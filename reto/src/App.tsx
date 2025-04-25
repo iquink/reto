@@ -1,5 +1,10 @@
+import { Outlet } from "react-router";
+
 function App() {
-  return <></>;
+  return <>
+  <span>Hola</span>
+  <Outlet />
+  </>
 }
 
 export default App;
