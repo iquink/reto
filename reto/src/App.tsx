@@ -1,10 +1,10 @@
+import AppMenu from "@components/AppMenu";
 import { Outlet } from "react-router";
 
 function App() {
   return <>
-  <span>Hola</span>
+  <AppMenu />
   <Outlet />
-  </>
-}
+  </>;}
 
 export default App;
