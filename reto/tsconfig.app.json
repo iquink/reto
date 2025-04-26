@@ -28,6 +28,10 @@
       "@router/*": ["router/*"],
       "@pages/*": ["pages/*"],
       "@components/*": ["components/*"],
+      "@assets/*": ["assets/*"],
+      "@hooks/*": ["hooks/*"],
+      "@styles/*": ["styles/*"],
+      "@context/*": ["context/*"]
     }
   },
   "include": ["src"]

@@ -1,0 +1,23 @@
+:root {
+  /* Light theme (green palette) */
+  --primary-color: #28a745; /* Green for buttons and accents */
+  --secondary-color: #6cc644; /* Lighter green */
+  --background-color: #f4fff6; /* Very light green background */
+  --text-color: #2d2d2d; /* Dark gray for text */
+  --border-color: #c3e6cb; /* Light green for borders */
+  --font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-size-base: 16px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+}
+
+/* Dark theme (green palette) */
+[data-theme="dark"] {
+  --primary-color: #38c172; /* Brighter green for accents */
+  --secondary-color: #4caf50; /* Dark green */
+  --background-color: #1c2520; /* Dark background with green tint */
+  --text-color: #e6f4ea; /* Light green for text */
+  --border-color: #4a7043; /* Dark green for borders */
+}
