@@ -1,23 +1,104 @@
 :root {
   /* Light theme (green palette) */
-  --primary-color: #28a745; /* Green for buttons and accents */
-  --secondary-color: #6cc644; /* Lighter green */
-  --background-color: #f4fff6; /* Very light green background */
-  --text-color: #2d2d2d; /* Dark gray for text */
-  --border-color: #c3e6cb; /* Light green for borders */
+  /* Main colors with improved contrast ratios */
+  --primary-color: #1e7e34; /* Darker green for better contrast with white text */
+  --primary-color-hover: #176b2b; /* Even darker for hover states */
+  --secondary-color: #5ba142; /* Adjusted lighter green */
+  --background-color: #f8f9fa; /* Slightly less tinted for better readability */
+  --text-color: #212529; /* Almost black for maximum contrast */
+  --text-color-secondary: #495057; /* For secondary text with sufficient contrast */
+  --border-color: #b8dabd; /* Darker border for better visibility */
+  --danger-color: #c82333; /* Darker red for better contrast */
+  --danger-hover-color: #a71d2a; /* Even darker for hover states */
+
+  /* Typography */
   --font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-size-base: 16px;
+  --font-size-sm: 14px;
+  --font-size-lg: 18px;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+  --line-height: 1.5;
+
+  /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Focus states for keyboard navigation */
+  --focus-ring-color: #2563eb; /* Blue focus ring */
+  --focus-ring-offset: 2px;
+  --focus-ring-width: 3px;
+
+  /* Animation speeds (with prefers-reduced-motion support in global.css) */
+  --transition-fast: 150ms;
+  --transition-medium: 250ms;
+  --transition-slow: 350ms;
+
+  /* Disabled state colors */
+  --disabled-bg-color: #e9ecef;
+  --disabled-text-color: #6c757d;
+  --disabled-border-color: #dee2e6;
+  --disabled-danger-color: #f1aeb5;
+
+  /* Semantic colors */
+  --color-success: #198754;
+  --color-info: #0dcaf0;
+  --color-warning: #ffc107;
+  --color-error: #dc3545;
+  --color-success-bg: #d1e7dd;
+  --color-info-bg: #cff4fc;
+  --color-warning-bg: #fff3cd;
+  --color-error-bg: #f8d7da;
 }
 
 /* Dark theme (green palette) */
 [data-theme="dark"] {
-  --primary-color: #38c172; /* Brighter green for accents */
-  --secondary-color: #4caf50; /* Dark green */
-  --background-color: #1c2520; /* Dark background with green tint */
-  --text-color: #e6f4ea; /* Light green for text */
-  --border-color: #4a7043; /* Dark green for borders */
+  /* Main colors with improved contrast */
+  --primary-color: #4ade80; /* Brighter green for better contrast with dark bg */
+  --primary-color-hover: #3cbe6c; /* Slightly darker for hover state */
+  --secondary-color: #6ee7b7; /* Brighter for better visibility */
+  --background-color: #121212; /* Standard dark background for better contrast */
+  --text-color: #f8f9fa; /* Almost white for maximum contrast */
+  --text-color-secondary: #e2e8f0; /* Light gray with good contrast */
+  --border-color: #3b8553; /* Brighter border for visibility */
+  --danger-color: #f87171; /* Brighter red for visibility */
+  --danger-hover-color: #ef4444; /* Slightly darker for hover */
+
+  /* Focus states */
+  --focus-ring-color: #60a5fa; /* Lighter blue for dark mode */
+
+  /* Disabled state colors for dark theme */
+  --disabled-bg-color: #2d3748;
+  --disabled-text-color: #a0aec0;
+  --disabled-border-color: #4a5568;
+  --disabled-danger-color: #9b2c2c;
+
+  /* Semantic colors for dark theme */
+  --color-success: #10b981;
+  --color-info: #06b6d4;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-success-bg: #064e3b;
+  --color-info-bg: #0e7490;
+  --color-warning-bg: #78350f;
+  --color-error-bg: #7f1d1d;
+}
+
+/* High contrast mode - activated when OS is set to high contrast */
+@media (forced-colors: active) {
+  :root {
+    --primary-color: HighlightText;
+    --secondary-color: Highlight;
+    --background-color: Canvas;
+    --text-color: CanvasText;
+    --border-color: ButtonBorder;
+    --danger-color: Mark;
+
+    /* Ensure focus indicators are visible */
+    --focus-ring-color: Highlight;
+    --focus-ring-width: 4px;
+  }
 }

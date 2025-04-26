@@ -6,10 +6,21 @@ import styles from "./App.module.css";
 
 function App() {
   const { theme, toggleTheme } = useTheme();
+
+  // Calculate the current effective theme and the next theme
+  const effectiveTheme =
+    theme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : theme;
+
+  const nextTheme = effectiveTheme === "light" ? "dark" : "light";
+
   return (
     <>
       <Header />
-      <div data-theme={theme} className={styles.app}>
+      <div className={styles.app}>
         <h1>Design System (Green Palette)</h1>
         <Button variant="primary" style={{ margin: "var(--spacing-sm)" }}>
           Primary Button
@@ -21,7 +32,7 @@ function App() {
           onClick={toggleTheme}
           style={{ margin: "var(--spacing-sm)", padding: "var(--spacing-sm)" }}
         >
-          Switch to {theme === "light" ? "dark" : "light"} theme
+          Switch to {nextTheme} theme
         </button>
       </div>
       <Outlet />
