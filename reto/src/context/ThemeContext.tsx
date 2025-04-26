@@ -43,21 +43,28 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
   );
 
   // Toggle theme function
-  const toggleTheme = () => {
-    setThemeState((prevTheme) => {
-      // Определяем текущую эффективную тему
-      const currentEffectiveTheme =
-        prevTheme === "system"
-          ? prefersDarkMode
-            ? "dark"
-            : "light"
-          : prevTheme;
-
-      // Переключаемся между light и dark напрямую
-      const newTheme = currentEffectiveTheme === "light" ? "dark" : "light";
+  const toggleTheme = (newTheme?: Theme) => {
+    if (newTheme) {
+      // If a specific parameter is passed, set that theme
       localStorage.setItem("theme", newTheme);
-      return newTheme;
-    });
+      setThemeState(newTheme);
+    } else {
+      // If no parameter is passed, toggle between light and dark
+      setThemeState((prevTheme) => {
+        // Determine the current effective theme
+        const currentEffectiveTheme =
+          prevTheme === "system"
+            ? prefersDarkMode
+              ? "dark"
+              : "light"
+            : prevTheme;
+
+        // Toggle directly between light and dark
+        const newTheme = currentEffectiveTheme === "light" ? "dark" : "light";
+        localStorage.setItem("theme", newTheme);
+        return newTheme;
+      });
+    }
   };
 
   // Set theme function

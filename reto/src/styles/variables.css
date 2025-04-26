@@ -1,9 +1,10 @@
 :root {
   /* Light theme (green palette) */
   /* Main colors with improved contrast ratios */
-  --primary-color: #1e7e34; /* Darker green for better contrast with white text */
-  --primary-color-hover: #176b2b; /* Even darker for hover states */
-  --secondary-color: #5ba142; /* Adjusted lighter green */
+  --primary-color: #1e7e34; /* Darker green for better contrast in light theme */
+  --primary-color-hover: #166328; /* Even darker for hover states */
+  --secondary-color: #2c5315; /* Even darker green for maximum contrast */
+  --primary-text-color: #ffffff; /* White text for primary elements */
   --background-color: #f8f9fa; /* Slightly less tinted for better readability */
   --text-color: #212529; /* Almost black for maximum contrast */
   --text-color-secondary: #495057; /* For secondary text with sufficient contrast */
@@ -60,6 +61,7 @@
   --primary-color: #4ade80; /* Brighter green for better contrast with dark bg */
   --primary-color-hover: #3cbe6c; /* Slightly darker for hover state */
   --secondary-color: #6ee7b7; /* Brighter for better visibility */
+  --primary-text-color: #121212; /* Dark text for primary elements in dark theme */
   --background-color: #121212; /* Standard dark background for better contrast */
   --text-color: #f8f9fa; /* Almost white for maximum contrast */
   --text-color-secondary: #e2e8f0; /* Light gray with good contrast */

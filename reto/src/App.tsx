@@ -28,12 +28,13 @@ function App() {
         <Button variant="secondary" style={{ margin: "var(--spacing-sm)" }}>
           Secondary Button
         </Button>
-        <button
-          onClick={toggleTheme}
+        <Button
+          variant="primary"
+          onClick={() => toggleTheme()}
           style={{ margin: "var(--spacing-sm)", padding: "var(--spacing-sm)" }}
         >
           Switch to {nextTheme} theme
-        </button>
+        </Button>
       </div>
       <Outlet />
     </>

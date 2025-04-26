@@ -6,7 +6,7 @@ export type ReducedMotion = "default" | "reduced";
 
 export interface ThemeContextType {
   theme: Theme;
-  toggleTheme: () => void;
+  toggleTheme: (newTheme?: Theme) => void;
   setTheme: (theme: Theme) => void;
   fontSize: FontSize;
   setFontSize: (size: FontSize) => void;

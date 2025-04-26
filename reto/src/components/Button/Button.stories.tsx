@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import Button from "./Button";
+import { ThemeProvider } from "../../context/ThemeContext";
 
 // Meta information for the component
 const meta = {
@@ -18,6 +19,13 @@ const meta = {
     onClick: { action: "clicked" },
     disabled: { control: "boolean" },
   },
+  decorators: [
+    (Story) => (
+      <ThemeProvider>
+        <Story />
+      </ThemeProvider>
+    ),
+  ],
 } satisfies Meta<typeof Button>;
 
 export default meta;

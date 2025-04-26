@@ -6,7 +6,7 @@
 /* Primary button styles */
 .primary {
   background-color: var(--primary-color);
-  color: var(--text-color);
+  color: var(--primary-text-color);
   padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid var(--border-color);
   border-radius: 6px;
@@ -17,7 +17,9 @@
 }
 
 .primary:hover:not(:disabled) {
-  background-color: var(--secondary-color);
+  background-color: var(
+    --primary-color-hover
+  ); /* Using darker hover instead of secondary */
 }
 
 .primary:focus-visible {
@@ -47,8 +49,14 @@
 }
 
 .secondary:hover:not(:disabled) {
-  background-color: var(--secondary-color);
-  color: var(--text-color);
+  background-color: rgba(
+    40,
+    167,
+    69,
+    0.1
+  ); /* Light green background on hover */
+  color: var(--primary-color-hover); /* Darker green for text on hover */
+  border-color: var(--primary-color-hover);
 }
 
 .secondary:focus-visible {
