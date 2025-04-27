@@ -1,8 +1,13 @@
 import styles from "./Button.module.css";
-import { ButtonHTMLAttributes, ReactNode, forwardRef } from "react";
+import { ReactNode, forwardRef } from "react";
 import { useTheme } from "../../context/ThemeContext/index";
+import {
+  Button as AriaButton,
+  ButtonProps as RACButtonProps,
+} from "react-aria-components";
+import clsx from "clsx";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends RACButtonProps {
   children: ReactNode;
   variant?: "primary" | "secondary" | "danger"; // Add more variants as needed
   ariaLabel?: string;
@@ -10,38 +15,41 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { children, variant = "primary", ariaLabel, disabled, className, ...props },
+    {
+      children,
+      variant = "primary",
+      ariaLabel,
+      isDisabled,
+      className,
+      ...props
+    },
     ref
   ) => {
     const { prefersReducedMotion } = useTheme();
 
     // Generate proper aria attributes for accessibility
     const ariaAttributes = {
-      "aria-disabled": disabled ? true : undefined,
       "aria-label": ariaLabel,
-      role: "button",
-      tabIndex: disabled ? -1 : 0,
+      tabIndex: isDisabled ? -1 : 0,
     };
 
     // Add reduced motion class if needed
-    const buttonClasses = [
+    const computedClassName = clsx(
       styles[variant],
-      prefersReducedMotion ? styles.reducedMotion : "",
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+      prefersReducedMotion && styles.reducedMotion,
+      className
+    );
 
     return (
-      <button
+      <AriaButton
         ref={ref}
-        className={buttonClasses}
-        disabled={disabled}
+        className={computedClassName}
+        isDisabled={isDisabled}
         {...ariaAttributes}
         {...props}
       >
         {children}
-      </button>
+      </AriaButton>
     );
   }
 );

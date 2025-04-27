@@ -17,7 +17,7 @@ const meta = {
       description: "Button variant",
     },
     onClick: { action: "clicked" },
-    disabled: { control: "boolean" },
+    isDisabled: { control: "boolean" },
   },
   decorators: [
     (Story) => (
@@ -60,7 +60,7 @@ export const Disabled: Story = {
   args: {
     variant: "primary",
     children: "Disabled Button",
-    disabled: true,
+    isDisabled: true,
   },
 };
 

@@ -28,6 +28,9 @@ function App() {
         <Button variant="secondary" style={{ margin: "var(--spacing-sm)" }}>
           Secondary Button
         </Button>
+        <Button isDisabled style={{ margin: "var(--spacing-sm)" }}>
+          Disabled Button
+        </Button>
         <Button
           variant="primary"
           onClick={() => toggleTheme()}
