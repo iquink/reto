@@ -1,15 +1,5 @@
 import "@testing-library/jest-dom";
 
-const cssModulesMock = {
-  __esModule: true,
-  default: new Proxy(
-    {},
-    {
-      get: (_target, prop) => prop, // Returns the class name without a hash
-    }
-  ),
-};
-
 Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: vi.fn().mockImplementation((query) => ({
@@ -23,5 +13,3 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: vi.fn(),
   })),
 });
-
-vitest.mock("*.module.css", () => cssModulesMock);
