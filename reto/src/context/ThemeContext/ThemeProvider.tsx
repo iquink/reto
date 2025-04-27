@@ -1,10 +1,6 @@
 import React, { useState, ReactNode, useEffect, useMemo } from "react";
-import {
-  Theme,
-  ThemeContext,
-  FontSize,
-  ReducedMotion,
-} from "./ThemeContext/index";
+import { FontSize, ReducedMotion, Theme } from "./types";
+import { ThemeContext } from "./hooks";
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
   children,
