@@ -6,6 +6,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "types": ["vitest/globals", "node"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -31,7 +32,8 @@
       "@assets/*": ["assets/*"],
       "@hooks/*": ["hooks/*"],
       "@styles/*": ["styles/*"],
-      "@context/*": ["context/*"]
+      "@context/*": ["context/*"],
+      "@test-utils/*": ["test-utils/*"]
     }
   },
   "include": ["src"]
