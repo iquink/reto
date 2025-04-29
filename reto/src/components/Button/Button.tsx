@@ -6,6 +6,7 @@ import {
   ButtonProps as RACButtonProps,
 } from "react-aria-components";
 import clsx from "clsx";
+import React from "react";
 
 interface ButtonProps extends RACButtonProps {
   children: ReactNode;

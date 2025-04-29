@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import Button from "./Button";
 import { ThemeProvider } from "../../context/ThemeContext";
+import React from "react";
 
 // Meta information for the component
 const meta = {
