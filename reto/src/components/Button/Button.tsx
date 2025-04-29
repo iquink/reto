@@ -8,12 +8,45 @@ import {
 import clsx from "clsx";
 import React from "react";
 
+/**
+ * Button component props interface.
+ *
+ * @interface ButtonProps
+ * @extends {RACButtonProps} - Extends React Aria Components button props
+ */
 interface ButtonProps extends RACButtonProps {
+  /** Content to be rendered inside the button */
   children: ReactNode;
+
+  /**
+   * Visual style variant of the button
+   * @default "primary"
+   */
   variant?: "primary" | "secondary" | "danger"; // Add more variants as needed
+
+  /**
+   * Accessible label for the button
+   * @example "Close dialog" or "Submit form"
+   */
   ariaLabel?: string;
 }
 
+/**
+ * Accessible button component with different visual variants.
+ *
+ * @component
+ * @example
+ * // Primary button (default)
+ * <Button>Submit</Button>
+ *
+ * @example
+ * // Secondary button
+ * <Button variant="secondary">Cancel</Button>
+ *
+ * @example
+ * // Disabled button
+ * <Button isDisabled>Cannot submit</Button>
+ */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -28,13 +61,29 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const { prefersReducedMotion } = useTheme();
 
-    // Generate proper aria attributes for accessibility
+    /**
+     * Generate aria attributes for the button.
+     *
+     * @remarks
+     * These attributes enhance accessibility for screen readers and keyboard users.
+     * The aria-label provides a text alternative, while tabIndex manages focus behavior.
+     *
+     * @see {@link https://developer.mozilla.org/en-US/docs/Web/Accessibility}
+     * @see {@link https://www.w3.org/WAI/ARIA/apg/patterns/button/}
+     */
     const ariaAttributes = {
       "aria-label": ariaLabel,
       tabIndex: isDisabled ? -1 : 0,
     };
 
-    // Add reduced motion class if needed
+    /**
+     * Computes the final className by combining variant styles, reduced motion preference,
+     * and any custom classNames provided by the consumer.
+     *
+     * @example
+     * // Resulting className might be something like:
+     * // "primary reducedMotion custom-class"
+     */
     const computedClassName = clsx(
       styles[variant],
       prefersReducedMotion && styles.reducedMotion,

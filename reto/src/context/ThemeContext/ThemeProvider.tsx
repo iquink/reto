@@ -2,9 +2,23 @@ import React, { useState, ReactNode, useEffect, useMemo } from "react";
 import { FontSize, ReducedMotion, Theme } from "./types";
 import { ThemeContext } from "./hooks";
 
-export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+/**
+ * ThemeProvider component props interface
+ * @interface ThemeProviderProps
+ */
+interface ThemeProviderProps {
+  /** Child components that will have access to the ThemeContext */
+  children: ReactNode;
+}
+
+/**
+ * ThemeProvider component provides theme-related context to its children.
+ * It manages and applies user preferences for theme, font size, and reduced motion.
+ *
+ * @param {ThemeProviderProps} props - The component props
+ * @returns {JSX.Element} The ThemeProvider component wrapping its children with ThemeContext
+ */
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   // Get system preferences
   const prefersDarkMode = useMemo(
     () => window.matchMedia("(prefers-color-scheme: dark)").matches,
@@ -38,7 +52,11 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
     prefersHighContrastQuery.matches
   );
 
-  // Toggle theme function
+  /**
+   * Toggles or sets the theme
+   *
+   * @param {Theme} [newTheme] - Optional theme to set. If not provided, toggles between light and dark.
+   */
   const toggleTheme = (newTheme?: Theme) => {
     if (newTheme) {
       // If a specific parameter is passed, set that theme
@@ -63,19 +81,31 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  // Set theme function
+  /**
+   * Sets the theme directly
+   *
+   * @param {Theme} newTheme - The theme to set
+   */
   const setTheme = (newTheme: Theme) => {
     localStorage.setItem("theme", newTheme);
     setThemeState(newTheme);
   };
 
-  // Set font size function
+  /**
+   * Sets the font size
+   *
+   * @param {FontSize} size - The font size to set
+   */
   const setFontSize = (size: FontSize) => {
     localStorage.setItem("fontSize", size);
     setFontSizeState(size);
   };
 
-  // Set reduced motion function
+  /**
+   * Sets the reduced motion preference
+   *
+   * @param {ReducedMotion} motion - The reduced motion setting to apply
+   */
   const setReducedMotion = (motion: ReducedMotion) => {
     localStorage.setItem("reducedMotion", motion);
     setReducedMotionState(motion);
