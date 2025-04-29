@@ -1,10 +1,10 @@
 import Button from "@components/Button/Button";
 import Header from "@components/layout/Header";
 import { useTheme } from "@context/ThemeContext/";
-import { Outlet } from "react-router";
 import styles from "./App.module.css";
+import React from "react";
 
-function App() {
+function App({ children }: { children: React.ReactNode }) {
   const { theme, toggleTheme } = useTheme();
 
   // Calculate the current effective theme and the next theme
@@ -28,18 +28,14 @@ function App() {
         <Button variant="secondary" style={{ margin: "var(--spacing-sm)" }}>
           Secondary Button
         </Button>
-        <Button isDisabled style={{ margin: "var(--spacing-sm)" }}>
-          Disabled Button
-        </Button>
-        <Button
-          variant="primary"
+        <button
           onClick={() => toggleTheme()}
           style={{ margin: "var(--spacing-sm)", padding: "var(--spacing-sm)" }}
         >
           Switch to {nextTheme} theme
-        </Button>
+        </button>
+        {children}
       </div>
-      <Outlet />
     </>
   );
 }
