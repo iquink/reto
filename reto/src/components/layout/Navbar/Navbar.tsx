@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import styles from "./Navbar.module.css";
 import { GiHamburgerMenu as MenuIcon } from "react-icons/gi";
 import clsx from "clsx";
+import SiteLogo from "@assets/img/Logo.svg";
 
 const Navbar: React.FC = () => {
   /**
@@ -27,7 +28,9 @@ const Navbar: React.FC = () => {
   return (
     <>
       <div className={styles.logo}>
-        <Link to="/">MyApp</Link>
+        <Link to="/">
+          <img src={SiteLogo} alt="Reto Logo" className={styles.logoImage} />
+        </Link>
       </div>
 
       <button

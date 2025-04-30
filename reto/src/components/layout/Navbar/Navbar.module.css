@@ -12,6 +12,13 @@
   text-decoration: none;
   /* Add focus styles for logo */
   outline: none;
+
+  img {
+    width: auto;
+    height: 48px;
+    margin-right: var(--spacing-sm);
+    fill: currentColor;
+  }
 }
 
 .logo a:focus-visible {
