@@ -1,5 +1,5 @@
 import Button from "@components/Button/Button";
-import Header from "@components/layout/Header";
+import Navbar from "@components/layout/Navbar/Navbar";
 import { useTheme } from "@context/ThemeContext/";
 import styles from "./App.module.css";
 import React from "react";
@@ -19,7 +19,9 @@ function App({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Header />
+      <header className={styles.header}>
+        <Navbar />
+      </header>
       <div className={styles.app}>
         <h1>Design System (Green Palette)</h1>
         <Button variant="primary" style={{ margin: "var(--spacing-sm)" }}>
