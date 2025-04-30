@@ -1,105 +1,104 @@
 :root {
-  /* Light theme (green palette) */
-  /* Main colors with improved contrast ratios */
-  --primary-color: #1e7e34; /* Darker green for better contrast in light theme */
-  --primary-color-hover: #166328; /* Even darker for hover states */
-  --secondary-color: #2c5315; /* Even darker green for maximum contrast */
-  --primary-text-color: #ffffff; /* White text for primary elements */
-  --background-color: #f8f9fa; /* Slightly less tinted for better readability */
-  --text-color: #212529; /* Almost black for maximum contrast */
-  --text-color-secondary: #495057; /* For secondary text with sufficient contrast */
-  --border-color: #b8dabd; /* Darker border for better visibility */
-  --danger-color: #c82333; /* Darker red for better contrast */
-  --danger-hover-color: #a71d2a; /* Even darker for hover states */
+  /* Light Theme (MUI Blue Palette) */
+  /* Main Colors */
+  --primary-color: #3f51b5; /* MUI primary indigo */
+  --primary-color-hover: #3949ab; /* MUI primary dark */
+  --secondary-color: #f50057; /* MUI secondary pink */
+  --primary-text-color: #ffffff; /* MUI contrastText */
+  --background-color: #fafafa; /* MUI background default */
+  --text-color: #000000; /* MUI text primary */
+  --text-color-secondary: rgba(0, 0, 0, 0.54); /* MUI text secondary */
+  --border-color: rgba(0, 0, 0, 0.12); /* MUI divider */
+  --danger-color: #f44336; /* MUI error */
+  --danger-hover-color: #d32f2f; /* MUI error dark */
 
   /* Typography */
-  --font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family: "Roboto", "Helvetica", "Arial", sans-serif; /* MUI default */
   --font-size-base: 16px;
   --font-size-sm: 14px;
   --font-size-lg: 18px;
   --font-weight-normal: 400;
-  --font-weight-bold: 700;
+  --font-weight-bold: 500; /* MUI uses 500 for bold in many components */
   --line-height: 1.5;
 
-  /* Spacing */
+  /* Spacing (MUI 4px grid, 8px base) */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
 
-  /* Focus states for keyboard navigation */
-  --focus-ring-color: #2563eb; /* Blue focus ring */
+  /* Focus States */
+  --focus-ring-color: #1976d2; /* MUI focus blue */
   --focus-ring-offset: 2px;
-  --focus-ring-width: 3px;
+  --focus-ring-width: 2px; /* MUI standard */
 
-  /* Animation speeds (with prefers-reduced-motion support in global.css) */
-  --transition-fast: 150ms;
-  --transition-medium: 250ms;
-  --transition-slow: 350ms;
+  /* Animation Speeds */
+  --transition-fast: 200ms; /* MUI short */
+  --transition-medium: 300ms; /* MUI standard */
+  --transition-slow: 400ms; /* Slightly longer for MUI-like effects */
 
-  /* Disabled state colors */
-  --disabled-bg-color: #e9ecef;
-  --disabled-text-color: #6c757d;
-  --disabled-border-color: #dee2e6;
-  --disabled-danger-color: #f1aeb5;
+  /* Disabled State Colors */
+  --disabled-bg-color: #e0e0e0; /* MUI disabled background */
+  --disabled-text-color: rgba(0, 0, 0, 0.38); /* MUI disabled text */
+  --disabled-border-color: rgba(0, 0, 0, 0.26); /* MUI disabled border */
+  --disabled-danger-color: #ef9a9a; /* MUI error light */
 
-  /* Semantic colors */
-  --color-success: #198754;
-  --color-info: #0dcaf0;
-  --color-warning: #ffc107;
-  --color-error: #dc3545;
-  --color-success-bg: #d1e7dd;
-  --color-info-bg: #cff4fc;
-  --color-warning-bg: #fff3cd;
-  --color-error-bg: #f8d7da;
+  /* Semantic Colors */
+  --color-success: #4caf50; /* MUI success */
+  --color-info: #00acc1; /* MUI info */
+  --color-warning: #ff9800; /* MUI warning */
+  --color-error: #f44336; /* MUI error */
+  --color-success-bg: #e8f5e9; /* MUI success light bg */
+  --color-info-bg: #e0f7fa; /* MUI info light bg */
+  --color-warning-bg: #fff8e1; /* MUI warning light bg */
+  --color-error-bg: #ffebee; /* MUI error light bg */
 }
 
-/* Dark theme (green palette) */
+/* Dark Theme (MUI Blue Palette) */
 [data-theme="dark"] {
-  /* Main colors with improved contrast */
-  --primary-color: #4ade80; /* Brighter green for better contrast with dark bg */
-  --primary-color-hover: #3cbe6c; /* Slightly darker for hover state */
-  --secondary-color: #6ee7b7; /* Brighter for better visibility */
-  --primary-text-color: #121212; /* Dark text for primary elements in dark theme */
-  --background-color: #121212; /* Standard dark background for better contrast */
-  --text-color: #f8f9fa; /* Almost white for maximum contrast */
-  --text-color-secondary: #e2e8f0; /* Light gray with good contrast */
-  --border-color: #3b8553; /* Brighter border for visibility */
-  --danger-color: #f87171; /* Brighter red for visibility */
-  --danger-hover-color: #ef4444; /* Slightly darker for hover */
+  /* Main Colors */
+  --primary-color: #7986cb; /* MUI primary light indigo for dark mode */
+  --primary-color-hover: #5c6bc0; /* MUI primary light */
+  --secondary-color: #ff4081; /* MUI secondary light pink for dark mode */
+  --primary-text-color: #000000; /* MUI contrastText (black for readability) */
+  --background-color: #121212; /* MUI dark background default */
+  --text-color: #ffffff; /* MUI text primary */
+  --text-color-secondary: rgba(255, 255, 255, 0.7); /* MUI text secondary */
+  --border-color: rgba(255, 255, 255, 0.12); /* MUI dark divider */
+  --danger-color: #ef5350; /* MUI error light for dark mode */
+  --danger-hover-color: #d32f2f; /* MUI error dark */
 
-  /* Focus states */
-  --focus-ring-color: #60a5fa; /* Lighter blue for dark mode */
+  /* Focus States */
+  --focus-ring-color: #90caf9; /* Lighter blue for dark mode focus */
+  --focus-ring-width: 2px;
 
-  /* Disabled state colors for dark theme */
-  --disabled-bg-color: #2d3748;
-  --disabled-text-color: #a0aec0;
-  --disabled-border-color: #4a5568;
-  --disabled-danger-color: #9b2c2c;
+  /* Disabled State Colors */
+  --disabled-bg-color: #424242; /* MUI dark disabled background */
+  --disabled-text-color: rgba(255, 255, 255, 0.5); /* MUI dark disabled text */
+  --disabled-border-color: rgba(255, 255, 255, 0.3); /* MUI dark disabled border */
+  --disabled-danger-color: #b71c1c; /* MUI error dark */
 
-  /* Semantic colors for dark theme */
-  --color-success: #10b981;
-  --color-info: #06b6d4;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-  --color-success-bg: #064e3b;
-  --color-info-bg: #0e7490;
-  --color-warning-bg: #78350f;
-  --color-error-bg: #7f1d1d;
+  /* Semantic Colors */
+  --color-success: #81c784; /* MUI success light */
+  --color-info: #4dd0e1; /* MUI info light */
+  --color-warning: #ffb300; /* MUI warning light */
+  --color-error: #ef5350; /* MUI error light */
+  --color-success-bg: #1b5e20; /* MUI success dark bg */
+  --color-info-bg: #006064; /* MUI info dark bg */
+  --color-warning-bg: #e65100; /* MUI warning dark bg */
+  --color-error-bg: #b71c1c; /* MUI error dark bg */
 }
 
-/* High contrast mode - activated when OS is set to high contrast */
+/* High Contrast Mode */
 @media (forced-colors: active) {
   :root {
-    --primary-color: HighlightText;
+    --primary-color: Highlight;
     --secondary-color: Highlight;
     --background-color: Canvas;
     --text-color: CanvasText;
     --border-color: ButtonBorder;
     --danger-color: Mark;
-
-    /* Ensure focus indicators are visible */
     --focus-ring-color: Highlight;
     --focus-ring-width: 4px;
   }
