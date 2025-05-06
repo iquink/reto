@@ -36,16 +36,22 @@ interface ButtonProps extends RACButtonProps {
  *
  * @component
  * @example
+ * ```tsx
  * // Primary button (default)
  * <Button>Submit</Button>
+ * ```
  *
  * @example
+ * ```tsx
  * // Secondary button
  * <Button variant="secondary">Cancel</Button>
+ * ```
  *
  * @example
+ * ```tsx
  * // Disabled button
  * <Button isDisabled>Cannot submit</Button>
+ * ```
  */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
