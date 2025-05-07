@@ -48,6 +48,9 @@ const Navbar: React.FC = () => {
         <Link to="/login" className={(active) => getActiveLinkClass(active)}>
           Login
         </Link>
+        <Link to="/register" className={(active) => getActiveLinkClass(active)}>
+          Register
+        </Link>
       </nav>
     </>
   );
