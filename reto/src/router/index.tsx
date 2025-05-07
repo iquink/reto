@@ -1,8 +1,8 @@
 import { Route, Switch } from "wouter";
 import App from "../App";
-import Home from "@pages/Home";
+import {Home} from "@pages";
 import React from "react";
-import Login from "@pages/Login";
+import {Login} from "@pages";
 
 /**
  * Defines the application's routing structure using Wouter.

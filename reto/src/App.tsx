@@ -3,7 +3,6 @@ import Navbar from "@components/layout/Navbar/Navbar";
 import { useTheme } from "@context/ThemeContext/";
 import styles from "./App.module.css";
 import React from "react";
-import Input from "@components/Input/Input";
 
 function App({ children }: { children: React.ReactNode }) {
   const { theme, toggleTheme } = useTheme();
@@ -37,7 +36,6 @@ function App({ children }: { children: React.ReactNode }) {
         >
           Switch to {nextTheme} theme
         </Button>
-        <Input label="Test" placeholder="Test placeholder" />
         {children}
       </div>
     </>

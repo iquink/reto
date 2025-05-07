@@ -26,7 +26,7 @@ describe("Input Component", () => {
       <Input
         label="Password"
         placeholder="Enter your password"
-        errorMessage="Password is required"
+        error={{ message: "Password is required" }}
       />
     );
     const errorMessageElement = screen.getByText(/Password is required/i);
@@ -62,7 +62,7 @@ describe("Input Component", () => {
 
     fireEvent.change(inputElement, { target: { value: "Hello" } });
     expect(handleChange).toHaveBeenCalledTimes(1);
-    expect(inputElement).toHaveValue("Hello");
+    expect(handleChange).toHaveBeenCalledWith("Hello");
   });
 
   test("renders Input with children (e.g., icon)", () => {

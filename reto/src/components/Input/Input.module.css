@@ -57,7 +57,7 @@
   cursor: not-allowed;
 }
 
-.error {
+[data-invalid = "true"].input {
   border-color: var(--danger-color);
 }
 

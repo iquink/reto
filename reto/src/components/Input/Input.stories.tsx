@@ -20,10 +20,6 @@ const meta = {
       control: "text",
       description: "Placeholder text for the input field",
     },
-    errorMessage: {
-      control: "text",
-      description: "Optional error message",
-    },
     isDisabled: {
       control: "boolean",
       description: "Whether the input is disabled",
@@ -54,7 +50,8 @@ export const WithError: Story = {
   args: {
     label: "Input with Error",
     placeholder: "Enter text here",
-    errorMessage: "This field is required",
+    error: {type: 'required', message: 'Value is required.'},
+    invalid: true,
   },
 };
 
@@ -67,20 +64,12 @@ export const Disabled: Story = {
   },
 };
 
-// Input with custom class
-export const CustomClass: Story = {
-  args: {
-    label: "Custom Class Input",
-    placeholder: "Styled input",
-    className: "custom-input-class",
-  },
-};
-
 // Input with children (e.g., icons)
 export const WithChildren: Story = {
   args: {
     label: "Input with Icon",
     placeholder: "Search...",
+    type: "search",
     children: <span role="img" aria-label="search-icon">🔍</span>,
   },
 };

@@ -1,0 +1,65 @@
+/* Mobile-first styles (default for screens less than 769px) */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .input {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-base);
+    border: 1px solid var(--border-color);
+    border-radius: var(--spacing-xs);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: border-color var(--transition-fast);
+  }
+  
+  .input:focus-visible {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: 2px;
+    border-color: var(--focus-ring-color);
+  }
+  
+  .button {
+    width: 100%;
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-text-color);
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: var(--spacing-xs);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+  }
+  
+  .button:hover {
+    background-color: var(--primary-color-hover);
+  }
+  
+  .button:disabled {
+    background-color: var(--disabled-bg-color);
+    color: var(--disabled-text-color);
+    cursor: not-allowed;
+  }
+  
+  /* Desktop styles (screens 769px and larger) */
+  @media (min-width: 769px) {
+    .form {
+      width: 400px;
+    }
+  
+    .input {
+      width: 100%; /* Inputs remain full width within the form */
+    }
+  
+    .button {
+      width: auto; /* Button takes its natural width */
+      align-self: flex-end; /* Align the button to the right */
+    }
+  }
