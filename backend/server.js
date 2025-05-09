@@ -1,6 +1,5 @@
 const express = require("express");
 const mysql = require("mysql2");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
@@ -13,14 +12,14 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allow requests from localhost:5173
+    origin: process.env.FRONTEND_HOST, // Allow requests from the frontend URL
     credentials: true, // Allow cookies to be sent with requests
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     exposedHeaders: ["Set-Cookie"],
   })
 );
-app.use(bodyParser.json());
+app.use(express.json()); // Use express.json() instead of bodyParser
 app.use(require("cookie-parser")()); // Add cookie-parser middleware
 
 // MySQL Database Connection
@@ -101,7 +100,10 @@ app.post("/login", (req, res) => {
         sameSite: "strict",
       });
 
-      res.json({ message: "Login successful." });
+      res.json({
+        message: "Login successful.",
+        user: { id: user.id, name: user.name, email: user.email },
+      });
     } catch (err) {
       console.error("Error verifying password:", err);
       res.status(500).send("Error logging in.");
