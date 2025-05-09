@@ -4,6 +4,8 @@ import Input from "@components/Input/Input";
 import { Controller, useForm } from "react-hook-form";
 import Button from "@components/Button/Button";
 import axios from "axios"; // Import axios and AxiosError
+import authApi from "@api/authApi"; // Import authApi
+import rootStore from "@store/index"; // Import the root store
 import styles from "./Login.module.css"; // Import the CSS module
 
 /**
@@ -47,11 +49,11 @@ const Login: React.FC = () => {
    */
   const onSubmit = async (data: FormData): Promise<void> => {
     try {
-      await axios.post(
-        "http://localhost:3000/login",
-        data,
-        { withCredentials: true } // Include credentials for cookies
-      );
+      await authApi.login(data.email, data.password).then((response) => {
+        // Assuming the response contains user data
+        const user = response.user;
+        rootStore.authStore.login({ ...user, id: user.id.toString() }); // Update the store with user data
+      });
 
       alert("Login successful!");
       reset(); // Reset the form after successful login
@@ -118,7 +120,8 @@ const Login: React.FC = () => {
             message: "Password cannot exceed 50 characters.",
           },
           pattern: {
-            value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+            value:
+              /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
             message:
               "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character.",
           },

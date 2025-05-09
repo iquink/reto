@@ -4,7 +4,7 @@ import Input from "@components/Input/Input";
 import { Controller, useForm } from "react-hook-form";
 import Button from "@components/Button/Button";
 import styles from "./Register.module.css"; // Import the CSS module
-import axios from "axios"; // Import axios for HTTP requests
+import { authApi } from "@api/index"; // Import the authApi for registration
 
 /**
  * Register component for user registration.
@@ -51,8 +51,12 @@ const Register: React.FC = () => {
    */
   const onSubmit = async (data: FormData): Promise<void> => {
     try {
-      const response = await axios.post("http://localhost:3000/register", data);
-      console.log(response.data);
+      const response = await authApi.register(
+        data.name,
+        data.email,
+        data.password
+      );
+      console.log(response);
       alert("Registration successful!");
       reset(); // Reset the form after successful registration
     } catch (error) {
@@ -78,7 +82,8 @@ const Register: React.FC = () => {
           },
           pattern: {
             value: /^[a-zA-Z0-9_]+$/,
-            message: "Username can only contain letters, numbers, and underscores.",
+            message:
+              "Username can only contain letters, numbers, and underscores.",
           },
         }}
         render={({
@@ -141,7 +146,8 @@ const Register: React.FC = () => {
             message: "Password cannot exceed 50 characters.",
           },
           pattern: {
-            value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+            value:
+              /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
             message:
               "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character.",
           },
