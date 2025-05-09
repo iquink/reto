@@ -4,26 +4,28 @@ import Input from "@components/Input/Input";
 import { Controller, useForm } from "react-hook-form";
 import Button from "@components/Button/Button";
 import styles from "./Register.module.css"; // Import the CSS module
+import axios from "axios"; // Import axios for HTTP requests
 
 /**
- * Login component for user authentication.
+ * Register component for user registration.
  *
- * This component renders a login form with fields for username and password.
+ * This component renders a registration form with fields for username, email, and password.
  * It uses `react-hook-form` for form validation and `react-aria-components` for accessibility.
  *
  * @component
  * @example
  * ```tsx
- * <Login />
+ * <Register />
  * ```
  */
 const Register: React.FC = () => {
   /**
-   * Default form values for the login form.
+   * Default form values for the registration form.
    */
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, reset } = useForm({
     defaultValues: {
       name: "",
+      email: "",
       password: "",
     },
   });
@@ -35,6 +37,9 @@ const Register: React.FC = () => {
     /** Username entered by the user */
     name: string;
 
+    /** Email entered by the user */
+    email: string;
+
     /** Password entered by the user */
     password: string;
   }
@@ -42,10 +47,18 @@ const Register: React.FC = () => {
   /**
    * Handles form submission.
    *
-   * @param data - The form data containing username and password.
+   * @param data - The form data containing username, email, and password.
    */
-  const onSubmit = (data: FormData): void => {
-    console.log(data);
+  const onSubmit = async (data: FormData): Promise<void> => {
+    try {
+      const response = await axios.post("http://localhost:3000/register", data);
+      console.log(response.data);
+      alert("Registration successful!");
+      reset(); // Reset the form after successful registration
+    } catch (error) {
+      console.error("Error during registration:", error);
+      alert("Registration failed. Please try again.");
+    }
   };
 
   return (
@@ -80,6 +93,34 @@ const Register: React.FC = () => {
             ref={ref}
             label="Username"
             placeholder="Enter your username"
+            invalid={invalid}
+            error={error}
+            className={styles.input} // Apply the input style
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="email"
+        rules={{
+          required: "Email is required.",
+          pattern: {
+            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            message: "Invalid email address.",
+          },
+        }}
+        render={({
+          field: { name, value, onChange, onBlur, ref },
+          fieldState: { invalid, error },
+        }) => (
+          <Input
+            name={name}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
+            ref={ref}
+            label="Email"
+            placeholder="Enter your email"
             invalid={invalid}
             error={error}
             className={styles.input} // Apply the input style
@@ -125,7 +166,7 @@ const Register: React.FC = () => {
         )}
       />
       <Button type="submit" className={styles.button}>
-        Submit
+        Register
       </Button>
     </Form>
   );
