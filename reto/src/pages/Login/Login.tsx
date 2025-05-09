@@ -3,7 +3,7 @@ import { Form } from "react-aria-components";
 import Input from "@components/Input/Input";
 import { Controller, useForm } from "react-hook-form";
 import Button from "@components/Button/Button";
-import axios from "axios"; // Import axios for HTTP requests
+import axios from "axios"; // Import axios and AxiosError
 import styles from "./Login.module.css"; // Import the CSS module
 
 /**
@@ -55,14 +55,21 @@ const Login: React.FC = () => {
 
       alert("Login successful!");
       reset(); // Reset the form after successful login
-    } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        alert("Invalid credentials. Please try again.");
-      } else if (error.response && error.response.status === 404) {
-        alert("User not found.");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Handle Axios-specific errors
+        if (error.response && error.response.status === 401) {
+          alert("Invalid credentials. Please try again.");
+        } else if (error.response && error.response.status === 404) {
+          alert("User not found.");
+        } else {
+          console.error("Error during login:", error);
+          alert("Login failed. Please try again.");
+        }
       } else {
-        console.error("Error during login:", error);
-        alert("Login failed. Please try again.");
+        // Handle non-Axios errors
+        console.error("Unexpected error:", error);
+        alert("An unexpected error occurred. Please try again.");
       }
     }
   };
