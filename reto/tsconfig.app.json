@@ -33,7 +33,9 @@
       "@hooks/*": ["hooks/*"],
       "@styles/*": ["styles/*"],
       "@context/*": ["context/*"],
-      "@test-utils/*": ["test-utils/*"]
+      "@test-utils/*": ["test-utils/*"],
+      "@store/*": ["store/*"],
+      "@api/*": ["api/*"]
     }
   },
   "include": ["src"]
