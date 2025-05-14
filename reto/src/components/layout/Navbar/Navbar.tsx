@@ -50,19 +50,29 @@ const Navbar: React.FC = observer(() => {
       </button>
 
       <nav className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}>
-        <Link to="/" className={(active) => getActiveLinkClass(active)}>
+        <Link
+          to="/"
+          className={(active) => getActiveLinkClass(active)}
+          onClick={() => setIsMenuOpen(false)}
+        >
           Home
         </Link>
         {!authStore.isAuthenticated && (
           <>
             <Link
               to="/login"
+              onClick={() => {
+                setIsMenuOpen(false);
+              }}
               className={(active) => getActiveLinkClass(active)}
             >
               Login
             </Link>
             <Link
               to="/register"
+              onClick={() => {
+                setIsMenuOpen(false);
+              }}
               className={(active) => getActiveLinkClass(active)}
             >
               Register
@@ -73,12 +83,18 @@ const Navbar: React.FC = observer(() => {
           <>
             <Link
               to="/profile"
+              onClick={() => {
+                setIsMenuOpen(false);
+              }}
               className={(active) => getActiveLinkClass(active)}
             >
               Profile
             </Link>
             <Button
-              onClick={handleLogout}
+              onClick={() => {
+                handleLogout();
+                setIsMenuOpen(false);
+              }}
               className={styles.logoutButton} // Add a CSS class for styling
             >
               Logout
