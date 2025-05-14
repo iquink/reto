@@ -1,8 +1,8 @@
 import React from "react";
-import rootStore from "@store/index";
+import {useStore} from "@store";
 
 const Home: React.FC = () => {
-  const { authStore } = rootStore;
+  const { authStore } = useStore();
 
   return (
     <div>

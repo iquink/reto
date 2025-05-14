@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import Button from "@components/Button/Button";
 import axios from "axios"; // Import axios and AxiosError
 import authApi from "@api/authApi"; // Import authApi
-import rootStore from "@store/index"; // Import the root store
+import {useStore} from "@store"; // Import the root store
 import styles from "./Login.module.css"; // Import the CSS module
 
 /**
@@ -21,6 +21,7 @@ import styles from "./Login.module.css"; // Import the CSS module
  * ```
  */
 const Login: React.FC = () => {
+  const {authStore} = useStore();
   /**
    * Default form values for the login form.
    */
@@ -52,7 +53,7 @@ const Login: React.FC = () => {
       await authApi.login(data.email, data.password).then((response) => {
         // Assuming the response contains user data
         const user = response.user;
-        rootStore.authStore.login({ ...user, id: user.id.toString() }); // Update the store with user data
+        authStore.login({ ...user, id: user.id.toString() }); // Update the store with user data
       });
 
       alert("Login successful!");
