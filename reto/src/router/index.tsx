@@ -1,6 +1,6 @@
 import { Route, Switch } from "wouter";
 import App from "../App";
-import {Home, Login, Register } from "@pages";
+import {Home, Login, Register, Profile } from "@pages";
 import React from "react";
 
 /**
@@ -19,6 +19,7 @@ export const Routes = () => (
       <Route path="/" component={Home} />
       <Route path={"/login"} component={Login} />
       <Route path={"/register"} component={Register} />
+      <Route path={"/profile"} component={Profile} />
       {/* Add more routes here as needed */}
     </Switch>
   </App>

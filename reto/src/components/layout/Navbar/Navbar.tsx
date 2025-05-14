@@ -4,8 +4,10 @@ import styles from "./Navbar.module.css";
 import { GiHamburgerMenu as MenuIcon } from "react-icons/gi";
 import clsx from "clsx";
 import SiteLogo from "@assets/img/Logo.svg";
+import { useStore } from "@store";
+import { observer } from "mobx-react-lite"; // Import observer
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC = observer(() => {
   /**
    * Navbar component that provides navigation links to different pages.
    *
@@ -16,6 +18,7 @@ const Navbar: React.FC = () => {
    * )
    */
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { authStore } = useStore();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -45,15 +48,27 @@ const Navbar: React.FC = () => {
         <Link to="/" className={(active) => getActiveLinkClass(active)}>
           Home
         </Link>
-        <Link to="/login" className={(active) => getActiveLinkClass(active)}>
-          Login
-        </Link>
-        <Link to="/register" className={(active) => getActiveLinkClass(active)}>
-          Register
-        </Link>
+        {!authStore.isAuthenticated && (
+          <>
+            <Link to="/login" className={(active) => getActiveLinkClass(active)}>
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className={(active) => getActiveLinkClass(active)}
+            >
+              Register
+            </Link>
+          </>
+        )}
+        {authStore.isAuthenticated && (
+          <Link to="/profile" className={(active) => getActiveLinkClass(active)}>
+            Profile
+          </Link>
+        )}
       </nav>
     </>
   );
-};
+});
 
 export default Navbar;
