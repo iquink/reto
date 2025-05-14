@@ -6,6 +6,7 @@ import clsx from "clsx";
 import SiteLogo from "@assets/img/Logo.svg";
 import { useStore } from "@store";
 import { observer } from "mobx-react-lite"; // Import observer
+import { Button } from "react-aria-components";
 
 const Navbar: React.FC = observer(() => {
   /**
@@ -26,6 +27,10 @@ const Navbar: React.FC = observer(() => {
 
   const getActiveLinkClass = (isActive: boolean) => {
     return isActive ? `${styles.link} ${styles.active}` : styles.link;
+  };
+
+  const handleLogout = async () => {
+    await authStore.logout(); // Call the logout action
   };
 
   return (
@@ -50,7 +55,10 @@ const Navbar: React.FC = observer(() => {
         </Link>
         {!authStore.isAuthenticated && (
           <>
-            <Link to="/login" className={(active) => getActiveLinkClass(active)}>
+            <Link
+              to="/login"
+              className={(active) => getActiveLinkClass(active)}
+            >
               Login
             </Link>
             <Link
@@ -62,9 +70,20 @@ const Navbar: React.FC = observer(() => {
           </>
         )}
         {authStore.isAuthenticated && (
-          <Link to="/profile" className={(active) => getActiveLinkClass(active)}>
-            Profile
-          </Link>
+          <>
+            <Link
+              to="/profile"
+              className={(active) => getActiveLinkClass(active)}
+            >
+              Profile
+            </Link>
+            <Button
+              onClick={handleLogout}
+              className={styles.logoutButton} // Add a CSS class for styling
+            >
+              Logout
+            </Button>
+          </>
         )}
       </nav>
     </>

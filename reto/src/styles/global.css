@@ -7,6 +7,28 @@
   box-sizing: border-box;
 }
 
+button {
+  /* Reset button styles */
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  text-decoration: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* Normalize button behavior */
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+  /* Reset effects */
+  box-shadow: none;
+  border-radius: 0;
+}
+
 /* Basic accessibility settings */
 html {
   font-size: 100%; /* Respects user's browser font size settings */

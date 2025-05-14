@@ -1,4 +1,9 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from "axios";
+import axios, {
+  AxiosInstance,
+  AxiosResponse,
+  AxiosError,
+  InternalAxiosRequestConfig,
+} from "axios";
 
 /**
  * Axios instance for making API requests.
@@ -51,8 +56,8 @@ apiClient.interceptors.response.use(
     // Handle errors globally, e.g., redirect to login on 401
     if (error.response && error.response.status === 401) {
       // Prevent redirect loop by checking the current page
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
+      if (window.location.pathname !== "/") {
+        window.location.href = "/";
       }
     }
     return Promise.reject(error);

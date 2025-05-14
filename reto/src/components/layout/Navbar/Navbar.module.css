@@ -77,7 +77,9 @@
   visibility: visible;
 }
 
-.link {
+/* Combine common styles for link and logout button */
+.link,
+.logoutButton {
   width: 100%;
   color: var(--primary-text-color);
   text-decoration: none;
@@ -87,13 +89,19 @@
   border-radius: var(--spacing-xs);
   transition: background-color var(--transition-medium);
   outline: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
 }
 
-.link:hover {
+.link:hover,
+.logoutButton:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.link:focus-visible {
+.link:focus-visible,
+.logoutButton:focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: var(--focus-ring-offset);
 }
@@ -132,7 +140,8 @@
     align-items: center;
   }
 
-  .link {
+  .link,
+  .logoutButton {
     width: auto;
     padding: var(--spacing-sm) var(--spacing-md);
     margin: 0 var(--spacing-sm);
