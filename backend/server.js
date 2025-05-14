@@ -112,7 +112,7 @@ app.post("/login", (req, res) => {
 });
 
 // Protected route example
-app.get("/protected", (req, res) => {
+app.get("/check-auth", (req, res) => {
   const token = req.cookies.token; // Get the token from the cookie
 
   if (!token) {
@@ -126,6 +126,38 @@ app.get("/protected", (req, res) => {
   } catch (err) {
     res.status(401).send("Invalid token.");
   }
+});
+
+app.get("/get-user", (req, res) => {
+  const token = req.cookies.token; // Get the token from the cookie
+
+  if (!token) {
+    res.status(401).send("Access denied. No token provided.");
+    return;
+  }
+
+  const query = "SELECT * FROM users WHERE id = ?";
+  const decoded = jwt.verify(token, JWT_SECRET);
+
+  db.query(query, [decoded.id], (err, results) => {
+    if (err) {
+      console.error("Error fetching user:", err);
+      res.status(500).send("Error fetching user.");
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).send("User not found.");
+      return;
+    }
+    try {
+      const user = results[0];
+      res.json({ id: user.id, name: user.name, email: user.email });
+    } catch (err) {
+      console.error("Error verifying token:", err);
+      res.status(401).send("Invalid token.");
+    }
+  });
 });
 
 // Start the server

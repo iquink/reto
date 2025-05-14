@@ -50,8 +50,10 @@ apiClient.interceptors.response.use(
   (error: AxiosError) => {
     // Handle errors globally, e.g., redirect to login on 401
     if (error.response && error.response.status === 401) {
-      // Redirect to login or handle unauthorized access
-      window.location.href = "/login";
+      // Prevent redirect loop by checking the current page
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(error);
   }

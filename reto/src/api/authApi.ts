@@ -3,7 +3,7 @@ import apiClient from "./api";
 /**
  * Authentication API for handling user-related operations.
  *
- * This module provides methods for user login, registration, logout, and fetching the current user.
+ * This module provides methods for user login, registration, logout, fetching the current user, and checking authentication status.
  */
 const authApi = {
   /**
@@ -45,13 +45,25 @@ const authApi = {
   },
 
   /**
-   * Fetches the currently authenticated user's information.
+   * Checks if the user is authenticated by verifying the token in the HTTP-only cookie.
    *
+   * @returns A promise that resolves to the response data, typically confirming the user's authentication status.
+   * @throws An error if the authentication check fails or the user is not authenticated.
+   */
+  async checkAuth() {
+    const response = await apiClient.get("/check-auth");
+    return response.data;
+  },
+
+  /**
+   * Fetches the current user's information by ID.
+   *
+   * @param id - The user's ID.
    * @returns A promise that resolves to the response data, typically containing the user's details.
-   * @throws An error if the request to fetch the current user fails.
+   * @throws An error if the request to fetch the user fails.
    */
   async getCurrentUser() {
-    const response = await apiClient.get("/me");
+    const response = await apiClient.get("/get-user");
     return response.data;
   },
 };

@@ -1,12 +1,13 @@
-import { types } from "mobx-state-tree";
+import { types, flow } from "mobx-state-tree";
 import { UserModel } from "./models";
+import authApi from "@api/authApi";
 
 // Define the IUser interface
 interface IUser {
-    id: string;
-    name: string;
-    email: string;
-  }
+  id: string;
+  name: string;
+  email: string;
+}
 
 // Define the AuthStore model
 export const AuthStore = types
@@ -23,4 +24,15 @@ export const AuthStore = types
       self.isAuthenticated = false;
       self.user = null;
     },
+  }))
+  .actions((self) => ({
+    checkAuthorization: flow(function* () {
+      try {
+        const user = yield authApi.getCurrentUser();
+        self.login({...user, id: user.id.toString()}); // Update the store with user data
+      } catch (error) {
+        console.error("Authorization check failed:", error);
+        self.logout(); // Reset authStore to default
+      }
+    }),
   }));

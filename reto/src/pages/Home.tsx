@@ -1,7 +1,8 @@
 import React from "react";
-import {useStore} from "@store";
+import { useStore } from "@store";
+import { observer } from "mobx-react-lite";
 
-const Home: React.FC = () => {
+const Home: React.FC = observer(() => {
   const { authStore } = useStore();
 
   return (
@@ -14,6 +15,6 @@ const Home: React.FC = () => {
       </p>
     </div>
   );
-};
+});
 
 export default Home;
