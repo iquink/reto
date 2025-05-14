@@ -28,6 +28,7 @@ const db = mysql.createConnection({
   user: process.env.DB_USER, // Use environment variable for user
   password: process.env.DB_PASSWORD, // Use environment variable for password
   database: process.env.DB_NAME, // Use environment variable for database name
+  debug: process.env.NODE_ENV !== 'production', // Enable debug mode in development
 });
 
 // Connect to the database
