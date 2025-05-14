@@ -112,6 +112,17 @@ app.post("/login", (req, res) => {
   });
 });
 
+// Logout a user
+app.post("/logout", (req, res) => {
+  // Clear the token cookie
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+    sameSite: "strict",
+  });
+  res.status(200).send("Logout successful.");
+});
+
 // Protected route example
 app.get("/check-auth", (req, res) => {
   const token = req.cookies.token; // Get the token from the cookie
@@ -160,6 +171,8 @@ app.get("/get-user", (req, res) => {
     }
   });
 });
+
+
 
 // Start the server
 app.listen(PORT, () => {

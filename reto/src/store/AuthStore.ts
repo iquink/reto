@@ -20,19 +20,23 @@ export const AuthStore = types
       self.isAuthenticated = true;
       self.user = UserModel.create(user);
     },
-    logout() {
-      self.isAuthenticated = false;
-      self.user = null;
-    },
+    logout: flow(function* () {
+      try {
+        yield authApi.logout(); // Call the logout API
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
+    }),
   }))
   .actions((self) => ({
     checkAuthorization: flow(function* () {
       try {
         const user = yield authApi.getCurrentUser();
-        self.login({...user, id: user.id.toString()}); // Update the store with user data
+        self.login({ ...user, id: user.id.toString() }); // Update the store with user data
       } catch (error) {
         console.error("Authorization check failed:", error);
-        self.logout(); // Reset authStore to default
+        self.isAuthenticated = false;
+        self.user = null;
       }
     }),
   }));

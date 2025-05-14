@@ -28,6 +28,11 @@ const Navbar: React.FC = observer(() => {
     return isActive ? `${styles.link} ${styles.active}` : styles.link;
   };
 
+  const handleLogout = async () => {
+    await authStore.logout(); // Call the logout action
+    window.location.href = "/login"; // Redirect to the login page after logout
+  };
+
   return (
     <>
       <div className={styles.logo}>
@@ -62,9 +67,20 @@ const Navbar: React.FC = observer(() => {
           </>
         )}
         {authStore.isAuthenticated && (
-          <Link to="/profile" className={(active) => getActiveLinkClass(active)}>
-            Profile
-          </Link>
+          <>
+            <Link
+              to="/profile"
+              className={(active) => getActiveLinkClass(active)}
+            >
+              Profile
+            </Link>
+            <button
+              onClick={handleLogout}
+              className={styles.link} // Add a CSS class for styling
+            >
+              Logout
+            </button>
+          </>
         )}
       </nav>
     </>
