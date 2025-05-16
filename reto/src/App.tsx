@@ -1,6 +1,6 @@
-import Button from "@components/Button/Button";
+// import Button from "@components/Button/Button";
 import Navbar from "@components/layout/Navbar/Navbar";
-import { useTheme } from "@context/ThemeContext/";
+// import { useTheme } from "@context/ThemeContext/";
 import styles from "./App.module.css";
 import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
@@ -8,18 +8,18 @@ import { useStore } from "@store";
 
 const App: React.FC<{ children: React.ReactNode }> = observer(
   ({ children }) => {
-    const { theme, toggleTheme } = useTheme();
+    // const { theme, toggleTheme } = useTheme();
     const { authStore } = useStore();
 
-    // Calculate the current effective theme and the next theme
-    const effectiveTheme =
-      theme === "system"
-        ? window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light"
-        : theme;
+    // // Calculate the current effective theme and the next theme
+    // const effectiveTheme =
+    //   theme === "system"
+    //     ? window.matchMedia("(prefers-color-scheme: dark)").matches
+    //       ? "dark"
+    //       : "light"
+    //     : theme;
 
-    const nextTheme = effectiveTheme === "light" ? "dark" : "light";
+    // const nextTheme = effectiveTheme === "light" ? "dark" : "light";
 
     // Check authorization when the app loads
     useEffect(() => {
@@ -32,7 +32,7 @@ const App: React.FC<{ children: React.ReactNode }> = observer(
           <Navbar />
         </header>
         <div className={styles.app}>
-          <h1>Temp page</h1>
+          {/* <h1>Temp page</h1>
           <Button variant="primary" style={{ margin: "var(--spacing-sm)" }}>
             Primary Button
           </Button>
@@ -47,7 +47,7 @@ const App: React.FC<{ children: React.ReactNode }> = observer(
             }}
           >
             Switch to {nextTheme} theme
-          </Button>
+          </Button> */}
           {children}
         </div>
       </>
