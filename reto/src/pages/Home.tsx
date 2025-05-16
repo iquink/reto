@@ -10,7 +10,7 @@ const Home: React.FC = observer(() => {
       <p>Welcome to the Home Page!</p>
       <p>
         {authStore.user
-          ? `User: ${authStore.user.usernname} (${authStore.user.email})`
+          ? `User: ${authStore.user.username} (${authStore.user.email})`
           : "No user logged in"}
       </p>
     </div>
