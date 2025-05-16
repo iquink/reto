@@ -5,8 +5,9 @@ import { Controller, useForm } from "react-hook-form";
 import Button from "@components/Button/Button";
 import axios from "axios"; // Import axios and AxiosError
 import authApi from "@api/authApi"; // Import authApi
-import {useStore} from "@store"; // Import the root store
+import { useStore } from "@store"; // Import the root store
 import styles from "./Login.module.css"; // Import the CSS module
+import { useLocation } from "wouter";
 
 /**
  * Login component for user authentication.
@@ -21,7 +22,8 @@ import styles from "./Login.module.css"; // Import the CSS module
  * ```
  */
 const Login: React.FC = () => {
-  const {authStore} = useStore();
+  const { authStore } = useStore();
+  const [, navigate] = useLocation();
   /**
    * Default form values for the login form.
    */
@@ -54,6 +56,8 @@ const Login: React.FC = () => {
         // Assuming the response contains user data
         const user = response.user;
         authStore.login({ ...user, id: user.id.toString() }); // Update the store with user data
+
+        navigate("/home");
       });
 
       alert("Login successful!");

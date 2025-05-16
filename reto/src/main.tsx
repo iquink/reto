@@ -8,9 +8,9 @@ import { rootStore, StoreProvider } from "@store/RootStore";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <StoreProvider value={rootStore}>
-    <ThemeProvider>
-      <Routes />
-    </ThemeProvider>
+      <ThemeProvider>
+        <Routes />
+      </ThemeProvider>
     </StoreProvider>
   </React.StrictMode>
 );

@@ -6,6 +6,7 @@ import clsx from "clsx";
 import SiteLogo from "@assets/img/Logo.svg";
 import { useStore } from "@store";
 import { observer } from "mobx-react-lite"; // Import observer
+import { Button } from "react-aria-components";
 
 const Navbar: React.FC = observer(() => {
   /**
@@ -30,7 +31,6 @@ const Navbar: React.FC = observer(() => {
 
   const handleLogout = async () => {
     await authStore.logout(); // Call the logout action
-    window.location.href = "/login"; // Redirect to the login page after logout
   };
 
   return (
@@ -50,16 +50,29 @@ const Navbar: React.FC = observer(() => {
       </button>
 
       <nav className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}>
-        <Link to="/" className={(active) => getActiveLinkClass(active)}>
+        <Link
+          to="/"
+          className={(active) => getActiveLinkClass(active)}
+          onClick={() => setIsMenuOpen(false)}
+        >
           Home
         </Link>
         {!authStore.isAuthenticated && (
           <>
-            <Link to="/login" className={(active) => getActiveLinkClass(active)}>
+            <Link
+              to="/login"
+              onClick={() => {
+                setIsMenuOpen(false);
+              }}
+              className={(active) => getActiveLinkClass(active)}
+            >
               Login
             </Link>
             <Link
               to="/register"
+              onClick={() => {
+                setIsMenuOpen(false);
+              }}
               className={(active) => getActiveLinkClass(active)}
             >
               Register
@@ -70,16 +83,22 @@ const Navbar: React.FC = observer(() => {
           <>
             <Link
               to="/profile"
+              onClick={() => {
+                setIsMenuOpen(false);
+              }}
               className={(active) => getActiveLinkClass(active)}
             >
               Profile
             </Link>
-            <button
-              onClick={handleLogout}
-              className={styles.link} // Add a CSS class for styling
+            <Button
+              onClick={() => {
+                handleLogout();
+                setIsMenuOpen(false);
+              }}
+              className={styles.logoutButton} // Add a CSS class for styling
             >
               Logout
-            </button>
+            </Button>
           </>
         )}
       </nav>

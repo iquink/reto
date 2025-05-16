@@ -1,6 +1,7 @@
 import { types, flow } from "mobx-state-tree";
 import { UserModel } from "./models";
 import authApi from "@api/authApi";
+import { navigate } from "wouter/use-browser-location";
 
 // Define the IUser interface
 interface IUser {
@@ -22,7 +23,10 @@ export const AuthStore = types
     },
     logout: flow(function* () {
       try {
-        yield authApi.logout(); // Call the logout API
+        yield authApi.logout();
+        self.isAuthenticated = false;
+        self.user = null;
+        navigate("/");
       } catch (error) {
         console.error("Logout failed:", error);
       }
