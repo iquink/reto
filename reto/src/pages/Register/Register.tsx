@@ -24,7 +24,7 @@ const Register: React.FC = () => {
    */
   const { handleSubmit, control, reset } = useForm({
     defaultValues: {
-      name: "",
+      username: "",
       email: "",
       password: "",
     },
@@ -35,7 +35,7 @@ const Register: React.FC = () => {
    */
   interface FormData {
     /** Username entered by the user */
-    name: string;
+    username: string;
 
     /** Email entered by the user */
     email: string;
@@ -52,7 +52,7 @@ const Register: React.FC = () => {
   const onSubmit = async (data: FormData): Promise<void> => {
     try {
       const response = await authApi.register(
-        data.name,
+        data.username,
         data.email,
         data.password
       );
@@ -69,7 +69,7 @@ const Register: React.FC = () => {
     <Form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <Controller
         control={control}
-        name="name"
+        name="username"
         rules={{
           required: "Username is required.",
           minLength: {

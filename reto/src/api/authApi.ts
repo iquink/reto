@@ -22,14 +22,14 @@ const authApi = {
   /**
    * Registers a new user with the provided name, email, and password.
    *
-   * @param name - The user's name.
+   * @param username - The user's name.
    * @param email - The user's email address.
    * @param password - The user's password.
    * @returns A promise that resolves to the response data, typically containing the newly created user's information.
    * @throws An error if the registration request fails.
    */
-  async register(name: string, email: string, password: string) {
-    const response = await apiClient.post("/register", { name, email, password });
+  async register(username: string, email: string, password: string) {
+    const response = await apiClient.post("/register", { username, email, password });
     return response.data;
   },
 

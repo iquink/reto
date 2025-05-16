@@ -43,14 +43,14 @@ db.connect((err) => {
 // Routes
 // Register a new user
 app.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
 
   try {
     // Hash the password using argon2
     const hashedPassword = await argon2.hash(password);
 
-    const query = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-    db.query(query, [name, email, hashedPassword], (err, results) => {
+    const query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+    db.query(query, [username, email, hashedPassword], (err, results) => {
       if (err) {
         console.error("Error registering user:", err);
         res.status(500).send("Error registering user.");
@@ -103,7 +103,7 @@ app.post("/login", (req, res) => {
 
       res.json({
         message: "Login successful.",
-        user: { id: user.id, name: user.name, email: user.email },
+        user: { id: user.id, username: user.username, email: user.email },
       });
     } catch (err) {
       console.error("Error verifying password:", err);
@@ -164,7 +164,7 @@ app.get("/get-user", (req, res) => {
     }
     try {
       const user = results[0];
-      res.json({ id: user.id, name: user.name, email: user.email });
+      res.json({ id: user.id, username: user.username, email: user.email });
     } catch (err) {
       console.error("Error verifying token:", err);
       res.status(401).send("Invalid token.");

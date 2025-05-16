@@ -9,13 +9,13 @@ const Profile: React.FC = observer(() => {
     return <p>No user data available. Please log in.</p>;
   }
 
-  const { name, email } = authStore.user;
+  const { usernname, email } = authStore.user;
 
   return (
     <div>
       <h1>User Profile</h1>
       <p>
-        <strong>Name:</strong> {name}
+        <strong>Name:</strong> {usernname}
       </p>
       <p>
         <strong>Email:</strong> {email}

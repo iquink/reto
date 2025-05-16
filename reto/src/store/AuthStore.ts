@@ -6,7 +6,7 @@ import { navigate } from "wouter/use-browser-location";
 // Define the IUser interface
 interface IUser {
   id: string;
-  name: string;
+  username: string;
   email: string;
 }
 
