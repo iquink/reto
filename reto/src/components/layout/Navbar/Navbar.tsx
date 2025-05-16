@@ -82,6 +82,15 @@ const Navbar: React.FC = observer(() => {
         {authStore.isAuthenticated && (
           <>
             <Link
+              to="/issues"
+              onClick={() => {
+                setIsMenuOpen(false);
+              }}
+              className={(active) => getActiveLinkClass(active)}
+            >
+              Issues
+            </Link>
+            <Link
               to="/profile"
               onClick={() => {
                 setIsMenuOpen(false);

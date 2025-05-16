@@ -20,7 +20,7 @@ describe("TextArea Component", () => {
   });
 
   test("calls onChange handler when value changes", () => {
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     render(
       <TextArea
         name="description"
