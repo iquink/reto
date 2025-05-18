@@ -7,6 +7,8 @@ import SiteLogo from "@assets/img/Logo.svg";
 import { useStore } from "@store";
 import { observer } from "mobx-react-lite"; // Import observer
 import { Button } from "react-aria-components";
+import { Switch } from "@components";
+import { useTheme } from "@context/ThemeContext/hooks";
 
 const Navbar: React.FC = observer(() => {
   /**
@@ -20,6 +22,8 @@ const Navbar: React.FC = observer(() => {
    */
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { authStore } = useStore();
+
+  const { theme, toggleTheme } = useTheme();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -50,6 +54,13 @@ const Navbar: React.FC = observer(() => {
       </button>
 
       <nav className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}>
+        <Switch
+          aria-label="Toggle Theme"
+          isDisabled={false}
+          isThemeSwitch
+          onChange={() => toggleTheme()}
+          isSelected={theme === "dark"}
+        />
         <Link
           to="/"
           className={(active) => getActiveLinkClass(active)}

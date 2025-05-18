@@ -1,0 +1,164 @@
+.switch {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  line-height: var(--line-height);
+  forced-color-adjust: none;
+}
+
+.indicator {
+  position: relative;
+  width: 2.5rem;
+  height: 1.5rem;
+  border: 2px solid var(--border-color);
+  background: var(--background-color);
+  border-radius: 1.5rem;
+  transition: all var(--transition-medium);
+}
+
+.indicator::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--text-color-secondary);
+  border-radius: 50%;
+  transition: all var(--transition-medium);
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  will-change: transform;
+}
+
+.switch:hover .indicator {
+  border-color: var(--primary-color);
+}
+
+.switch[data-pressed] .indicator {
+  border-color: var(--primary-color-hover);
+  background: var(--primary-color);
+}
+
+.switch[data-pressed] .indicator::before {
+  background: var(--primary-text-color);
+}
+
+.switch[data-selected] .indicator {
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+}
+
+.switch[data-selected] .indicator::before {
+  background: var(--primary-text-color);
+  transform: translateX(100%);
+  left: -4px;
+}
+
+.switch[data-selected][data-pressed] .indicator {
+  border-color: var(--primary-color-hover);
+  background: var(--primary-color-hover);
+}
+
+.switch[data-focus-visible] .indicator {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.switch[data-disabled] {
+  color: var(--disabled-text-color);
+}
+
+.switch[data-disabled] .indicator {
+  border-color: var(--disabled-border-color);
+  background: var(--disabled-bg-color);
+}
+
+.switch[data-disabled] .indicator::before {
+  background: var(--disabled-text-color);
+}
+
+.themeSwitch .indicator {
+  background: var(--background-color);
+}
+
+.themeSwitch[data-selected] .indicator {
+  background: var(--switch-navbar-bg);
+
+  &&::before {
+    background: var(--switch-navbar-bg);
+  }
+}
+
+.themeSwitch .indicator::before {
+  content: var(--light-theme-emoji, "☀️");
+}
+
+.themeSwitch[data-selected] .indicator::before {
+  content: var(--dark-theme-emoji, "🌙");
+}
+
+.themeSwitch[data-disabled] .indicator::before {
+  content: var(--disabled-theme-emoji, "☀️");
+}
+
+@media (forced-colors: active) {
+  .switch {
+    color: CanvasText;
+  }
+
+  .switch .indicator {
+    border-color: ButtonBorder;
+    background: Canvas;
+  }
+
+  .switch .indicator::before {
+    background: CanvasText;
+  }
+
+  .switch.themeSwitch .indicator::before {
+    content: var(--light-theme-emoji, "☀️");
+  }
+
+  .switch[data-selected] .indicator {
+    border-color: Highlight;
+    background: Highlight;
+  }
+
+  .switch[data-selected] .indicator::before {
+    background: Canvas;
+  }
+
+  .switch.themeSwitch[data-selected] .indicator::before {
+    content: var(--dark-theme-emoji, "🌙");
+  }
+
+  .switch[data-focus-visible] .indicator {
+    outline: 4px solid Highlight;
+  }
+
+  .switch[data-disabled] {
+    color: GrayText;
+  }
+
+  .switch[data-disabled] .indicator {
+    border-color: GrayText;
+    background: Canvas;
+  }
+
+  .switch[data-disabled] .indicator::before {
+    background: GrayText;
+  }
+
+  .switch.themeSwitch[data-disabled] .indicator::before {
+    content: var(--disabled-theme-emoji, "☀️");
+  }
+}

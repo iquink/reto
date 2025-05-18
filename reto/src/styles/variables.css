@@ -53,6 +53,14 @@
   --color-info-bg: #e0f7fa; /* MUI info light bg */
   --color-warning-bg: #fff8e1; /* MUI warning light bg */
   --color-error-bg: #ffebee; /* MUI error light bg */
+
+  /* Switch in Navbar Backgrounds (Light Theme) */
+  --switch-navbar-bg: rgba(
+    0,
+    0,
+    0,
+    0.05
+  ); /* Light dark shade for the light theme */
 }
 
 /* Dark Theme (MUI Blue Palette) */
@@ -76,7 +84,12 @@
   /* Disabled State Colors */
   --disabled-bg-color: #424242; /* MUI dark disabled background */
   --disabled-text-color: rgba(255, 255, 255, 0.5); /* MUI dark disabled text */
-  --disabled-border-color: rgba(255, 255, 255, 0.3); /* MUI dark disabled border */
+  --disabled-border-color: rgba(
+    255,
+    255,
+    255,
+    0.3
+  ); /* MUI dark disabled border */
   --disabled-danger-color: #b71c1c; /* MUI error dark */
 
   /* Semantic Colors */
@@ -88,6 +101,14 @@
   --color-info-bg: #006064; /* MUI info dark bg */
   --color-warning-bg: #e65100; /* MUI warning dark bg */
   --color-error-bg: #b71c1c; /* MUI error dark bg */
+
+  /* Switch in Navbar Backgrounds (Dark Theme) */
+  --switch-navbar-bg: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); /* Lighter than the background for the dark theme */
 }
 
 /* High Contrast Mode */
@@ -101,5 +122,6 @@
     --danger-color: Mark;
     --focus-ring-color: Highlight;
     --focus-ring-width: 4px;
+    --switch-navbar-bg: Canvas; /* For high contrast */
   }
 }
