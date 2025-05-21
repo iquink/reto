@@ -1,3 +1,5 @@
+const { verifyToken } = require("../utils/jwt");
+
 class AuthController {
     constructor(authService) {
       this.authService = authService;
@@ -43,7 +45,9 @@ class AuthController {
   
     async getUser(req, res) {
       try {
-        const user = await this.authService.getUserById(req.user.id);
+        const token = req.cookies.token; // Get the token from the cookie
+        const decoded = verifyToken(token);
+        const user = await this.authService.getUserById(decoded.id);
         res.json(user);
       } catch (err) {
         console.error('Error fetching user:', err);
