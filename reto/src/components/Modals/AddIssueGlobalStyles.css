@@ -1,0 +1,20 @@
+.react-aria-ModalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: var(--visual-viewport-height, 100vh); /* Fallback to 100vh */
+    background: rgba(0, 0, 0, 0.8); /* Hardcore dark overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  
+    &[data-entering] {
+      animation: modal-fade var(--transition-fast, 200ms);
+    }
+  
+    &[data-exiting] {
+      animation: modal-fade var(--transition-fast, 150ms) reverse ease-in;
+    }
+  }

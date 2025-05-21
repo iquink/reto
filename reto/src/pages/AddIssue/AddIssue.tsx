@@ -3,8 +3,9 @@ import { Form } from "react-aria-components";
 import Input from "@components/Input/Input";
 import TextArea from "@components/TextArea/TextArea";
 import { Controller, useForm } from "react-hook-form";
-import Button from "@components/Button/Button";
+import {Button, Map} from "@components";
 import styles from "./AddIssue.module.css"; // Import the CSS module
+import {AddIssueModal} from "@components";
 
 /**
  * AddIssue component for creating a new issue.
@@ -119,6 +120,7 @@ const AddIssue: React.FC = () => {
           />
         )}
       />
+      <AddIssueModal />
       <Button type="submit" className={styles.button}>
         Submit
       </Button>

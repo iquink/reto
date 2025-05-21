@@ -1,0 +1,59 @@
+.modal {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3); /* Hardcore shadow */
+  border-radius: var(--spacing-lg, 16px); /* Fallback to 16px */
+  background: var(--background-color, #1e1e1e); /* Hardcore dark background */
+  color: var(--text-color, #ffffff); /* Hardcore white text */
+  border: 2px solid var(--primary-color, #ff0000); /* Hardcore red border */
+  outline: none;
+  width: calc(100vw - 20px);
+
+  &[data-entering] {
+    animation: modal-zoom var(--transition-medium, 300ms) cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .react-aria-TextField {
+    margin-bottom: var(--spacing-sm, 8px); /* Fallback to 8px */
+  }
+}
+
+@keyframes modal-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-zoom {
+  from {
+    transform: scale(0.7); /* Hardcore zoom-in effect */
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes mymodal-blur {
+  from {
+    background: rgba(255, 0, 0, 0); /* Hardcore red fade-in */
+    backdrop-filter: blur(0);
+  }
+
+  to {
+    background: rgba(255, 0, 0, 0.5); /* Hardcore red blur */
+    backdrop-filter: blur(15px); /* Hardcore blur intensity */
+  }
+}
+
+@keyframes mymodal-slide {
+  from {
+    transform: translateX(150%); /* Hardcore slide-in from the right */
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}

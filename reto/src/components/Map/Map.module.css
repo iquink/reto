@@ -1,0 +1,18 @@
+.mapPageContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mapWrapper {
+  background: var(--background-color);
+  border-radius: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  box-shadow: 0px 4px 6px var(--border-color); /* Adjusted for shadow */
+}
+
+.styledMapContainer {
+  height: 400px;
+  width: 100%;
+  border-radius: var(--spacing-lg);
+  box-shadow: 0px 2px 4px var(--border-color); /* Adjusted for shadow */
+}
