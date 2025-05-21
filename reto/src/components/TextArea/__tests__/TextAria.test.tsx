@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@test-utils/";
 import TextArea from "../TextArea";
 
 describe("TextArea Component", () => {
@@ -38,7 +38,8 @@ describe("TextArea Component", () => {
       <TextArea
         name="description"
         label="Description"
-        error={{ message: "This field is required" }}
+        error={{ type: 'required', message: "This field is required" }}
+        invalid={true}
       />
     );
     expect(screen.getByText("This field is required")).toBeInTheDocument();

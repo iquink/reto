@@ -26,7 +26,8 @@ describe("Input Component", () => {
       <Input
         label="Password"
         placeholder="Enter your password"
-        error={{ message: "Password is required" }}
+        error={{ type: 'required', message: "Password is required" }}
+        invalid={true}
       />
     );
     const errorMessageElement = screen.getByText(/Password is required/i);
