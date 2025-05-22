@@ -6,6 +6,8 @@ import { Controller, useForm } from "react-hook-form";
 import { Button } from "@components";
 import styles from "./AddIssue.module.css"; // Import the CSS module
 import { AddIssueModal } from "@components";
+import { useStore } from "@store"; // <-- Add this import
+import { observer } from "mobx-react-lite";
 
 /**
  * AddIssue component for creating a new issue.
@@ -20,7 +22,7 @@ import { AddIssueModal } from "@components";
  * <AddIssue />
  * ```
  */
-const AddIssue: React.FC = () => {
+const AddIssue: React.FC = observer(() => {
   /**
    * Default form values for the Add Issue form.
    */
@@ -30,6 +32,8 @@ const AddIssue: React.FC = () => {
       description: "",
     },
   });
+
+  const { issuesStore } = useStore(); // <-- Get the store
 
   /**
    * Interface for the form data.
@@ -120,12 +124,21 @@ const AddIssue: React.FC = () => {
           />
         )}
       />
+      {/* Coordinates display section */}
+      {issuesStore.selectedLocation && (
+        <div
+          style={{ marginBottom: "16px", color: "var(--text-color-secondary)" }}
+        >
+          <strong>Selected coordinates:</strong>{" "}
+          {issuesStore.selectedLocation[0]}, {issuesStore.selectedLocation[1]}
+        </div>
+      )}
       <AddIssueModal />
       <Button type="submit" className={styles.button}>
         Submit
       </Button>
     </Form>
   );
-};
+});
 
 export default AddIssue;

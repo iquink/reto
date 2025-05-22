@@ -6,34 +6,38 @@ import styles from "./Map.module.css";
 
 /**
  * Props for the Map component.
- * @property isGetCoordinatesByClick - If true, enables logging of coordinates on map click.
+ * @property isGetCoordinatesByClick - If true, enables picking coordinates by clicking on the map.
+ * @property setPickedLocation - Callback to receive the picked latitude and longitude when the map is clicked.
  */
 interface MapProps {
   isGetCoordinatesByClick?: boolean;
+  setPickedLocation?: (lat: number, lng: number) => void;
 }
 
 /**
- * Renders a Leaflet map centered on the user's location.
- * Optionally enables logging of coordinates when the map is clicked.
+ * Map component renders a Leaflet map centered on the user's location.
+ * If isGetCoordinatesByClick is true, clicking the map will call setPickedLocation with the clicked coordinates.
  *
- * @param props - MapProps
+ * @param isGetCoordinatesByClick - Enables coordinate picking on map click.
+ * @param setPickedLocation - Callback for picked coordinates.
  * @returns The Map component.
  */
 export const Map: React.FC<MapProps> = ({
   isGetCoordinatesByClick = false,
+  setPickedLocation,
 }) => {
   const position = getUserLocation();
 
   /**
-   * Handles map click events and logs the latitude and longitude to the console.
+   * Handles map click events and calls setPickedLocation with the latitude and longitude.
    * Only rendered if isGetCoordinatesByClick is true.
    */
   const MapEvents = () => {
     useMapEvents({
       click(e) {
-        // Log coordinates when the map is clicked
-        console.log(e.latlng.lat);
-        console.log(e.latlng.lng);
+        if (setPickedLocation) {
+          setPickedLocation(e.latlng.lat, e.latlng.lng);
+        }
       },
     });
     return null;
