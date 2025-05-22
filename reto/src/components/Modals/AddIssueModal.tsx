@@ -6,6 +6,8 @@ import { Button } from "@components";
 import { Button as CloseButton } from "react-aria-components";
 import { MdClose } from "react-icons/md";
 import { useStore } from "@store";
+import L, { LatLngExpression } from "leaflet";
+import { pickedLocation } from "@assets";
 
 /**
  * AddIssueModal component displays a modal dialog with a map for selecting coordinates.
@@ -23,6 +25,7 @@ import { useStore } from "@store";
  */
 export const AddIssueModal: React.FC = () => {
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [markers, setMarkers] = useState<{ [name: string]: [LatLngExpression, L.Icon] }>({});
   const { issuesStore } = useStore();
 
   /**
@@ -35,6 +38,12 @@ export const AddIssueModal: React.FC = () => {
   const setPickedLocation = (lat: number, lng: number) => {
     issuesStore.setSelectedLocation([lat, lng]);
     console.log("Selected location:", issuesStore.selectedLocation);
+    setMarkers({
+      "pickedLocation": [
+        [lat, lng],
+        L.icon({ iconUrl: pickedLocation, iconSize: [32, 32], iconAnchor: [16, 32] })
+      ],
+    })
   };
 
   // Load the map after a short delay for smoother modal animation.
@@ -57,7 +66,7 @@ export const AddIssueModal: React.FC = () => {
           <div className={styles.content}>
             <div className={styles.mapWrapper}>
               {isMapLoaded ? (
-                <Map isGetCoordinatesByClick setPickedLocation={setPickedLocation} />
+                <Map isGetCoordinatesByClick setPickedLocation={setPickedLocation} markers={markers} />
               ) : (
                 <p>Loading map...</p>
               )}

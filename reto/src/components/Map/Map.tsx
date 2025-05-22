@@ -1,17 +1,21 @@
 import React from "react";
-import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { getUserLocation } from "./geolocation";
 import styles from "./Map.module.css";
+import { LatLngExpression } from "leaflet";
 
 /**
  * Props for the Map component.
  * @property isGetCoordinatesByClick - If true, enables picking coordinates by clicking on the map.
  * @property setPickedLocation - Callback to receive the picked latitude and longitude when the map is clicked.
  */
+
+
 interface MapProps {
   isGetCoordinatesByClick?: boolean;
   setPickedLocation?: (lat: number, lng: number) => void;
+  markers?:  { [name: string]: [LatLngExpression, L.Icon] }
 }
 
 /**
@@ -25,6 +29,7 @@ interface MapProps {
 export const Map: React.FC<MapProps> = ({
   isGetCoordinatesByClick = false,
   setPickedLocation,
+  markers = {},
 }) => {
   const position = getUserLocation();
 
@@ -55,6 +60,11 @@ export const Map: React.FC<MapProps> = ({
         attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       {isGetCoordinatesByClick && <MapEvents />}
+      {Object.keys(markers).map((key, i) => (
+        <Marker key={key} position={markers[key][0]} icon={markers[key][1]}>
+          <Popup>{key}</Popup>
+        </Marker>
+      ))}
     </MapContainer>
   );
 };
