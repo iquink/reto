@@ -1,11 +1,11 @@
 import React from "react";
 import { Form } from "react-aria-components";
-import Input from "@components/Input/Input";
-import TextArea from "@components/TextArea/TextArea";
+import { Input } from "@components";
+import { TextArea } from "@components";
 import { Controller, useForm } from "react-hook-form";
-import {Button, Map} from "@components";
+import { Button } from "@components";
 import styles from "./AddIssue.module.css"; // Import the CSS module
-import {AddIssueModal} from "@components";
+import { AddIssueModal } from "@components";
 
 /**
  * AddIssue component for creating a new issue.

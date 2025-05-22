@@ -109,7 +109,9 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           />
           {children && <div className={styles.icon}>{children}</div>}
         </div>
-        <FieldError className={styles.errorMessage}>{error?.message}</FieldError>
+        <FieldError className={styles.errorMessage}>
+          {error?.message}
+        </FieldError>
       </TextField>
     );
   }
@@ -117,4 +119,4 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
 TextArea.displayName = "TextArea";
 
-export default TextArea;
+export { TextArea };

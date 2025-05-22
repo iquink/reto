@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import TextArea from "./TextArea";
+import { TextArea } from "./TextArea";
 import { ThemeProvider } from "../../context/ThemeContext";
 import React from "react";
 
@@ -69,6 +69,10 @@ export const WithChildren: Story = {
   args: {
     label: "TextArea with Icon",
     placeholder: "Enter your description here",
-    children: <span role="img" aria-label="icon">✍️</span>,
+    children: (
+      <span role="img" aria-label="icon">
+        ✍️
+      </span>
+    ),
   },
 };

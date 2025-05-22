@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "wouter";
-import Button from "@components/Button/Button";
+import { Button } from "@components";
 import styles from "./Issues.module.css"; // Add a CSS module for styling
 
 const Issues: React.FC = () => {

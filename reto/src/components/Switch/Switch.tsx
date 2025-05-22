@@ -61,4 +61,4 @@ const Switch = forwardRef<HTMLLabelElement, SwitchProps>(
 
 Switch.displayName = "Switch";
 
-export default Switch;
+export { Switch };

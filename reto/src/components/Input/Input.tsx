@@ -109,7 +109,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           />
           {children && <div className={styles.icon}>{children}</div>}
         </div>
-        <FieldError className={styles.errorMessage}>{error?.message}</FieldError>
+        <FieldError className={styles.errorMessage}>
+          {error?.message}
+        </FieldError>
       </TextField>
     );
   }
@@ -117,4 +119,4 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
 Input.displayName = "Input";
 
-export default Input;
+export { Input };

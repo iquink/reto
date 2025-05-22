@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Input from "./Input";
+import { Input } from "./Input";
 import { ThemeProvider } from "../../context/ThemeContext";
 import React from "react";
 
@@ -50,7 +50,7 @@ export const WithError: Story = {
   args: {
     label: "Input with Error",
     placeholder: "Enter text here",
-    error: {type: 'required', message: 'Value is required.'},
+    error: { type: "required", message: "Value is required." },
     invalid: true,
   },
 };
@@ -70,6 +70,10 @@ export const WithChildren: Story = {
     label: "Input with Icon",
     placeholder: "Search...",
     type: "search",
-    children: <span role="img" aria-label="search-icon">🔍</span>,
+    children: (
+      <span role="img" aria-label="search-icon">
+        🔍
+      </span>
+    ),
   },
 };

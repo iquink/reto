@@ -1,8 +1,8 @@
 import React from "react";
 import { Form } from "react-aria-components";
-import Input from "@components/Input/Input";
+import { Input } from "@components";
 import { Controller, useForm } from "react-hook-form";
-import Button from "@components/Button/Button";
+import { Button } from "@components";
 import axios from "axios"; // Import axios and AxiosError
 import authApi from "@api/authApi"; // Import authApi
 import { useStore } from "@store"; // Import the root store
