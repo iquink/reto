@@ -1,0 +1,63 @@
+.react-aria-ModalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: var(--visual-viewport-height, 100vh); /* Fallback to 100vh */
+    background: rgba(0, 0, 0, 0.8); /* Hardcore dark overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  
+    &[data-entering] {
+      animation: modal-fade var(--transition-fast, 200ms);
+    }
+  
+    &[data-exiting] {
+      animation: modal-fade var(--transition-fast, 150ms) reverse ease-in;
+    }
+  }
+
+  @keyframes modal-fade {
+    from {
+      opacity: 0;
+    }
+  
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes modal-zoom {
+    from {
+      transform: scale(0.7); /* Hardcore zoom-in effect */
+    }
+  
+    to {
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes mymodal-blur {
+    from {
+      background: rgba(255, 0, 0, 0); /* Hardcore red fade-in */
+      backdrop-filter: blur(0);
+    }
+  
+    to {
+      background: rgba(255, 0, 0, 0.5); /* Hardcore red blur */
+      backdrop-filter: blur(15px); /* Hardcore blur intensity */
+    }
+  }
+  
+  @keyframes mymodal-slide {
+    from {
+      transform: translateX(150%); /* Hardcore slide-in from the right */
+    }
+  
+    to {
+      transform: translateX(0);
+    }
+  }
+  
