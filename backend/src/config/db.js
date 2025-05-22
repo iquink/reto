@@ -1,4 +1,4 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 const initDB = async () => {
   try {
@@ -11,11 +11,16 @@ const initDB = async () => {
       connectionLimit: 10,
       queueLimit: 0,
     });
-    console.log('Connected to the MySQL database.');
+    const connection = await pool.getConnection();
+    connection.release();
+
     return pool;
   } catch (err) {
-    console.error('Error connecting to the database:', err);
+    console.error("Error connecting to the database:", err);
     process.exit(1);
+  }
+  finally {
+    console.log("Connected to the MySQL database.");
   }
 };
 
