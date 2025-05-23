@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@test-utils/";
-import TextArea from "../TextArea";
+import {TextArea} from "../TextArea";
 
 describe("TextArea Component", () => {
   test("renders TextArea with label", () => {

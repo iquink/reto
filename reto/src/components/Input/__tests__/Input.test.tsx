@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@test-utils/";
 import { expect } from "vitest";
-import Input from "../Input";
+import {Input} from "../Input";
 
 describe("Input Component", () => {
   test("renders Input with label", () => {

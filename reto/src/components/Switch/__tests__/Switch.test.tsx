@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@test-utils/";
 import { expect } from "vitest";
-import Switch from "../Switch";
+import {Switch} from "../Switch";
 
 describe("Switch Component", () => {
   test("renders Switch with label", () => {
