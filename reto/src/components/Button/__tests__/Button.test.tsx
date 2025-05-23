@@ -1,7 +1,8 @@
 import React from "react";
 import { render, screen } from "@test-utils/";
 import { expect } from "vitest";
-import Button from "../Button";
+import {Button} from "../Button";
+import { MdClose, MdLocationOn } from "react-icons/md";
 
 describe("Button Component", () => {
   test("renders Button with primary variant", () => {
@@ -24,6 +25,29 @@ describe("Button Component", () => {
     const buttonElement = screen.getByText(/Danger Button/i);
     expect(buttonElement).toBeInTheDocument();
     expect(buttonElement).toHaveClass("danger");
+  });
+
+  test("renders Button with icon variant", () => {
+    render(
+      <Button variant="icon" ariaLabel="Close">
+        <MdClose />
+      </Button>
+    );
+    const buttonElement = screen.getByLabelText(/Close/i);
+    expect(buttonElement).toBeInTheDocument();
+    expect(buttonElement).toHaveClass("icon");
+  });
+
+  test("renders Button with icon and text", () => {
+    render(
+      <Button variant="primary" ariaLabel="Location">
+        <MdLocationOn /> Location
+      </Button>
+    );
+    const buttonElement = screen.getByLabelText(/Location/i);
+    expect(buttonElement).toBeInTheDocument();
+    expect(buttonElement).toHaveClass("primary");
+    expect(buttonElement).toHaveTextContent("Location");
   });
 
   test("renders Button with disabled state", () => {

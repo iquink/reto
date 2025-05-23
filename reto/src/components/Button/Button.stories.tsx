@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import {Button} from "./Button";
+import { Button } from "./Button";
 import { ThemeProvider } from "../../context/ThemeContext";
 import React from "react";
+import { MdClose, MdLocationOn } from "react-icons/md";
 
 // Meta information for the component
 const meta = {
@@ -14,7 +15,7 @@ const meta = {
   argTypes: {
     variant: {
       control: "select",
-      options: ["primary", "secondary", "danger"],
+      options: ["primary", "secondary", "danger", "icon"],
       description: "Button variant",
     },
     onClick: { action: "clicked" },
@@ -71,5 +72,27 @@ export const CustomWidth: Story = {
     variant: "primary",
     children: "Wide Button",
     style: { width: "300px" },
+  },
+};
+
+// Icon button story
+export const Icon: Story = {
+  args: {
+    variant: "icon",
+    ariaLabel: "Close",
+    children: <MdClose />,
+  },
+};
+
+// Icon button with text story
+export const IconWithText: Story = {
+  args: {
+    variant: "primary",
+    ariaLabel: "Location",
+    children: (
+      <>
+       Location <MdLocationOn /> 
+      </>
+    ),
   },
 };

@@ -22,7 +22,7 @@ interface ButtonProps extends RACButtonProps {
    * Visual style variant of the button
    * @default "primary"
    */
-  variant?: "primary" | "secondary" | "danger"; // Add more variants as needed
+  variant?: "primary" | "secondary" | "danger" | "icon";
 
   /**
    * Accessible label for the button
@@ -49,8 +49,14 @@ interface ButtonProps extends RACButtonProps {
  *
  * @example
  * ```tsx
- * // Disabled button
- * <Button isDisabled>Cannot submit</Button>
+ * // Icon button
+ * <Button variant="icon" ariaLabel="Close"><MdClose /></Button>
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Icon button with text
+ * <Button variant="icon" ariaLabel="Location"><MdLocationOn /> Location</Button>
  * ```
  */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -69,13 +75,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     /**
      * Generate aria attributes for the button.
-     *
-     * @remarks
-     * These attributes enhance accessibility for screen readers and keyboard users.
-     * The aria-label provides a text alternative, while tabIndex manages focus behavior.
-     *
-     * @see {@link https://developer.mozilla.org/en-US/docs/Web/Accessibility}
-     * @see {@link https://www.w3.org/WAI/ARIA/apg/patterns/button/}
      */
     const ariaAttributes = {
       "aria-label": ariaLabel,
@@ -85,10 +84,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     /**
      * Computes the final className by combining variant styles, reduced motion preference,
      * and any custom classNames provided by the consumer.
-     *
-     * @example
-     * // Resulting className might be something like:
-     * // "primary reducedMotion custom-class"
      */
     const computedClassName = clsx(
       styles[variant],
