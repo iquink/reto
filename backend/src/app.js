@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser');
 const initDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const AuthService = require('./services/authService');
+const IssuesService = require('./services/issuesService');
+const issuesRoutes = require('./routes/issuesRoutes');
 require('dotenv').config();
 
 const app = express();
@@ -15,6 +17,7 @@ const PORT = process.env.PORT || 3000;
 
   // Service initialization
   const authService = new AuthService(db);
+  const issuesService = new IssuesService(db);
 
   // Middleware
   app.use(
@@ -25,12 +28,13 @@ const PORT = process.env.PORT || 3000;
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     })
   );
-//   app.options('*', cors());
+
   app.use(express.json());
   app.use(cookieParser());
 
   // Routes
   app.use('/', authRoutes(authService));
+  app.use('/issues', issuesRoutes(issuesService));
 
   // Error handling
   app.use((err, req, res, next) => {

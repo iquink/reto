@@ -8,43 +8,51 @@ import { MdClose } from "react-icons/md";
 import { useStore } from "@store";
 import L, { LatLngExpression } from "leaflet";
 import { pickedLocation } from "@assets";
-import { MdOutlineMap  as GoToMapIcon } from "react-icons/md";
+import { MdOutlineMap as GoToMapIcon } from "react-icons/md";
+import { observer } from "mobx-react-lite";
 
 /**
  * AddIssueModal component displays a modal dialog with a map for selecting coordinates.
  *
- * - Opens a modal when the "Open map" button is clicked.
+ * - Opens a modal when the map button is clicked.
  * - Loads the map after a short delay for smoother UX.
  * - Allows the user to pick a location on the map, saving coordinates to the issuesStore.
+ * - Calls the optional `onCoordinatesChanged` callback when coordinates are picked.
  * - Includes Submit and Cancel buttons, and a close icon in the top-right corner.
  *
  * @component
+ * @param {Object} props
+ * @param {(coords: [number, number]) => void} [props.onCoordinatesChanged] - Optional callback called when coordinates are picked.
  * @example
  * ```tsx
- * <AddIssueModal />
+ * <AddIssueModal onCoordinatesChanged={(coords) => console.log(coords)} />
  * ```
  */
-export const AddIssueModal: React.FC = () => {
+export const AddIssueModal: React.FC<{
+  onCoordinatesChanged?: (coords: [number, number]) => void;
+}> = observer(({ onCoordinatesChanged }) => {
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [markers, setMarkers] = useState<{ [name: string]: [LatLngExpression, L.Icon] }>({});
   const { issuesStore } = useStore();
 
   /**
    * Callback for when a location is picked on the map.
-   * Updates the selectedLocation in the issuesStore.
+   * Updates the selectedLocation in the issuesStore and calls onCoordinatesChanged if provided.
    *
    * @param lat - Latitude of the picked location.
    * @param lng - Longitude of the picked location.
    */
   const setPickedLocation = (lat: number, lng: number) => {
     issuesStore.setSelectedLocation([lat, lng]);
-    console.log("Selected location:", issuesStore.selectedLocation);
+    if (onCoordinatesChanged) {
+      onCoordinatesChanged([lat, lng]);
+    }
     setMarkers({
-      "pickedLocation": [
+      pickedLocation: [
         [lat, lng],
-        L.icon({ iconUrl: pickedLocation, iconSize: [32, 32], iconAnchor: [16, 32] })
+        L.icon({ iconUrl: pickedLocation, iconSize: [32, 32], iconAnchor: [16, 32] }),
       ],
-    })
+    });
   };
 
   // Load the map after a short delay for smoother modal animation.
@@ -58,7 +66,9 @@ export const AddIssueModal: React.FC = () => {
 
   return (
     <DialogTrigger>
-      <Button variant="icon"><GoToMapIcon  /></Button>
+      <Button variant="icon">
+        <GoToMapIcon />
+      </Button>
       <Modal>
         <Dialog className={styles.modal}>
           <CloseButton className={styles.closeButton} slot="close" aria-label="Close">
@@ -83,4 +93,4 @@ export const AddIssueModal: React.FC = () => {
       </Modal>
     </DialogTrigger>
   );
-};
+});

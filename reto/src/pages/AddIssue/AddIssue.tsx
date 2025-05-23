@@ -1,61 +1,40 @@
 import React from "react";
 import { Form } from "react-aria-components";
-import { Input } from "@components";
-import { TextArea } from "@components";
+import { Input, TextArea, Button, AddIssueModal } from "@components";
 import { Controller, useForm } from "react-hook-form";
-import { Button } from "@components";
-import styles from "./AddIssue.module.css"; // Import the CSS module
-import { AddIssueModal } from "@components";
-import { useStore } from "@store"; // <-- Add this import
+import { useStore } from "@store";
 import { observer } from "mobx-react-lite";
+import styles from "./AddIssue.module.css";
 
-/**
- * AddIssue component for creating a new issue.
- *
- * This component renders a form with a text input for the issue title,
- * a textarea for the issue description, and a submit button.
- * It uses `react-hook-form` for form validation and `react-aria-components` for accessibility.
- *
- * @component
- * @example
- * ```tsx
- * <AddIssue />
- * ```
- */
 const AddIssue: React.FC = observer(() => {
-  /**
-   * Default form values for the Add Issue form.
-   */
-  const { handleSubmit, control, reset } = useForm({
+  const { handleSubmit, control, reset, setValue, formState: { errors } } = useForm({
     defaultValues: {
       title: "",
       description: "",
+      coordinates: "",
     },
   });
 
-  const { issuesStore } = useStore(); // <-- Get the store
+  const { issuesStore, authStore } = useStore();
+  const { user } = authStore;
 
-  /**
-   * Interface for the form data.
-   */
   interface FormData {
-    /** Title of the issue */
     title: string;
-
-    /** Description of the issue */
     description: string;
+    coordinates: string;
   }
 
-  /**
-   * Handles form submission.
-   *
-   * @param data - The form data containing title and description.
-   */
   const onSubmit = async (data: FormData): Promise<void> => {
-    // Submit logic will go here when the endpoint is available
     console.log("Form submitted:", data);
+    issuesStore.addIssue({
+      user_id: Number(user.id),
+      title: data.title,
+      description: data.description,
+      coordinates: data.coordinates,
+    });
     alert("Form submitted successfully!");
     reset();
+    issuesStore.clearSelectedLocation();
   };
 
   return (
@@ -65,19 +44,10 @@ const AddIssue: React.FC = observer(() => {
         name="title"
         rules={{
           required: "Title is required.",
-          minLength: {
-            value: 3,
-            message: "Title must be at least 3 characters long.",
-          },
-          maxLength: {
-            value: 100,
-            message: "Title cannot exceed 100 characters.",
-          },
+          minLength: { value: 3, message: "Title must be at least 3 characters long." },
+          maxLength: { value: 100, message: "Title cannot exceed 100 characters." },
         }}
-        render={({
-          field: { name, value, onChange, onBlur, ref },
-          fieldState: { invalid, error },
-        }) => (
+        render={({ field: { name, value, onChange, onBlur, ref }, fieldState: { invalid, error } }) => (
           <Input
             name={name}
             value={value}
@@ -97,19 +67,10 @@ const AddIssue: React.FC = observer(() => {
         name="description"
         rules={{
           required: "Description is required.",
-          minLength: {
-            value: 10,
-            message: "Description must be at least 10 characters long.",
-          },
-          maxLength: {
-            value: 500,
-            message: "Description cannot exceed 500 characters.",
-          },
+          minLength: { value: 10, message: "Description must be at least 10 characters long." },
+          maxLength: { value: 500, message: "Description cannot exceed 500 characters." },
         }}
-        render={({
-          field: { name, value, onChange, onBlur, ref },
-          fieldState: { invalid, error },
-        }) => (
+        render={({ field: { name, value, onChange, onBlur, ref }, fieldState: { invalid, error } }) => (
           <TextArea
             name={name}
             value={value}
@@ -124,18 +85,29 @@ const AddIssue: React.FC = observer(() => {
           />
         )}
       />
-      {/* Coordinates display section */}
+      <Controller
+        control={control}
+        name="coordinates"
+        rules={{
+          required: "Coordinates are required.",
+        }}
+        render={({ field: { name, value, ref } }) => (
+          <Input type="hidden" name={name} value={value} ref={ref} />
+        )}
+      />
       <div className={styles.coordinatesRow}>
         <div className={styles.coordinatesInfo}>
-          <strong className={styles.coordinatesTitle}>
-            Selected coordinates:
-          </strong>{" "}
-          {Array.isArray(issuesStore.selectedLocation) &&
-            issuesStore.selectedLocation.length !== 0 &&
-            `${issuesStore.selectedLocation[0]}, ${issuesStore.selectedLocation[1]}`}
+          <strong className={styles.coordinatesTitle}>Selected coordinates:</strong>{" "}
+          {Array.isArray(issuesStore.selectedLocation) && issuesStore.selectedLocation.length === 2
+            ? `${issuesStore.selectedLocation[0]}, ${issuesStore.selectedLocation[1]}`
+            : "Press the map button to select coordinates"}
+          {errors.coordinates && (
+            <span className={styles.error}>{errors.coordinates.message}</span>
+          )}
         </div>
         <div className={styles.coordinatesModal}>
-          <AddIssueModal />
+          <AddIssueModal onCoordinatesChanged={() => setValue("coordinates", Array.isArray(issuesStore.selectedLocation) && issuesStore.selectedLocation.length === 2
+            ? `${issuesStore.selectedLocation[0]}, ${issuesStore.selectedLocation[1]}` : "" )} />
         </div>
       </div>
       <Button type="submit" className={styles.button}>

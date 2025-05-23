@@ -60,7 +60,7 @@ export const Map: React.FC<MapProps> = ({
         attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       {isGetCoordinatesByClick && <MapEvents />}
-      {Object.keys(markers).map((key, i) => (
+      {Object.keys(markers).map((key) => (
         <Marker key={key} position={markers[key][0]} icon={markers[key][1]}>
           <Popup>{key}</Popup>
         </Marker>

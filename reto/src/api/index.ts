@@ -1,3 +1,4 @@
 import authApi from "./authApi";
+import issuesApi from "./issuesApi";
 
-export { authApi };
+export { authApi, issuesApi };
