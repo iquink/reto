@@ -8,6 +8,7 @@ import { MdClose } from "react-icons/md";
 import { useStore } from "@store";
 import L, { LatLngExpression } from "leaflet";
 import { pickedLocation } from "@assets";
+import { MdOutlineMap  as GoToMapIcon } from "react-icons/md";
 
 /**
  * AddIssueModal component displays a modal dialog with a map for selecting coordinates.
@@ -57,7 +58,7 @@ export const AddIssueModal: React.FC = () => {
 
   return (
     <DialogTrigger>
-      <Button>Open map</Button>
+      <Button variant="icon"><GoToMapIcon  /></Button>
       <Modal>
         <Dialog className={styles.modal}>
           <CloseButton className={styles.closeButton} slot="close" aria-label="Close">

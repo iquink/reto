@@ -55,7 +55,7 @@ const AddIssue: React.FC = observer(() => {
     // Submit logic will go here when the endpoint is available
     console.log("Form submitted:", data);
     alert("Form submitted successfully!");
-    reset(); // Reset the form after submission
+    reset();
   };
 
   return (
@@ -88,7 +88,7 @@ const AddIssue: React.FC = observer(() => {
             placeholder="Enter the issue title"
             invalid={invalid}
             error={error}
-            className={styles.input} // Apply the input style
+            className={styles.input}
           />
         )}
       />
@@ -120,20 +120,24 @@ const AddIssue: React.FC = observer(() => {
             placeholder="Enter the issue description"
             invalid={invalid}
             error={error}
-            className={styles.textarea} // Apply the textarea style
+            className={styles.textarea}
           />
         )}
       />
       {/* Coordinates display section */}
-      {issuesStore.selectedLocation && (
-        <div
-          style={{ marginBottom: "16px", color: "var(--text-color-secondary)" }}
-        >
-          <strong>Selected coordinates:</strong>{" "}
-          {issuesStore.selectedLocation[0]}, {issuesStore.selectedLocation[1]}
+      <div className={styles.coordinatesRow}>
+        <div className={styles.coordinatesInfo}>
+          <strong className={styles.coordinatesTitle}>
+            Selected coordinates:
+          </strong>{" "}
+          {Array.isArray(issuesStore.selectedLocation) &&
+            issuesStore.selectedLocation.length !== 0 &&
+            `${issuesStore.selectedLocation[0]}, ${issuesStore.selectedLocation[1]}`}
         </div>
-      )}
-      <AddIssueModal />
+        <div className={styles.coordinatesModal}>
+          <AddIssueModal />
+        </div>
+      </div>
       <Button type="submit" className={styles.button}>
         Submit
       </Button>
