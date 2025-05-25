@@ -43,7 +43,6 @@ export const IssuesStore = types
 
     // Add a new issue and push it to the issues list
     addIssue: flow(function* (issueData: {
-      userId: number;
       title: string;
       description: string;
       photos?: string[];
@@ -51,7 +50,8 @@ export const IssuesStore = types
     }) {
       try {
         const data = yield issuesApi.createIssue(issueData);
-        self.issues.unshift(cast(data));
+        // TODO: get the issue from the server and cast it to IssueModel
+        // self.issues.unshift(cast(data));
       } catch (error) {
         console.error("Failed to add issue:", error);
       }

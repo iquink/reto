@@ -12,13 +12,14 @@ const issuesApi = {
    * @returns The created issue object.
    */
   async createIssue(data: {
-    userId: number;
     title: string;
     description?: string;
     photos?: string[];
     coordinates?: string;
   }) {
-    const response = await apiClient.post("/issues", data, { withCredentials: true });
+    const response = await apiClient.post("/issues", data, {
+      withCredentials: true,
+    });
     return response.data;
   },
 
@@ -37,7 +38,9 @@ const issuesApi = {
    * @returns The issue object.
    */
   async getIssueById(id: number) {
-    const response = await apiClient.get(`/issues/${id}`, { withCredentials: true });
+    const response = await apiClient.get(`/issues/${id}`, {
+      withCredentials: true,
+    });
     return response.data;
   },
 
@@ -56,7 +59,9 @@ const issuesApi = {
       coordinates?: string;
     }
   ) {
-    const response = await apiClient.put(`/issues/${id}`, data, { withCredentials: true });
+    const response = await apiClient.put(`/issues/${id}`, data, {
+      withCredentials: true,
+    });
     return response.data;
   },
 
@@ -66,7 +71,9 @@ const issuesApi = {
    * @returns Status message.
    */
   async deleteIssue(id: number) {
-    const response = await apiClient.delete(`/issues/${id}`, { withCredentials: true });
+    const response = await apiClient.delete(`/issues/${id}`, {
+      withCredentials: true,
+    });
     return response.data;
   },
 };

@@ -7,7 +7,13 @@ import { observer } from "mobx-react-lite";
 import styles from "./AddIssue.module.css";
 
 const AddIssue: React.FC = observer(() => {
-  const { handleSubmit, control, reset, setValue, formState: { errors } } = useForm({
+  const {
+    handleSubmit,
+    control,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       title: "",
       description: "",
@@ -44,10 +50,19 @@ const AddIssue: React.FC = observer(() => {
         name="title"
         rules={{
           required: "Title is required.",
-          minLength: { value: 3, message: "Title must be at least 3 characters long." },
-          maxLength: { value: 100, message: "Title cannot exceed 100 characters." },
+          minLength: {
+            value: 3,
+            message: "Title must be at least 3 characters long.",
+          },
+          maxLength: {
+            value: 100,
+            message: "Title cannot exceed 100 characters.",
+          },
         }}
-        render={({ field: { name, value, onChange, onBlur, ref }, fieldState: { invalid, error } }) => (
+        render={({
+          field: { name, value, onChange, onBlur, ref },
+          fieldState: { invalid, error },
+        }) => (
           <Input
             name={name}
             value={value}
@@ -67,10 +82,19 @@ const AddIssue: React.FC = observer(() => {
         name="description"
         rules={{
           required: "Description is required.",
-          minLength: { value: 10, message: "Description must be at least 10 characters long." },
-          maxLength: { value: 500, message: "Description cannot exceed 500 characters." },
+          minLength: {
+            value: 10,
+            message: "Description must be at least 10 characters long.",
+          },
+          maxLength: {
+            value: 500,
+            message: "Description cannot exceed 500 characters.",
+          },
         }}
-        render={({ field: { name, value, onChange, onBlur, ref }, fieldState: { invalid, error } }) => (
+        render={({
+          field: { name, value, onChange, onBlur, ref },
+          fieldState: { invalid, error },
+        }) => (
           <TextArea
             name={name}
             value={value}
@@ -97,8 +121,11 @@ const AddIssue: React.FC = observer(() => {
       />
       <div className={styles.coordinatesRow}>
         <div className={styles.coordinatesInfo}>
-          <strong className={styles.coordinatesTitle}>Selected coordinates:</strong>{" "}
-          {Array.isArray(issuesStore.selectedLocation) && issuesStore.selectedLocation.length === 2
+          <strong className={styles.coordinatesTitle}>
+            Selected coordinates:
+          </strong>{" "}
+          {Array.isArray(issuesStore.selectedLocation) &&
+          issuesStore.selectedLocation.length === 2
             ? `${issuesStore.selectedLocation[0]}, ${issuesStore.selectedLocation[1]}`
             : "Press the map button to select coordinates"}
           {errors.coordinates && (
@@ -106,8 +133,17 @@ const AddIssue: React.FC = observer(() => {
           )}
         </div>
         <div className={styles.coordinatesModal}>
-          <AddIssueModal onCoordinatesChanged={() => setValue("coordinates", Array.isArray(issuesStore.selectedLocation) && issuesStore.selectedLocation.length === 2
-            ? `${issuesStore.selectedLocation[0]}, ${issuesStore.selectedLocation[1]}` : "" )} />
+          <AddIssueModal
+            onCoordinatesChanged={() =>
+              setValue(
+                "coordinates",
+                Array.isArray(issuesStore.selectedLocation) &&
+                  issuesStore.selectedLocation.length === 2
+                  ? `${issuesStore.selectedLocation[0]} ${issuesStore.selectedLocation[1]}`
+                  : ""
+              )
+            }
+          />
         </div>
       </div>
       <Button type="submit" className={styles.button}>

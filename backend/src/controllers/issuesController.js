@@ -9,7 +9,7 @@ class IssuesController {
       const userId = req.userId;
       const { title, description, photos, coordinates } = req.body;
       const issue = await this.issuesService.createIssue({
-        user_id: userId,
+        userId,
         title,
         description,
         photos,
@@ -17,7 +17,7 @@ class IssuesController {
       });
       res.status(201).json(issue);
     } catch (err) {
-        console.log("data", req.body);
+      console.log("data", req.body);
       console.error("Error creating issue:", err);
       res.status(500).send("Error creating issue.");
     }
@@ -61,7 +61,8 @@ class IssuesController {
         photos,
         coordinates,
       });
-      if (!updated) return res.status(404).send("Issue not found or not yours.");
+      if (!updated)
+        return res.status(404).send("Issue not found or not yours.");
       res.json({ message: "Issue updated." });
     } catch (err) {
       console.error("Error updating issue:", err);
@@ -75,7 +76,8 @@ class IssuesController {
       const userId = req.user.id;
       const issueId = req.params.id;
       const deleted = await this.issuesService.deleteIssue(issueId, userId);
-      if (!deleted) return res.status(404).send("Issue not found or not yours.");
+      if (!deleted)
+        return res.status(404).send("Issue not found or not yours.");
       res.json({ message: "Issue deleted." });
     } catch (err) {
       console.error("Error deleting issue:", err);
