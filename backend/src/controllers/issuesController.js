@@ -26,7 +26,7 @@ class IssuesController {
   // Get all issues for the authenticated user
   async getUserIssues(req, res) {
     try {
-      const userId = req.user.id;
+      const { userId } = req;
       const issues = await this.issuesService.getUserIssues(userId);
       res.json(issues);
     } catch (err) {

@@ -1,0 +1,261 @@
+.table {
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--overlay-background, var(--background-color));
+  outline: none;
+  border-spacing: 0;
+  min-height: 100px;
+  align-self: start;
+  max-width: 100%;
+  word-break: break-word;
+  forced-color-adjust: none;
+
+  &[data-focus-visible] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -1px;
+  }
+
+  .tableHeader {
+    color: var(--text-color);
+
+    &:after {
+      content: '';
+      display: table-row;
+      height: 2px;
+    }
+
+    & tr:last-child .column {
+      border-bottom: 1px solid var(--border-color);
+      cursor: default;
+    }
+  }
+
+  .row {
+    --radius-top: 6px;
+    --radius-bottom: 6px;
+    --radius: var(--radius-top) var(--radius-top) var(--radius-bottom) var(--radius-bottom);
+    border-radius: var(--radius);
+    clip-path: inset(0 round var(--radius)); /* firefox */
+    outline: none;
+    cursor: default;
+    color: var(--text-color);
+    font-size: var(--font-size-base);
+    position: relative;
+    transform: scale(1);
+
+    &[data-focus-visible] {
+      outline: 2px solid var(--focus-ring-color);
+      outline-offset: -2px;
+    }
+
+    &[data-pressed] {
+      background: var(--disabled-bg-color);
+    }
+
+    &[data-selected] {
+      background: var(--color-success-bg);
+      color: var(--color-success);
+      --focus-ring-color: var(--color-success);
+
+      &[data-focus-visible],
+      .cell[data-focus-visible] {
+        outline-offset: -4px;
+      }
+    }
+
+    &[data-disabled] {
+      color: var(--disabled-text-color);
+    }
+  }
+
+  .cell,
+  .column {
+    padding: var(--spacing-xs) var(--spacing-md);
+    text-align: left;
+    outline: none;
+
+    &[data-focus-visible] {
+      outline: 2px solid var(--focus-ring-color);
+      outline-offset: -2px;
+    }
+  }
+
+  .cell {
+    transform: translateZ(0);
+
+    &:first-child {
+      border-radius: var(--radius-top) 0 0 var(--radius-bottom);
+    }
+
+    &:last-child {
+      border-radius: 0 var(--radius-top) var(--radius-bottom) 0;
+    }
+  }
+
+  /* join selected items if :has selector is supported */
+  @supports selector(:has(.foo)) {
+    .row[data-selected]:has(+ [data-selected]),
+    .row[data-selected]:has(+ .react-aria-DropIndicator + [data-selected]) {
+      --radius-bottom: 0px;
+    }
+
+    .row[data-selected] + [data-selected],
+    .row[data-selected] + .react-aria-DropIndicator + [data-selected]{
+      --radius-top: 0px;
+    }
+  }
+}
+
+:where(.row) .react-aria-Checkbox {
+  --selected-color: var(--color-success);
+  --selected-color-pressed: var(--color-success);
+  --checkmark-color: var(--color-success-bg);
+  --background-color: var(--color-success-bg);
+}
+
+.row[data-href] {
+  cursor: pointer;
+}
+
+.column {
+  .sortIndicator {
+    padding: 0 2px;
+  }
+
+  &:not([data-sort-direction]) .sortIndicator {
+    visibility: hidden;
+  }
+}
+
+.body {
+  &[data-empty] {
+    text-align: center;
+    font-style: italic;
+  }
+}
+
+.resizableTableContainer {
+  max-width: 400px;
+  overflow: auto;
+  position: relative;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--background-color);
+
+  .table {
+    border: none;
+  }
+
+  .column-name,
+  .button {
+    --background-color: var(--overlay-background, var(--background-color));
+    flex: 1;
+    font: inherit;
+    text-align: start;
+    color: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-color: transparent;
+    transition: background var(--transition-fast);
+    &[data-hovered] {
+      background: var(--primary-color-hover);
+    }
+
+    &[data-pressed] {
+      background: var(--primary-color-hover);
+      box-shadow: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--focus-ring-color);
+    }
+  }
+
+  .columnResizer {
+    width: 15px;
+    background-color: var(--border-color);
+    height: 25px;
+    flex: 0 0 auto;
+    touch-action: none;
+    box-sizing: border-box;
+    border: 5px;
+    border-style: none solid;
+    border-color: transparent;
+    background-clip: content-box;
+
+    &[data-resizable-direction=both] {
+      cursor: ew-resize;
+    }
+
+    &[data-resizable-direction=left] {
+      cursor: e-resize;
+    }
+
+    &[data-resizable-direction=right] {
+      cursor: w-resize;
+    }
+
+    &[data-focus-visible] {
+      background-color: var(--focus-ring-color);
+    }
+
+    &[data-resizing] {
+      border-color: var(--focus-ring-color);
+      background-color: transparent;
+    }
+  }
+
+  .column,
+  .cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.row {
+  &[data-dragging] {
+    opacity: 0.6;
+    transform: translateZ(0);
+  }
+
+  [slot=drag] {
+    all: unset;
+    width: 15px;
+    text-align: center;
+
+    &[data-focus-visible] {
+      border-radius: 4px;
+      outline: 2px solid var(--focus-ring-color);
+    }
+  }
+}
+
+.react-aria-DropIndicator[data-drop-target] {
+  outline: 1px solid var(--color-success-bg);
+  transform: translateZ(0);
+}
+
+.table[data-drop-target] {
+  outline: 2px solid var(--color-success-bg);
+  outline-offset: -1px;
+  background: var(--color-success-bg)
+}
+
+.row[data-drop-target] {
+  outline: 2px solid var(--color-success-bg);
+  background: var(--color-success-bg)
+}
+
+.react-aria-DropIndicator[data-drop-target] {
+  outline: 1px solid var(--color-success-bg);
+  transform: translateZ(0);
+}
+
+.cell img {
+  height: 30px;
+  width: 30px;
+  object-fit: cover;
+  display: block;
+}

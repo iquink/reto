@@ -1,5 +1,7 @@
 import apiClient from "./api";
 
+const PATH = "/issues";
+
 /**
  * Issues API for handling CRUD operations on issues.
  *
@@ -17,7 +19,7 @@ const issuesApi = {
     photos?: string[];
     coordinates?: string;
   }) {
-    const response = await apiClient.post("/issues", data, {
+    const response = await apiClient.post(PATH, data, {
       withCredentials: true,
     });
     return response.data;
@@ -28,7 +30,7 @@ const issuesApi = {
    * @returns Array of issue objects.
    */
   async getUserIssues() {
-    const response = await apiClient.get("/issues", { withCredentials: true });
+    const response = await apiClient.get(PATH, { withCredentials: true });
     return response.data;
   },
 
@@ -38,7 +40,7 @@ const issuesApi = {
    * @returns The issue object.
    */
   async getIssueById(id: number) {
-    const response = await apiClient.get(`/issues/${id}`, {
+    const response = await apiClient.get(`${PATH}/${id}`, {
       withCredentials: true,
     });
     return response.data;
@@ -59,7 +61,7 @@ const issuesApi = {
       coordinates?: string;
     }
   ) {
-    const response = await apiClient.put(`/issues/${id}`, data, {
+    const response = await apiClient.put(`${PATH}/${id}`, data, {
       withCredentials: true,
     });
     return response.data;
@@ -71,7 +73,7 @@ const issuesApi = {
    * @returns Status message.
    */
   async deleteIssue(id: number) {
-    const response = await apiClient.delete(`/issues/${id}`, {
+    const response = await apiClient.delete(`${PATH}/${id}`, {
       withCredentials: true,
     });
     return response.data;

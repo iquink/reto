@@ -104,11 +104,14 @@ class IssuesService {
   }
 
   async getUserIssues(userId) {
-    const query = `SELECT * FROM issues WHERE user_id = ? ORDER BY created_at DESC`;
+    const query = `SELECT * FROM issues WHERE user_id = ? ORDER BY updated_at DESC`;
     const [rows] = await this.db.execute(query, [userId]);
     return rows.map((row) => ({
-      ...row,
-      photos: row.photos ? JSON.parse(row.photos) : null,
+      id: row.id,
+      title: row.title,
+      created_at: row.created_at,
+      updated_at: row.updated_at,
+      status: row.status,
     }));
   }
 

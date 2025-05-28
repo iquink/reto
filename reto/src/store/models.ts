@@ -13,6 +13,14 @@ export const IssueModel = types.model("Issue", {
   description: types.maybeNull(types.string),
   photos: types.maybeNull(types.frozen()), // JSON array or null
   coordinates: types.maybeNull(types.string),
-  created_at: types.string,
-  updated_at: types.string,
+  created_at: types.string,   // ISO string, e.g. "2025-05-28T07:55:49.000Z"
+  updated_at: types.string,   // ISO string, e.g. "2025-05-28T07:55:49.000Z"
+});
+
+export const UserIssuesListItemModel = types.model("UserIssuesListItem", {
+  id: types.identifierNumber,
+  title: types.string,
+  created_at: types.string,   // ISO string
+  updated_at: types.string,   // ISO string
+  status: types.string, // Assuming status is a string, adjust as needed
 });
