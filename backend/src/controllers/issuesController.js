@@ -38,7 +38,7 @@ class IssuesController {
   // Get a single issue by ID (must belong to user)
   async getIssueById(req, res) {
     try {
-      const userId = req.user.id;
+      const { userId } = req;
       const issueId = req.params.id;
       const issue = await this.issuesService.getIssueById(issueId, userId);
       if (!issue) return res.status(404).send("Issue not found.");
@@ -52,7 +52,7 @@ class IssuesController {
   // Update an issue (must belong to user)
   async updateIssue(req, res) {
     try {
-      const userId = req.user.id;
+      const { userId } = req;
       const issueId = req.params.id;
       const { title, description, photos, coordinates } = req.body;
       const updated = await this.issuesService.updateIssue(issueId, userId, {
@@ -73,7 +73,7 @@ class IssuesController {
   // Delete an issue (must belong to user)
   async deleteIssue(req, res) {
     try {
-      const userId = req.user.id;
+      const { userId } = req;
       const issueId = req.params.id;
       const deleted = await this.issuesService.deleteIssue(issueId, userId);
       if (!deleted)

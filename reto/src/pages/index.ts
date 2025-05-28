@@ -4,5 +4,6 @@ import Register from "./Register/Register";
 import Profile from "./Profile";
 import AddIssue from "./AddIssue/AddIssue";
 import Issues from "./Issues/Issues";
+import Issue from "./Issue/Issue";
 
-export { Home, Login, Register, Profile, AddIssue, Issues };
+export { Home, Login, Register, Profile, AddIssue, Issues, Issue };

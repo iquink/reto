@@ -1,0 +1,14 @@
+.mapWrapper {
+  width: 100%;
+  max-width: 600px;
+  height: 350px;
+  margin: 32px auto 0 auto;
+  border-radius: var(--spacing-lg, 24px);
+  overflow: hidden;
+  box-shadow: 0 4px 16px var(--border-color, #222);
+  border: 1px solid var(--border-color, #222);
+  background: var(--background-color, #fafafa);
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}

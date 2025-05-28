@@ -73,4 +73,13 @@ export const IssuesStore = types
         self.clearUserIssues();
       }
     }),
+    getIssueById: flow(function* (id: number) {
+      try {
+        const data = yield issuesApi.getIssueById(id);
+        self.setCurrentIssue(data);
+      } catch (error) {
+        console.error("Failed to fetch issue by ID:", error);
+        self.setCurrentIssue(null);
+      }
+    }),
   }));

@@ -56,7 +56,7 @@ const Issues: React.FC = observer(() => {
           You don't have any issues. Press Add to create one.
         </p>
       ) : (
-        <Table aria-label="Issues Table">
+        <Table aria-label="Issues Table" onRowAction={(id) => navigate(`/issues/${id}`)}>
           <Table.Header columns={columns}>
             {columns.map((column) => (
               <Table.Column

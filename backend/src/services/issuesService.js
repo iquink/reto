@@ -121,8 +121,13 @@ class IssuesService {
     if (rows.length === 0) return null;
     const row = rows[0];
     return {
-      ...row,
+      id: row.id,
+      title: row.title,
+      description: row.description,
       photos: row.photos ? JSON.parse(row.photos) : null,
+      coordinates: row.coordinates,
+      created_at: row.created_at,
+      updated_at: row.updated_at,
     };
   }
 

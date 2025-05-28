@@ -12,7 +12,12 @@ export const IssueModel = types.model("Issue", {
   title: types.string,
   description: types.maybeNull(types.string),
   photos: types.maybeNull(types.frozen()), // JSON array or null
-  coordinates: types.maybeNull(types.string),
+  coordinates: types.maybeNull(
+    types.model({
+      x: types.number,
+      y: types.number,
+    })
+  ),
   created_at: types.string,   // ISO string, e.g. "2025-05-28T07:55:49.000Z"
   updated_at: types.string,   // ISO string, e.g. "2025-05-28T07:55:49.000Z"
 });
