@@ -1,5 +1,11 @@
 import React from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMapEvents,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { getUserLocation } from "./geolocation";
 import styles from "./Map.module.css";
@@ -11,11 +17,11 @@ import { LatLngExpression } from "leaflet";
  * @property setPickedLocation - Callback to receive the picked latitude and longitude when the map is clicked.
  */
 
-
 interface MapProps {
   isGetCoordinatesByClick?: boolean;
   setPickedLocation?: (lat: number, lng: number) => void;
-  markers?:  { [name: string]: [LatLngExpression, L.Icon] }
+  markers?: { [name: string]: [LatLngExpression, L.Icon] };
+  center?: LatLngExpression;
 }
 
 /**
@@ -30,8 +36,9 @@ export const Map: React.FC<MapProps> = ({
   isGetCoordinatesByClick = false,
   setPickedLocation,
   markers = {},
+  center,
 }) => {
-  const position = getUserLocation();
+  const position = center ?? getUserLocation();
 
   /**
    * Handles map click events and calls setPickedLocation with the latitude and longitude.

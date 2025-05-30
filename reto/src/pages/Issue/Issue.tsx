@@ -19,6 +19,9 @@ const Issue: React.FC<{ id: string | number }> = observer(({ id }) => {
     if (issueId) {
       issuesStore.getIssueById(Number(issueId));
     }
+    return () => {
+      issuesStore.clearCurrentIssue(); // Clear the current issue when component unmounts
+    };
   }, [issueId, issuesStore]);
 
   const issue = issuesStore.currentIssue;
@@ -53,6 +56,11 @@ const Issue: React.FC<{ id: string | number }> = observer(({ id }) => {
       {/* TODO: Render photos if available */}
       <div className={styles.mapWrapper}>
         <Map
+          center={
+            issue.coordinates
+              ? [issue.coordinates.y, issue.coordinates.x]
+              : undefined
+          }
           markers={{
             [`issue-${issue.id}`]: [
               [issue.coordinates.y, issue.coordinates.x],

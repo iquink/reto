@@ -36,6 +36,9 @@ export const IssuesStore = types
     clearUserIssues() {
       self.userIssues.clear();
     },
+    clearCurrentIssue() {
+      self.currentIssue = null;
+    },
   }))
   .actions((self) => ({
     // Fetch a single issue by id and set as currentIssue
