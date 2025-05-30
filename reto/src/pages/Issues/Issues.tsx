@@ -1,10 +1,16 @@
 import React from "react";
 import { useLocation } from "wouter";
-import styles from "./Issues.module.css"; // Add a CSS module for styling
-import { Table, Button } from "@components/index";
+import styles from "./Issues.module.css";
+import { IssueCard } from "@components/IssueCard/IssueCard";
+import { Button } from "@components/index";
 import { useStore } from "@store/index";
 import { observer } from "mobx-react-lite";
 import { getFormattedDate } from "./utils";
+import type { Instance } from "mobx-state-tree";
+import { UserIssuesListItemModel } from "@store/models";
+
+// TUserIssue type for userIssues
+export type TUserIssue = Instance<typeof UserIssuesListItemModel>;
 
 const Issues: React.FC = observer(() => {
   const [, navigate] = useLocation();
@@ -13,39 +19,12 @@ const Issues: React.FC = observer(() => {
     navigate("/issues/add");
   };
 
-  interface Column {
-    id: string;
-    name: string;
-    allowsSorting?: boolean;
-  }
-
-  interface RowData {
-    id: string;
-    [key: string]: any;
-  }
-
-  const columns: Column[] = [
-    { id: "id", name: "ID", allowsSorting: true },
-    { id: "title", name: "Title", allowsSorting: true },
-    { id: "created_at", name: "Created At", allowsSorting: true },
-    { id: "updated_at", name: "Updated At", allowsSorting: true },
-    { id: "status", name: "Status", allowsSorting: true },
-  ];
-
-  const [rows, setRows] = React.useState<RowData[]>([]);
-  const { issuesStore } = useStore(); // Assuming you have a store to manage issues
+  const { issuesStore } = useStore();
+  const [rows, setRows] = React.useState<TUserIssue[]>([]);
 
   React.useEffect(() => {
     issuesStore.getUserIssues().then(() => {
-      setRows(
-        issuesStore.userIssues.map((issue) => ({
-          id: issue.id.toString(),
-          title: issue.title,
-          created_at: getFormattedDate(issue.created_at),
-          updated_at: getFormattedDate(issue.updated_at),
-          status: issue.status,
-        }))
-      );
+      setRows(issuesStore.userIssues.slice());
     });
   }, [issuesStore]);
 
@@ -56,28 +35,19 @@ const Issues: React.FC = observer(() => {
           You don't have any issues. Press Add to create one.
         </p>
       ) : (
-        <Table aria-label="Issues Table" onRowAction={(id) => navigate(`/issues/${id}`)}>
-          <Table.Header columns={columns}>
-            {columns.map((column) => (
-              <Table.Column
-                key={column.id}
-                id={column.id}
-                allowsSorting={column.allowsSorting}
-              >
-                {column.name}
-              </Table.Column>
-            ))}
-          </Table.Header>
-          <Table.Body>
-            {rows.map((row) => (
-              <Table.Row key={row.id} id={row.id} columns={columns}>
-                {columns.map((column) => (
-                  <Table.Cell key={column.id}>{row[column.id]}</Table.Cell>
-                ))}
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+        <div className={styles.cardsGrid}>
+          {rows.map((row) => (
+            <IssueCard
+              key={row.id}
+              id={row.id}
+              title={row.title}
+              status={row.status}
+              created_at={getFormattedDate(row.created_at)}
+              updated_at={getFormattedDate(row.updated_at)}
+              onClick={() => navigate(`/issues/${row.id}`)}
+            />
+          ))}
+        </div>
       )}
       <Button onClick={handleAddIssue} className={styles.addButton}>
         Add
