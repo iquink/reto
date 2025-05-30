@@ -6,3 +6,4 @@ export { Map } from "./Map/Map";
 export { AddIssueModal } from "./Modals/AddIssueModal";
 export { Checkbox } from "./Checkbox/Checkbox";
 export { Table } from "./Table/Table";
+export { IssueCard } from "./IssueCard/IssueCard";

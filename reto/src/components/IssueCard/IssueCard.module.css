@@ -1,0 +1,92 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--background-color);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 1rem 1.25rem;
+  margin: 0.5rem 0;
+  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+  outline: none;
+}
+.card:focus,
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+  transform: translateY(-2px) scale(1.01);
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+.status {
+  padding: 0.15em 0.7em;
+  border-radius: 1em;
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 0.9em;
+}
+.status.open {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+.status.closed {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+.id {
+  color: #888;
+  font-size: 0.85em;
+}
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0.2em 0 0.1em 0;
+  color: var(--text-color);
+}
+.description {
+  color: var(--text-color-secondary);
+  font-size: 1rem;
+  margin-bottom: 0.2em;
+}
+.coordinates {
+  font-size: 0.95em;
+  color: var(--text-color-secondary);
+}
+.dates {
+  display: flex;
+  gap: 1.5em;
+  font-size: 0.85em;
+  color: var(--text-color-secondary);
+}
+.photos {
+  display: flex;
+  gap: 0.5em;
+  margin-top: 0.5em;
+  flex-wrap: wrap;
+}
+.photo {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+@media (max-width: 600px) {
+  .card {
+    padding: 0.75rem 0.5rem;
+  }
+  .title {
+    font-size: 1rem;
+  }
+  .description {
+    font-size: 0.95rem;
+  }
+  .photo {
+    width: 44px;
+    height: 44px;
+  }
+}
