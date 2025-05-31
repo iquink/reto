@@ -3,7 +3,7 @@ import styles from "./Issue.module.css";
 import { useStore } from "@store";
 import { observer } from "mobx-react-lite";
 import { Map } from "@components/index";
-import { pickedLocation } from "@assets";
+import { pickedLocation } from "@assets/index";
 import L from "leaflet";
 
 /**

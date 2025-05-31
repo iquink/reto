@@ -3,7 +3,11 @@ import { Table } from "./Table";
 import { ThemeProvider } from "../../context/ThemeContext";
 import React from "react";
 
-const columns = [
+const columns: Array<{
+  id: keyof (typeof rows)[0];
+  name: string;
+  allowsSorting: boolean;
+}> = [
   { id: "id", name: "ID", allowsSorting: true },
   { id: "title", name: "Title", allowsSorting: true },
   { id: "created_at", name: "Created At", allowsSorting: true },
@@ -11,7 +15,13 @@ const columns = [
   { id: "status", name: "Status", allowsSorting: true },
 ];
 
-const rows = [
+const rows: Array<{
+  id: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+  status: string;
+}> = [
   {
     id: "1",
     title: "First Issue",

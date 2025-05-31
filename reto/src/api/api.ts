@@ -1,7 +1,6 @@
 import axios, {
   AxiosInstance,
   AxiosResponse,
-  AxiosError,
   InternalAxiosRequestConfig,
 } from "axios";
 
@@ -22,7 +21,7 @@ const apiClient: AxiosInstance = axios.create({
 export interface ApiError {
   status: number;
   message: string;
-  details?: any;
+  details?: unknown;
 }
 
 const errorMessages: Record<number, string> = {
@@ -47,8 +46,7 @@ apiClient.interceptors.request.use(
     // You can add authorization tokens or other custom logic here
     return config;
   },
-  (error: AxiosError) => {
-    // Handle request errors
+  (error: unknown) => {
     return Promise.reject(error);
   }
 );
@@ -66,21 +64,25 @@ apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
   },
-  (error: AxiosError) => {
-    const status = error.response?.status || 0;
+  (error: unknown) => {
+    // Type guard for AxiosError
+    const err = error as {
+      response?: { status?: number; data?: unknown };
+      config?: { url?: string };
+    };
+    const status = err.response?.status || 0;
     let message = errorMessages[status] || "An unexpected error occurred.";
 
-    if (status === 404 && error.config?.url?.includes("/login")) {
-      message = (error.response?.data as string) || "User not found.";
+    if (status === 404 && err.config?.url?.includes("/login")) {
+      message = (err.response?.data as string) || "User not found.";
     }
 
     const apiError: ApiError = {
       status,
       message,
-      details: error.response?.data,
+      details: err.response?.data,
     };
 
-    // Handle errors globally, e.g., redirect to login on 401
     if (apiError.status === 401 && window.location.pathname !== "/") {
       window.location.href = "/";
     }
