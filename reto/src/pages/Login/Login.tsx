@@ -3,11 +3,11 @@ import { Form } from "react-aria-components";
 import { Input } from "@components";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "@components";
-import axios from "axios"; // Import axios and AxiosError
-import authApi from "@api/authApi"; // Import authApi
+// import axios from "axios";
+// import authApi from "@api/authApi";
 import { useStore } from "@store"; // Import the root store
 import styles from "./Login.module.css"; // Import the CSS module
-import { useLocation } from "wouter";
+// import { useLocation } from "wouter";
 
 /**
  * Login component for user authentication.
@@ -23,7 +23,7 @@ import { useLocation } from "wouter";
  */
 const Login: React.FC = () => {
   const { authStore } = useStore();
-  const [, navigate] = useLocation();
+  // const [, navigate] = useLocation();
   /**
    * Default form values for the login form.
    */
@@ -51,33 +51,13 @@ const Login: React.FC = () => {
    * @param data - The form data containing email and password.
    */
   const onSubmit = async (data: FormData): Promise<void> => {
-    try {
-      await authApi.login(data.email, data.password).then((response) => {
-        // Assuming the response contains user data
-        const user = response.user;
-        authStore.login({ ...user, id: user.id.toString() }); // Update the store with user data
-
-        navigate("/home");
-      });
-
-      alert("Login successful!");
-      reset(); // Reset the form after successful login
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        // Handle Axios-specific errors
-        if (error.response && error.response.status === 401) {
-          alert("Invalid credentials. Please try again.");
-        } else if (error.response && error.response.status === 404) {
-          alert("User not found.");
-        } else {
-          console.error("Error during login:", error);
-          alert("Login failed. Please try again.");
-        }
-      } else {
-        // Handle non-Axios errors
-        console.error("Unexpected error:", error);
-        alert("An unexpected error occurred. Please try again.");
-      }
+    const result = await authStore.login(data.email, data.password);
+    if (result.success) {
+      console.log("Login successful!");
+      reset(); // Reset the form after submission
+    } else {
+      alert(result.message);
+      console.error("Login failed:", result);
     }
   };
 

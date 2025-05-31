@@ -29,7 +29,11 @@ const authApi = {
    * @throws An error if the registration request fails.
    */
   async register(username: string, email: string, password: string) {
-    const response = await apiClient.post("/register", { username, email, password });
+    const response = await apiClient.post("/register", {
+      username,
+      email,
+      password,
+    });
     return response.data;
   },
 

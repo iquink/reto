@@ -1,14 +1,8 @@
-import { types, flow } from "mobx-state-tree";
+import { types, flow, Instance } from "mobx-state-tree";
 import { UserModel } from "./models";
 import authApi from "@api/authApi";
 import { navigate } from "wouter/use-browser-location";
-
-// Define the IUser interface
-interface IUser {
-  id: string;
-  username: string;
-  email: string;
-}
+import { ApiError } from "@api/api";
 
 // Define the AuthStore model
 export const AuthStore = types
@@ -17,10 +11,27 @@ export const AuthStore = types
     user: types.maybeNull(UserModel),
   })
   .actions((self) => ({
-    login(user: IUser) {
-      self.isAuthenticated = true;
-      self.user = UserModel.create(user);
+    setUser(user: Instance<typeof UserModel>) {
+      self.user = UserModel.create({ ...user, id: user.id.toString() });
     },
+  }))
+  .actions((self) => ({
+    login: flow(function* (email: string, password: string) {
+      try {
+        const response = yield authApi.login(email, password);
+        const user = response.user;
+        self.isAuthenticated = true;
+        self.setUser(user);
+        navigate("/");
+        return { success: true };
+      } catch (error: unknown) {
+        return {
+          success: false,
+          message:
+            (error as ApiError).message || "Login failed. Please try again.",
+        };
+      }
+    }),
     logout: flow(function* () {
       try {
         yield authApi.logout();
@@ -31,12 +42,11 @@ export const AuthStore = types
         console.error("Logout failed:", error);
       }
     }),
-  }))
-  .actions((self) => ({
     checkAuthorization: flow(function* () {
       try {
         const user = yield authApi.getCurrentUser();
-        self.login({ ...user, id: user.id.toString() }); // Update the store with user data
+        self.isAuthenticated = true;
+        self.setUser(user);
       } catch (error) {
         console.error("Authorization check failed:", error);
         self.isAuthenticated = false;
