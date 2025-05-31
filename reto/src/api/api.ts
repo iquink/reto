@@ -19,6 +19,20 @@ const apiClient: AxiosInstance = axios.create({
   },
 });
 
+export interface ApiError {
+  status: number;
+  message: string;
+  details?: any;
+}
+
+const errorMessages: Record<number, string> = {
+  400: "Bad request. Please check your input.",
+  401: "Unauthorized. Please log in again.",
+  403: "Forbidden. You don't have permission to perform this action.",
+  404: "Resource not found.",
+  500: "Server error. Please try again later.",
+};
+
 /**
  * Request interceptor for the Axios instance.
  *
@@ -53,14 +67,24 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    // Handle errors globally, e.g., redirect to login on 401
-    if (error.response && error.response.status === 401) {
-      // Prevent redirect loop by checking the current page
-      if (window.location.pathname !== "/") {
-        window.location.href = "/";
-      }
+    const status = error.response?.status || 0;
+    let message = errorMessages[status] || "An unexpected error occurred.";
+
+    if (status === 404 && error.config?.url?.includes("/login")) {
+      message = (error.response?.data as string) || "User not found.";
     }
-    return Promise.reject(error);
+
+    const apiError: ApiError = {
+      status,
+      message,
+      details: error.response?.data,
+    };
+
+    // Handle errors globally, e.g., redirect to login on 401
+    if (apiError.status === 401 && window.location.pathname !== "/") {
+      window.location.href = "/";
+    }
+    return Promise.reject(apiError);
   }
 );
 
