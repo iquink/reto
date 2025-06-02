@@ -122,7 +122,15 @@
   border-radius: 1px;
 }
 
-/* Desktop styles - only apply to screens larger than 768px */
+/* Controls Row for theme switcher and language selector */
+.controlsRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
 @media (min-width: 769px) {
   .menuButton {
     display: none; /* Hide hamburger menu on desktop */
@@ -145,5 +153,24 @@
     width: auto;
     padding: var(--spacing-sm) var(--spacing-md);
     margin: 0 var(--spacing-sm);
+  }
+
+  .controlsRow {
+    margin-bottom: 0;
+    margin-right: var(--spacing-md);
+    gap: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .controlsRow {
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+    justify-content: flex-start;
+  }
+
+  .nav {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

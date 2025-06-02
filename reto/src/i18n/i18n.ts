@@ -1,20 +1,30 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import enUS from "./locales/en-US.json";
-import fiFI from "./locales/fi-FI.json";
-import ruRU from "./locales/ru-RU.json";
+import en from "./locales/en.json";
+import fi from "./locales/fi.json";
+import ru from "./locales/ru.json";
+import LanguageDetector from 'i18next-browser-languagedetector';
 
-i18n.use(initReactI18next).init({
-  resources: {
-    en: enUS,
-    fi: fiFI,
-    ru: ruRU,
-  },
-  lng: "en",
-  fallbackLng: "en",
-  interpolation: {
-    escapeValue: false, // React already does escaping
-  },
-});
+
+i18n
+  .use(initReactI18next)
+  .use(LanguageDetector)
+  .init({
+    supportedLngs: ["en-US", "fi-FI", "ru-RU"],
+    resources: {
+      "en": en,
+      "fi": fi,
+      "ru": ru,
+    },
+    fallbackLng: "fi-FI",
+    interpolation: {
+      escapeValue: false, // React already does escaping
+    },
+    detection: {
+      order: ["localStorage", "navigator", "querystring", "htmlTag"],
+      caches: ["localStorage"]
+    },
+    nonExplicitSupportedLngs: true,
+  });
 
 export default i18n;

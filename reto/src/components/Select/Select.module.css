@@ -47,6 +47,9 @@
 .selectedValue {
   flex: 1 1 auto;
   text-align: left;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 
 .listBox {
@@ -98,6 +101,18 @@
   margin-right: var(--spacing-xs);
   display: flex;
   align-items: center;
+  /* Allow icon container to size to content */
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.optionIcon img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+  object-fit: contain;
 }
 
 .disabled {

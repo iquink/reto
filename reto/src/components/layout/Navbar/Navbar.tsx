@@ -7,8 +7,11 @@ import SiteLogo from "@assets/img/Logo.svg";
 import { useStore } from "@store";
 import { observer } from "mobx-react-lite"; // Import observer
 import { Button } from "react-aria-components";
+import { Select } from "@components/index";
 import { Switch } from "@components";
 import { useTheme } from "@context/ThemeContext/hooks";
+import {US, RU, FI} from "@assets/index"
+import i18next from "i18next";
 
 const Navbar: React.FC = observer(() => {
   /**
@@ -54,13 +57,30 @@ const Navbar: React.FC = observer(() => {
       </button>
 
       <nav className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}>
-        <Switch
-          aria-label="Toggle Theme"
-          isDisabled={false}
-          isThemeSwitch
-          onChange={() => toggleTheme()}
-          isSelected={theme === "dark"}
-        />
+        <div className={styles.controlsRow}>
+          <Switch
+            aria-label="Toggle Theme"
+            isDisabled={false}
+            isThemeSwitch
+            onChange={() => toggleTheme()}
+            isSelected={theme === "dark"}
+          />
+          <Select
+            name="language"
+            aria-label="Select Language"
+            onSelectionChange={(value) => {
+              console.log("Selected language:", value);
+              i18next.changeLanguage(value as string);
+            }}
+            defaultSelectedKey={i18next.language}
+            options={[
+              { value: "en", label: "English", icon:  <img src={US} alt="English" /> },
+              { value: "ru", label: "Russian", icon: <img src={RU} alt="Russian" /> },
+              { value: "fi", label: "Finnish", icon: <img src={FI} alt="Finnish" /> },
+            ]}
+            className={styles.languageSelect}
+          />
+        </div>
         <Link
           to="/"
           className={(active) => getActiveLinkClass(active)}
