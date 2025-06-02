@@ -33,6 +33,33 @@ interface SelectProps extends Omit<AriaSelectProps, "children"> {
   error?: RHFFieldError | undefined;
 }
 
+/**
+ * Select component using react-aria-components and design system styling.
+ *
+ * Renders an accessible, theme-aware select dropdown with support for icons, error display,
+ * react-hook-form integration, and custom options. Uses design system variables for styling.
+ *
+ * @remarks
+ * - Integrates with react-hook-form for form validation and error display.
+ * - Supports custom icons for both the select button and individual options.
+ * - Fully accessible and keyboard-navigable.
+ * - Uses design system variables and CSS modules for consistent styling.
+ *
+ * @example
+ * ```tsx
+ * <Select
+ *   name="status"
+ *   label="Status"
+ *   options={[{ value: 'open', label: 'Open' }, { value: 'closed', label: 'Closed' }]}
+ *   value={selectedStatus}
+ *   onChange={setSelectedStatus}
+ *   error={formState.errors.status}
+ * />
+ * ```
+ *
+ * @param props - {@link SelectProps} for configuring the select component.
+ * @returns The rendered Select component.
+ */
 const Select = forwardRef<HTMLButtonElement, SelectProps>(
   (
     {
