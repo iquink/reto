@@ -10,7 +10,7 @@ import { Button } from "react-aria-components";
 import { Select } from "@components/index";
 import { Switch } from "@components";
 import { useTheme } from "@context/ThemeContext/hooks";
-import {US, RU, FI} from "@assets/index"
+import { US, RU, FI } from "@assets/index";
 import i18next from "i18next";
 
 const Navbar: React.FC = observer(() => {
@@ -24,7 +24,7 @@ const Navbar: React.FC = observer(() => {
    * )
    */
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { authStore } = useStore();
+  const { authStore, settingsStore } = useStore();
 
   const { theme, toggleTheme } = useTheme();
 
@@ -71,12 +71,25 @@ const Navbar: React.FC = observer(() => {
             onSelectionChange={(value) => {
               console.log("Selected language:", value);
               i18next.changeLanguage(value as string);
+              //settingsStore.setCurrentLanguage(value as string);
             }}
             defaultSelectedKey={i18next.language}
             options={[
-              { value: "en", label: "English", icon:  <img src={US} alt="English" /> },
-              { value: "ru", label: "Russian", icon: <img src={RU} alt="Russian" /> },
-              { value: "fi", label: "Finnish", icon: <img src={FI} alt="Finnish" /> },
+              {
+                value: "en",
+                label: "English",
+                icon: <img src={US} alt="English" />,
+              },
+              {
+                value: "ru",
+                label: "Russian",
+                icon: <img src={RU} alt="Russian" />,
+              },
+              {
+                value: "fi",
+                label: "Finnish",
+                icon: <img src={FI} alt="Finnish" />,
+              },
             ]}
             className={styles.languageSelect}
           />

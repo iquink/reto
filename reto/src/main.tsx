@@ -4,6 +4,7 @@ import { Routes } from "./router";
 import "./styles/global.css";
 import { ThemeProvider } from "@context/ThemeContext";
 import { rootStore, StoreProvider } from "@store/RootStore";
+import "./i18n/i18n";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

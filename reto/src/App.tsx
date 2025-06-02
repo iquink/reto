@@ -3,7 +3,6 @@ import styles from "./App.module.css";
 import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "@store";
-import "./i18n/i18n";
 
 const App: React.FC<{ children: React.ReactNode }> = observer(
   ({ children }) => {
