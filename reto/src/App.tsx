@@ -3,12 +3,11 @@ import styles from "./App.module.css";
 import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "@store";
-import { initI18n } from "./i18n/i18n";
+import "./i18n/i18n";
 
 const App: React.FC<{ children: React.ReactNode }> = observer(
   ({ children }) => {
     const { authStore } = useStore();
-    initI18n();
 
     // Check authorization when the app loads
     useEffect(() => {
