@@ -7,7 +7,7 @@ import { Button as CloseButton } from "react-aria-components";
 import { MdClose } from "react-icons/md";
 import { useStore } from "@store";
 import L, { LatLngExpression } from "leaflet";
-import { pickedLocation } from "@assets";
+import { pickedLocation } from "@assets/index";
 import { MdOutlineMap as GoToMapIcon } from "react-icons/md";
 import { observer } from "mobx-react-lite";
 

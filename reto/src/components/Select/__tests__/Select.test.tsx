@@ -1,5 +1,6 @@
 import React from "react";
-import { render, screen, fireEvent } from "@test-utils/";
+import { render, screen, fireEvent, waitFor } from "@test-utils/index";
+import userEvent from "@testing-library/user-event";
 import { expect } from "vitest";
 import { Select } from "../Select";
 import { MdLanguage } from "react-icons/md";
@@ -19,24 +20,34 @@ describe("Select Component", () => {
     { value: "fi-FI", label: "Suomi", icon: <MdLanguage data-testid="icon" /> },
   ];
 
-  // test("renders Select with label and options", () => {
-  //   render(<Select name="lang" label="Language" options={options} />);
-  //   expect(screen.getByText(/Language/i)).toBeInTheDocument();
-  //   // Button should show label before selection
-  //   expect(screen.getByText("Language")).toBeInTheDocument();
-  // });
+  test("renders Select with label and options", () => {
+    render(<Select name="lang" label="Language" options={options} />);
+    expect(screen.getByText(/Language/i)).toBeInTheDocument();
+    // Button should show label before selection
+    expect(screen.getByText("Language")).toBeInTheDocument();
+  });
 
-  // test("opens dropdown and displays all options", () => {
-  //   render(<Select name="lang" label="Language" options={options} />);
-  //   const button = screen.getByRole("button");
-  //   fireEvent.click(button);
-  //   options.forEach((opt) => {
-  //     expect(screen.getByText(opt.label)).toBeInTheDocument();
-  //   });
-  // });
+  test("opens dropdown and displays all options", async () => {
+    const user = userEvent.setup();
+    render(<Select name="lang" label="Language" options={options} />);
+    // Find the button that opens the dropdown by its accessible name
+    const button = screen.getByRole("button", { name: /language/i });
+    // Simulate clicking the button to open the dropdown
+    await user.click(button);
+    // Wait for the dropdown to appear
+    for (const option of options) {
+      const optionElement = await screen.findByRole("option", {
+        name: option.label,
+      });
+      expect(optionElement).toBeInTheDocument();
+    }
+  });
 
-  test("calls onChange when option is selected", () => {
+  test("calls onChange when option is selected", async () => {
+    // Mock the onChange handler
     const handleChange = vi.fn();
+
+    // Render the Select component with test props
     render(
       <Select
         name="lang"
@@ -45,19 +56,35 @@ describe("Select Component", () => {
         onChange={handleChange}
       />
     );
-    const button = screen.getByRole("button");
-    fireEvent.click(button);
-    const option = screen.getByText("Русский");
-    fireEvent.click(option);
-    expect(handleChange).toHaveBeenCalledWith("ru-RU");
-  });
 
+    // Find the button that opens the dropdown by its accessible name
+    const button = screen.getByRole("button", { name: /language/i });
+
+    // Simulate clicking the button to open the dropdown
+    fireEvent.click(button);
+
+    // Wait for the dropdown to appear
+    const dropdown = await screen.findByRole("listbox", { name: /language/i });
+    expect(dropdown).toBeInTheDocument();
+
+    // Find the option by role and text
+    const option = await screen.findByRole("option", { name: /Русский/i });
+
+    // Simulate clicking the option
+    fireEvent.click(option);
+
+    // Assert that the onChange handler was called with the correct value
+    await waitFor(() => {
+      expect(handleChange).toHaveBeenCalledWith("ru-RU");
+    });
+  });
   test("renders with selected value", () => {
     render(
       <Select name="lang" label="Language" options={options} value="fi-FI" />
     );
     // Button should show selected label
-    expect(screen.getByText("Suomi")).toBeInTheDocument();
+    const button = screen.getByRole("button", { name: /language/i });
+    expect(button).toHaveTextContent("Suomi");
   });
 
   test("renders disabled Select", () => {

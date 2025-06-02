@@ -7,6 +7,12 @@ export enum Language {
   SYSTEM = "system",
 }
 
+export enum Status {
+  OPEN = "open",
+  IN_PROGRESS = "in_progress",
+  CLOSED = "closed",
+}
+
 export const UserModel = types.model("User", {
   id: types.identifier,
   username: types.string,
@@ -26,7 +32,12 @@ export const IssueModel = types.model("Issue", {
     })
   ),
   created_at: types.string, // ISO string, e.g. "2025-05-28T07:55:49.000Z"
-  updated_at: types.string, // ISO string, e.g. "2025-05-28T07:55:49.000Z"
+  updated_at: types.string, // ISO string, e.g. "2025-05-28T07:55:49.000Z",
+  status: types.enumeration<Status>("Status", [
+    Status.OPEN, 
+    Status.IN_PROGRESS,
+    Status.CLOSED,
+  ]),
 });
 
 export const UserIssuesListItemModel = types.model("UserIssuesListItem", {

@@ -59,7 +59,7 @@ export const IssuesStore = types
       coordinates?: string;
     }) {
       try {
-        const data = yield issuesApi.createIssue(issueData);
+        yield issuesApi.createIssue(issueData);
         // TODO: get the issue from the server and cast it to IssueModel
         // self.issues.unshift(cast(data));
       } catch (error) {

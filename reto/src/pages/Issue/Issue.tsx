@@ -53,6 +53,9 @@ const Issue: React.FC<{ id: string | number }> = observer(({ id }) => {
         <strong>Updated at:</strong>{" "}
         {new Date(issue.updated_at).toLocaleString()}
       </p>
+      <p>
+        <strong>Status:</strong> {issue.status}
+      </p>
       {/* TODO: Render photos if available */}
       <div className={styles.mapWrapper}>
         <Map
