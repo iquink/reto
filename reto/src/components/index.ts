@@ -3,7 +3,6 @@ export { Input } from "./Input/Input";
 export { Switch } from "./Switch/Switch";
 export { TextArea } from "./TextArea/TextArea";
 export { Map } from "./Map/Map";
-export { AddIssueModal } from "./Modals/AddIssueModal";
 export { Checkbox } from "./Checkbox/Checkbox";
 export { Table } from "./Table/Table";
 export { IssueCard } from "./IssueCard/IssueCard";

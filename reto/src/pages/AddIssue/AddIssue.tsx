@@ -1,6 +1,7 @@
 import React from "react";
 import { Form } from "react-aria-components";
-import { Input, TextArea, Button, AddIssueModal } from "@components";
+import { Input, TextArea, Button } from "@components/index";
+import { AddIssueModal } from "./AddIssueModal/AddIssueModal";
 import { Controller, useForm } from "react-hook-form";
 import { useStore } from "@store";
 import { observer } from "mobx-react-lite";
