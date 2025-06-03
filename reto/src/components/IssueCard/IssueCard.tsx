@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./IssueCard.module.css";
+import { useTranslation } from "react-i18next";
 
 export interface IssueCardProps {
   id: string | number;
@@ -24,6 +25,7 @@ const IssueCard: React.FC<IssueCardProps> = ({
   photos,
   onClick,
 }) => {
+  const { t } = useTranslation();
   return (
     <div
       className={styles.card}
@@ -36,7 +38,7 @@ const IssueCard: React.FC<IssueCardProps> = ({
     >
       <div className={styles.header}>
         <span className={styles.status + " " + styles[status] || ""}>
-          {status}
+          {t(`issueStatus.${status}`)}
         </span>
         <span className={styles.id}>#{id}</span>
       </div>
@@ -49,8 +51,8 @@ const IssueCard: React.FC<IssueCardProps> = ({
         </div>
       )}
       <div className={styles.dates}>
-        <span className={styles.created}>Created: {created_at}</span>
-        <span className={styles.updated}>Updated: {updated_at}</span>
+        <span className={styles.created}>{t("issueCard.createdAt")} {created_at}</span>
+        <span className={styles.updated}>{t("issueCard.updatedAt")} {updated_at}</span>
       </div>
       {photos && photos.length > 0 && (
         <div className={styles.photos}>

@@ -1,4 +1,135 @@
 {
-  "welcome": "Tervetuloa",
-  "goodbye": "Näkemisiin"
+  "navbar": {
+    "home": "Etusivu",
+    "login": "Kirjaudu sisään",
+    "logout": "Kirjaudu ulos",
+    "register": "Rekisteröidy",
+    "profile": "Profiili",
+    "settings": "Asetukset",
+    "issues": "Ilmoitukset",
+    "labels": {
+      "logo": "Reto-logo",
+      "toggleMenu": "Valikon avaaminen",
+      "toggleTheme": "Vaihda teemaa",
+      "selectLanguage": "Valitse kieli"
+    }
+  },
+  "pages": {
+    "register": {
+      "form": {
+        "username": "Käyttäjänimi",
+        "email": "Sähköposti",
+        "password": "Salasana",
+        "submit": "Rekisteröidy",
+        "placeholder": {
+          "username": "Syötä käyttäjänimi",
+          "email": "Syötä sähköposti",
+          "password": "Syötä salasana"
+        },
+        "validation": {
+          "username": {
+            "required": "Käyttäjänimi on pakollinen",
+            "minLength": "Käyttäjänimen on oltava vähintään 3 merkkiä pitkä",
+            "maxLength": "Käyttäjänimen on oltava enintään 20 merkkiä pitkä",
+            "pattern": "Käyttäjänimi voi sisältää vain kirjaimia, numeroita ja alaviivoja"
+          },
+          "email": {
+            "required": "Sähköposti on pakollinen",
+            "invalid": "Sähköposti on virheellinen"
+          },
+          "password": {
+            "required": "Salasana on pakollinen",
+            "minLength": "Salasanan on oltava vähintään 8 merkkiä pitkä",
+            "maxLength": "Salasanan on oltava enintään 50 merkkiä pitkä",
+            "pattern": "Salasanan on sisällettävä vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki"
+          }
+        }
+      }
+    },
+    "login": {
+      "form": {
+        "email": "Sähköposti",
+        "password": "Salasana",
+        "submit": "Kirjaudu sisään",
+        "placeholder": {
+          "email": "Syötä sähköposti",
+          "password": "Syötä salasana"
+        },
+        "validation": {
+          "email": {
+            "required": "Sähköposti on pakollinen",
+            "invalid": "Sähköposti on virheellinen"
+          },
+          "password": {
+            "required": "Salasana on pakollinen"
+          }
+        }
+      }
+    },
+    "issues": {
+      "noIssues": "Sinulla ei ole yhtään ilmoitusta.",
+      "createIssue": "Luo ilmoitus"
+    },
+    "issue": {
+      "id": "ID:",
+      "description": "Kuvaus:",
+      "coordinates": "Koordinaatit:",
+      "createdAt": "Luotu:",
+      "updatedAt": "Päivitetty:",
+      "status": "Tila:",
+      "noCoordinates": "-"
+    },
+    "addIssue": {
+      "form": {
+        "title": "Otsikko",
+        "description": "Kuvaus",
+        "coordinates": "Koordinaatit",
+        "submit": "Lähetä",
+        "placeholder": {
+          "title": "Anna ilmoituksen otsikko",
+          "description": "Anna ilmoituksen kuvaus"
+        },
+        "validation": {
+          "title": {
+            "required": "Otsikko on pakollinen.",
+            "minLength": "Otsikon on oltava vähintään 3 merkkiä pitkä.",
+            "maxLength": "Otsikko ei saa ylittää 100 merkkiä."
+          },
+          "description": {
+            "required": "Kuvaus on pakollinen.",
+            "minLength": "Kuvauksen on oltava vähintään 10 merkkiä pitkä.",
+            "maxLength": "Kuvaus ei saa ylittää 500 merkkiä."
+          },
+          "coordinates": {
+            "required": "Koordinaatit ovat pakolliset."
+          }
+        },
+        "selectedCoordinates": "Valitut koordinaatit:",
+        "selectOnMap": "Paina karttapainiketta valitaksesi koordinaatit"
+      }
+    }
+  },
+  "languages": {
+    "en": "Englanti",
+    "fi": "Suomi",
+    "ru": "Venäjä"
+  },
+  "issueCard": {
+    "createdAt": "Luotu:",
+    "updatedAt": "Päivitetty:"
+  },
+  "modals": {
+    "addIssue": {
+      "openMap": "Avaa kartta valitaksesi koordinaatit",
+      "loadingMap": "Ladataan karttaa...",
+      "submit": "Lähetä",
+      "cancel": "Peruuta",
+      "close": "Sulje"
+    }
+  },
+  "issueStatus": {
+    "open": "Avoin",
+    "closed": "Suljettu",
+    "in_progress": "Käsittelyssä"
+  }
 }

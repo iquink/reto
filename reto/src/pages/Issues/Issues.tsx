@@ -8,12 +8,14 @@ import { observer } from "mobx-react-lite";
 import { getFormattedDate } from "./utils";
 import type { Instance } from "mobx-state-tree";
 import { UserIssuesListItemModel } from "@store/models";
+import { useTranslation } from "react-i18next";
 
 // TUserIssue type for userIssues
 export type TUserIssue = Instance<typeof UserIssuesListItemModel>;
 
 const Issues: React.FC = observer(() => {
   const [, navigate] = useLocation();
+  const { t } = useTranslation();
 
   const handleAddIssue = () => {
     navigate("/issues/add");
@@ -32,7 +34,7 @@ const Issues: React.FC = observer(() => {
     <div className={styles.container}>
       {rows.length === 0 ? (
         <p className={styles.message}>
-          You don't have any issues. Press Add to create one.
+          {t("pages.issues.noIssues")} {/* Localized no issues message */}
         </p>
       ) : (
         <div className={styles.cardsGrid}>
@@ -50,7 +52,7 @@ const Issues: React.FC = observer(() => {
         </div>
       )}
       <Button onClick={handleAddIssue} className={styles.addButton}>
-        Add
+        {t("pages.issues.createIssue")} {/* Localized add button */}
       </Button>
     </div>
   );

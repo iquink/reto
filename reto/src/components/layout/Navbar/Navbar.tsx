@@ -12,6 +12,7 @@ import { Switch } from "@components";
 import { useTheme } from "@context/ThemeContext/hooks";
 import { US, RU, FI } from "@assets/index";
 import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 const Navbar: React.FC = observer(() => {
   /**
@@ -28,6 +29,8 @@ const Navbar: React.FC = observer(() => {
 
   const { theme, toggleTheme } = useTheme();
 
+  const { t } = useTranslation();
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -37,69 +40,36 @@ const Navbar: React.FC = observer(() => {
   };
 
   const handleLogout = async () => {
-    await authStore.logout(); // Call the logout action
+    await authStore.logout();
   };
 
   return (
     <>
       <div className={styles.logo}>
         <Link to="/">
-          <img src={SiteLogo} alt="Reto Logo" className={styles.logoImage} />
+          <img
+            src={SiteLogo}
+            alt={t("navbar.labels.logo")}
+            className={styles.logoImage}
+          />
         </Link>
       </div>
 
       <button
         className={styles.menuButton}
         onClick={toggleMenu}
-        aria-label="Toggle menu"
+        aria-label={t("navbar.labels.toggleMenu")}
       >
         <MenuIcon size={24} />
       </button>
 
       <nav className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}>
-        <div className={styles.controlsRow}>
-          <Switch
-            aria-label="Toggle Theme"
-            isDisabled={false}
-            isThemeSwitch
-            onChange={() => toggleTheme()}
-            isSelected={theme === "dark"}
-          />
-          <Select
-            name="language"
-            aria-label="Select Language"
-            onSelectionChange={(value) => {
-              console.log("Selected language:", value);
-              i18next.changeLanguage(value as string);
-              //settingsStore.setCurrentLanguage(value as string);
-            }}
-            defaultSelectedKey={i18next.language}
-            options={[
-              {
-                value: "en",
-                label: "English",
-                icon: <img src={US} alt="English" />,
-              },
-              {
-                value: "ru",
-                label: "Russian",
-                icon: <img src={RU} alt="Russian" />,
-              },
-              {
-                value: "fi",
-                label: "Finnish",
-                icon: <img src={FI} alt="Finnish" />,
-              },
-            ]}
-            className={styles.languageSelect}
-          />
-        </div>
         <Link
           to="/"
           className={(active) => getActiveLinkClass(active)}
           onClick={() => setIsMenuOpen(false)}
         >
-          Home
+          {t("navbar.home")}
         </Link>
         {!authStore.isAuthenticated && (
           <>
@@ -110,7 +80,7 @@ const Navbar: React.FC = observer(() => {
               }}
               className={(active) => getActiveLinkClass(active)}
             >
-              Login
+              {t("navbar.login")}
             </Link>
             <Link
               to="/register"
@@ -119,7 +89,7 @@ const Navbar: React.FC = observer(() => {
               }}
               className={(active) => getActiveLinkClass(active)}
             >
-              Register
+              {t("navbar.register")}
             </Link>
           </>
         )}
@@ -132,7 +102,7 @@ const Navbar: React.FC = observer(() => {
               }}
               className={(active) => getActiveLinkClass(active)}
             >
-              Issues
+              {t("navbar.issues")}
             </Link>
             <Link
               to="/profile"
@@ -141,19 +111,56 @@ const Navbar: React.FC = observer(() => {
               }}
               className={(active) => getActiveLinkClass(active)}
             >
-              Profile
+              {t("navbar.profile")}
             </Link>
             <Button
               onClick={() => {
                 handleLogout();
                 setIsMenuOpen(false);
               }}
-              className={styles.logoutButton} // Add a CSS class for styling
+              className={styles.logoutButton}
             >
-              Logout
+              {t("navbar.logout")}
             </Button>
           </>
         )}
+        <div className={styles.controlsRow}>
+          <Select
+            name="language"
+            aria-label={t("navbar.labels.selectLanguage")}
+            onSelectionChange={(value) => {
+              i18next.changeLanguage(value as string).then(() => {
+                settingsStore.setCurrentLanguage(value as string);
+              });
+            }}
+            defaultSelectedKey={i18next.language}
+            options={[
+              {
+                value: "en-US",
+                label: t("languages.en"),
+                icon: <img src={US} alt={t("languages.en")} />,
+              },
+              {
+                value: "ru-RU",
+                label: t("languages.ru"),
+                icon: <img src={RU} alt={t("languages.ru")} />,
+              },
+              {
+                value: "fi-FI",
+                label: t("languages.fi"),
+                icon: <img src={FI} alt={t("languages.fi")} />,
+              },
+            ]}
+            className={styles.languageSelect}
+          />
+          <Switch
+            aria-label={t("navbar.labels.toggleTheme")}
+            isDisabled={false}
+            isThemeSwitch
+            onChange={() => toggleTheme()}
+            isSelected={theme === "dark"}
+          />
+        </div>
       </nav>
     </>
   );

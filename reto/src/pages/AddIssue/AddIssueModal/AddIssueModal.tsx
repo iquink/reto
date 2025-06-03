@@ -10,6 +10,7 @@ import L, { LatLngExpression } from "leaflet";
 import { pickedLocation } from "@assets/index";
 import { MdOutlineMap as GoToMapIcon } from "react-icons/md";
 import { observer } from "mobx-react-lite";
+import { useTranslation } from "react-i18next";
 
 /**
  * AddIssueModal component displays a modal dialog with a map for selecting coordinates.
@@ -34,6 +35,7 @@ export const AddIssueModal: React.FC<{
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [markers, setMarkers] = useState<{ [name: string]: [LatLngExpression, L.Icon] }>({});
   const { issuesStore } = useStore();
+  const { t } = useTranslation();
 
   /**
    * Callback for when a location is picked on the map.
@@ -66,12 +68,12 @@ export const AddIssueModal: React.FC<{
 
   return (
     <DialogTrigger>
-      <Button variant="icon">
+      <Button variant="icon" aria-label={t("modals.addIssue.openMap")}> {/* Accessible label for open map */}
         <GoToMapIcon />
       </Button>
       <Modal>
         <Dialog className={styles.modal}>
-          <CloseButton className={styles.closeButton} slot="close" aria-label="Close">
+          <CloseButton className={styles.closeButton} slot="close" aria-label={t("modals.addIssue.close")}> {/* Localized close label */}
             <MdClose size={28} />
           </CloseButton>
           <div className={styles.content}>
@@ -79,13 +81,13 @@ export const AddIssueModal: React.FC<{
               {isMapLoaded ? (
                 <Map isGetCoordinatesByClick setPickedLocation={setPickedLocation} markers={markers} />
               ) : (
-                <p>Loading map...</p>
+                <p>{t("modals.addIssue.loadingMap")}</p>
               )}
             </div>
             <div className={styles.buttonContainer}>
-              <Button slot="close">Submit</Button>
+              <Button slot="close">{t("modals.addIssue.submit")}</Button>
               <Button slot="close" variant="secondary">
-                Cancel
+                {t("modals.addIssue.cancel")}
               </Button>
             </div>
           </div>

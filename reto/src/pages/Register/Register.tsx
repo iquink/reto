@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Button } from "@components";
 import styles from "./Register.module.css"; // Import the CSS module
 import { authApi } from "@api/index"; // Import the authApi for registration
+import { useTranslation } from "react-i18next";
 
 /**
  * Register component for user registration.
@@ -65,25 +66,26 @@ const Register: React.FC = () => {
     }
   };
 
+  const { t } = useTranslation();
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <Controller
         control={control}
         name="username"
         rules={{
-          required: "Username is required.",
+          required: t("pages.register.form.validation.username.required"),
           minLength: {
             value: 3,
-            message: "Username must be at least 3 characters long.",
+            message: t("pages.register.form.validation.username.minLength"),
           },
           maxLength: {
             value: 20,
-            message: "Username cannot exceed 20 characters.",
+            message: t("pages.register.form.validation.username.maxLength"),
           },
           pattern: {
             value: /^[a-zA-Z0-9_]+$/,
-            message:
-              "Username can only contain letters, numbers, and underscores.",
+            message: t("pages.register.form.validation.username.pattern"),
           },
         }}
         render={({
@@ -96,11 +98,11 @@ const Register: React.FC = () => {
             onChange={onChange}
             onBlur={onBlur}
             ref={ref}
-            label="Username"
-            placeholder="Enter your username"
+            label={t("pages.register.form.username")}
+            placeholder={t("pages.register.form.placeholder.username")}
             invalid={invalid}
             error={error}
-            className={styles.input} // Apply the input style
+            className={styles.input}
           />
         )}
       />
@@ -108,10 +110,10 @@ const Register: React.FC = () => {
         control={control}
         name="email"
         rules={{
-          required: "Email is required.",
+          required: t("pages.register.form.validation.email.required"),
           pattern: {
             value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            message: "Invalid email address.",
+            message: t("pages.register.form.validation.email.invalid"),
           },
         }}
         render={({
@@ -124,11 +126,11 @@ const Register: React.FC = () => {
             onChange={onChange}
             onBlur={onBlur}
             ref={ref}
-            label="Email"
-            placeholder="Enter your email"
+            label={t("pages.register.form.email")}
+            placeholder={t("pages.register.form.placeholder.email")}
             invalid={invalid}
             error={error}
-            className={styles.input} // Apply the input style
+            className={styles.input}
           />
         )}
       />
@@ -136,20 +138,19 @@ const Register: React.FC = () => {
         control={control}
         name="password"
         rules={{
-          required: "Password is required.",
+          required: t("pages.register.form.validation.password.required"),
           minLength: {
             value: 8,
-            message: "Password must be at least 8 characters long.",
+            message: t("pages.register.form.validation.password.minLength"),
           },
           maxLength: {
             value: 50,
-            message: "Password cannot exceed 50 characters.",
+            message: t("pages.register.form.validation.password.maxLength"),
           },
           pattern: {
             value:
               /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-            message:
-              "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character.",
+            message: t("pages.register.form.validation.password.pattern"),
           },
         }}
         render={({
@@ -162,17 +163,17 @@ const Register: React.FC = () => {
             onChange={onChange}
             onBlur={onBlur}
             ref={ref}
-            label="Password"
+            label={t("pages.register.form.password")}
             type="password"
-            placeholder="Enter your password"
+            placeholder={t("pages.register.form.placeholder.password")}
             invalid={invalid}
             error={error}
-            className={styles.input} // Apply the input style
+            className={styles.input}
           />
         )}
       />
       <Button type="submit" className={styles.button}>
-        Register
+        {t("pages.register.form.submit")}
       </Button>
     </Form>
   );

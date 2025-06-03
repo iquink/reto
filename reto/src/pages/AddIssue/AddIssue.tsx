@@ -5,6 +5,7 @@ import { AddIssueModal } from "./AddIssueModal/AddIssueModal";
 import { Controller, useForm } from "react-hook-form";
 import { useStore } from "@store";
 import { observer } from "mobx-react-lite";
+import { useTranslation } from "react-i18next";
 import styles from "./AddIssue.module.css";
 
 const AddIssue: React.FC = observer(() => {
@@ -22,6 +23,7 @@ const AddIssue: React.FC = observer(() => {
     },
   });
 
+  const { t } = useTranslation();
   const { issuesStore, authStore } = useStore();
   const { user } = authStore;
 
@@ -50,14 +52,14 @@ const AddIssue: React.FC = observer(() => {
         control={control}
         name="title"
         rules={{
-          required: "Title is required.",
+          required: t("pages.addIssue.form.validation.title.required"),
           minLength: {
             value: 3,
-            message: "Title must be at least 3 characters long.",
+            message: t("pages.addIssue.form.validation.title.minLength"),
           },
           maxLength: {
             value: 100,
-            message: "Title cannot exceed 100 characters.",
+            message: t("pages.addIssue.form.validation.title.maxLength"),
           },
         }}
         render={({
@@ -70,8 +72,8 @@ const AddIssue: React.FC = observer(() => {
             onChange={onChange}
             onBlur={onBlur}
             ref={ref}
-            label="Title"
-            placeholder="Enter the issue title"
+            label={t("pages.addIssue.form.title")}
+            placeholder={t("pages.addIssue.form.placeholder.title")}
             invalid={invalid}
             error={error}
             className={styles.input}
@@ -82,14 +84,14 @@ const AddIssue: React.FC = observer(() => {
         control={control}
         name="description"
         rules={{
-          required: "Description is required.",
+          required: t("pages.addIssue.form.validation.description.required"),
           minLength: {
             value: 10,
-            message: "Description must be at least 10 characters long.",
+            message: t("pages.addIssue.form.validation.description.minLength"),
           },
           maxLength: {
             value: 500,
-            message: "Description cannot exceed 500 characters.",
+            message: t("pages.addIssue.form.validation.description.maxLength"),
           },
         }}
         render={({
@@ -102,8 +104,8 @@ const AddIssue: React.FC = observer(() => {
             onChange={onChange}
             onBlur={onBlur}
             ref={ref}
-            label="Description"
-            placeholder="Enter the issue description"
+            label={t("pages.addIssue.form.description")}
+            placeholder={t("pages.addIssue.form.placeholder.description")}
             invalid={invalid}
             error={error}
             className={styles.textarea}
@@ -114,7 +116,7 @@ const AddIssue: React.FC = observer(() => {
         control={control}
         name="coordinates"
         rules={{
-          required: "Coordinates are required.",
+          required: t("pages.addIssue.form.validation.coordinates.required"),
         }}
         render={({ field: { name, value, ref } }) => (
           <Input type="hidden" name={name} value={value} ref={ref} />
@@ -123,12 +125,12 @@ const AddIssue: React.FC = observer(() => {
       <div className={styles.coordinatesRow}>
         <div className={styles.coordinatesInfo}>
           <strong className={styles.coordinatesTitle}>
-            Selected coordinates:
+            {t("pages.addIssue.form.selectedCoordinates")}
           </strong>{" "}
           {Array.isArray(issuesStore.selectedLocation) &&
           issuesStore.selectedLocation.length === 2
             ? `${issuesStore.selectedLocation[0]}, ${issuesStore.selectedLocation[1]}`
-            : "Press the map button to select coordinates"}
+            : t("pages.addIssue.form.selectOnMap")}
           {errors.coordinates && (
             <span className={styles.error}>{errors.coordinates.message}</span>
           )}
@@ -148,7 +150,7 @@ const AddIssue: React.FC = observer(() => {
         </div>
       </div>
       <Button type="submit" className={styles.button}>
-        Submit
+        {t("pages.addIssue.form.submit")}
       </Button>
     </Form>
   );

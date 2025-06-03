@@ -9,13 +9,13 @@ i18n
   .use(initReactI18next)
   .use(LanguageDetector)
   .init({
-    supportedLngs: ["en", "fi", "ru"],
+    supportedLngs: ["en-US", "fi-FI", "ru-RU"],
     resources: {
-      en: { translation: en },
-      fi: { translation: fi },
-      ru: { translation: ru },
+      "en-US": { translation: en },
+      "fi-FI": { translation: fi },
+      "ru-RU": { translation: ru },
     },
-    fallbackLng: "fi",
+    fallbackLng: "fi-FI",
     interpolation: {
       escapeValue: false, // React already does escaping
     },

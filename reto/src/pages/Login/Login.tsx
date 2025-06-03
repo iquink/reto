@@ -6,6 +6,7 @@ import { Button } from "@components";
 // import axios from "axios";
 // import authApi from "@api/authApi";
 import { useStore } from "@store"; // Import the root store
+import { useTranslation } from "react-i18next";
 import styles from "./Login.module.css"; // Import the CSS module
 // import { useLocation } from "wouter";
 
@@ -23,6 +24,7 @@ import styles from "./Login.module.css"; // Import the CSS module
  */
 const Login: React.FC = () => {
   const { authStore } = useStore();
+  const { t } = useTranslation();
   // const [, navigate] = useLocation();
   /**
    * Default form values for the login form.
@@ -67,10 +69,10 @@ const Login: React.FC = () => {
         control={control}
         name="email"
         rules={{
-          required: "Email is required.",
+          required: t("pages.login.form.validation.email.required"),
           pattern: {
             value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            message: "Invalid email address.",
+            message: t("pages.login.form.validation.email.invalid"),
           },
         }}
         render={({
@@ -83,11 +85,11 @@ const Login: React.FC = () => {
             onChange={onChange}
             onBlur={onBlur}
             ref={ref}
-            label="Email"
-            placeholder="Enter your email"
+            label={t("pages.login.form.email")}
+            placeholder={t("pages.login.form.placeholder.email")}
             invalid={invalid}
             error={error}
-            className={styles.input} // Apply the input style
+            className={styles.input}
           />
         )}
       />
@@ -95,21 +97,7 @@ const Login: React.FC = () => {
         control={control}
         name="password"
         rules={{
-          required: "Password is required.",
-          minLength: {
-            value: 8,
-            message: "Password must be at least 8 characters long.",
-          },
-          maxLength: {
-            value: 50,
-            message: "Password cannot exceed 50 characters.",
-          },
-          pattern: {
-            value:
-              /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-            message:
-              "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character.",
-          },
+          required: t("pages.login.form.validation.password.required"),
         }}
         render={({
           field: { name, value, onChange, onBlur, ref },
@@ -121,17 +109,17 @@ const Login: React.FC = () => {
             onChange={onChange}
             onBlur={onBlur}
             ref={ref}
-            label="Password"
+            label={t("pages.login.form.password")}
             type="password"
-            placeholder="Enter your password"
+            placeholder={t("pages.login.form.placeholder.password")}
             invalid={invalid}
             error={error}
-            className={styles.input} // Apply the input style
+            className={styles.input}
           />
         )}
       />
       <Button type="submit" className={styles.button}>
-        Login
+        {t("pages.login.form.submit")}
       </Button>
     </Form>
   );

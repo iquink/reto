@@ -1,4 +1,135 @@
 {
-  "welcome": "Welcome",
-  "goodbye": "Goodbye"
+  "navbar": {
+    "home": "Home",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "profile": "Profile",
+    "settings": "Settings",
+    "issues": "Issues",
+    "labels": {
+      "logo": "Reto Logo",
+      "toggleMenu": "Toggle Menu",
+      "toggleTheme": "Toggle Theme",
+      "selectLanguage": "Select Language"
+    }
+  },
+  "pages": {
+    "register": {
+      "form": {
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Register",
+        "placeholder": {
+          "username": "Enter your username",
+          "email": "Enter your email",
+          "password": "Enter your password"
+        },
+        "validation": {
+          "username": {
+            "required": "Username is required",
+            "minLength": "Username must be at least 3 characters long",
+            "maxLength": "Username must be at most 20 characters long",
+            "pattern": "Username can only contain letters, numbers, and underscores"
+          },
+          "email": {
+            "required": "Email is required",
+            "invalid": "Email is invalid"
+          },
+          "password": {
+            "required": "Password is required",
+            "minLength": "Password must be at least 8 characters long",
+            "maxLength": "Password must be at most 50 characters long",
+            "pattern": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+          }
+        }
+      }
+    },
+    "login": {
+      "form": {
+        "email": "Email",
+        "password": "Password",
+        "submit": "Login",
+        "placeholder": {
+          "email": "Enter your email",
+          "password": "Enter your password"
+        },
+        "validation": {
+          "email": {
+            "required": "Email is required",
+            "invalid": "Email is invalid"
+          },
+          "password": {
+            "required": "Password is required"
+          }
+        }
+      }
+    },
+        "issues": {
+      "noIssues": "You have no issues.",
+      "createIssue": "Create issue"
+    },
+    "issue": {
+      "id": "ID:",
+      "description": "Description:",
+      "coordinates": "Coordinates:",
+      "createdAt": "Created at:",
+      "updatedAt": "Updated at:",
+      "status": "Status:",
+      "noCoordinates": "-"
+    },
+    "addIssue": {
+      "form": {
+        "title": "Title",
+        "description": "Description",
+        "coordinates": "Coordinates",
+        "submit": "Submit",
+        "placeholder": {
+          "title": "Enter the issue title",
+          "description": "Enter the issue description"
+        },
+        "validation": {
+          "title": {
+            "required": "Title is required.",
+            "minLength": "Title must be at least 3 characters long.",
+            "maxLength": "Title cannot exceed 100 characters."
+          },
+          "description": {
+            "required": "Description is required.",
+            "minLength": "Description must be at least 10 characters long.",
+            "maxLength": "Description cannot exceed 500 characters."
+          },
+          "coordinates": {
+            "required": "Coordinates are required."
+          }
+        },
+        "selectedCoordinates": "Selected coordinates:",
+        "selectOnMap": "Press the map button to select coordinates"
+      }
+    }
+  },
+  "languages": {
+    "en": "English",
+    "fi": "Finnish",
+    "ru": "Russian"
+  },
+  "issueCard": {
+    "createdAt": "Created:",
+    "updatedAt": "Updated:"
+  },
+  "modals": {
+    "addIssue": {
+      "openMap": "Opens the map to select coordinates",
+      "loadingMap": "Loading map...",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "close": "Close"
+    }
+  },
+  "issueStatus": {
+    "open": "Open",
+    "closed": "Closed",
+    "in_progress": "In Progress"
+  }
 }
