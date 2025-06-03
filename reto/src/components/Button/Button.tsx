@@ -29,6 +29,16 @@ interface ButtonProps extends RACButtonProps {
    * @example "Close dialog" or "Submit form"
    */
   ariaLabel?: string;
+  /** Whether the button is currently hovered with a mouse */
+  isHovered?: boolean;
+  /** Whether the button is currently in a pressed state */
+  isPressed?: boolean;
+  /** Whether the button is focused, either via a mouse or keyboard */
+  isFocused?: boolean;
+  /** Whether the button is keyboard focused */
+  isFocusVisible?: boolean;
+  /** Whether the button is currently in a pending state */
+  isPending?: boolean;
 }
 
 /**

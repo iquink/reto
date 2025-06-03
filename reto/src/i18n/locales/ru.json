@@ -84,6 +84,7 @@
         "title": "Заголовок",
         "description": "Описание",
         "coordinates": "Координаты",
+        "uploadFile": "Загрузить файл",
         "submit": "Отправить",
         "placeholder": {
           "title": "Введите заголовок заявки",

@@ -84,6 +84,7 @@
         "title": "Otsikko",
         "description": "Kuvaus",
         "coordinates": "Koordinaatit",
+        "uploadFile": "Lataa tiedosto",
         "submit": "Lähetä",
         "placeholder": {
           "title": "Anna ilmoituksen otsikko",

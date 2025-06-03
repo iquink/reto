@@ -84,6 +84,7 @@
         "title": "Title",
         "description": "Description",
         "coordinates": "Coordinates",
+        "uploadFile": "Upload File",
         "submit": "Submit",
         "placeholder": {
           "title": "Enter the issue title",

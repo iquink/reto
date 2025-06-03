@@ -5,6 +5,7 @@
 
 /* Primary button styles */
 .primary {
+  text-align: center;
   background-color: var(--primary-color);
   color: var(--primary-text-color);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -37,6 +38,7 @@
 }
 
 .secondary {
+  text-align: center;
   background-color: transparent;
   color: var(--primary-color);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -73,6 +75,7 @@
 }
 
 .danger {
+  text-align: center;
   background-color: var(--danger-color);
   color: white;
   padding: var(--spacing-sm) var(--spacing-md);

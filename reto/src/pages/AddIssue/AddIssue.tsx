@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form } from "react-aria-components";
-import { Input, TextArea, Button } from "@components/index";
+import { Input, TextArea, Button, FileTrigger } from "@components/index";
 import { AddIssueModal } from "./AddIssueModal/AddIssueModal";
 import { Controller, useForm } from "react-hook-form";
 import { useStore } from "@store";
@@ -26,6 +26,8 @@ const AddIssue: React.FC = observer(() => {
   const { t } = useTranslation();
   const { issuesStore, authStore } = useStore();
   const { user } = authStore;
+
+  const [file, setFile] = useState<string[] | null>(null);
 
   interface FormData {
     title: string;
@@ -149,6 +151,18 @@ const AddIssue: React.FC = observer(() => {
           />
         </div>
       </div>
+      <FileTrigger
+        onSelect={(e) => {
+          const files = e ? Array.from(e) : [];
+          const filenames = files.map((file) => file.name);
+          setFile(filenames.length ? filenames : null);
+        }}
+        acceptedFileTypes={["image/*"]}
+        allowsMultiple={true}
+      >
+        {t("pages.addIssue.form.uploadFile")}
+      </FileTrigger>
+      {file && file.join(", ")}
       <Button type="submit" className={styles.button}>
         {t("pages.addIssue.form.submit")}
       </Button>
