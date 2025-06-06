@@ -23,12 +23,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
-    args: {
-        children: "Select a file",
-        allowsMultiple: false,
-        acceptedFileTypes: ["image/*"],
-        acceptDirectory: false,
-        isDisabled: false,
-    },
+  args: {
+    children: "Select a file",
+    allowsMultiple: false,
+    acceptedFileTypes: ["image/*"],
+    acceptDirectory: false,
+    isDisabled: false,
+    onSelect: (files: FileList | null): void => {
+      console.log(files);
+    }
+  }
 };
 
