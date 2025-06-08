@@ -152,7 +152,7 @@ const AddIssue: React.FC = observer(() => {
         </div>
       </div>
       <FileTrigger
-        onSelect={(e) => {
+        onSelect={(e: FileList | null) => {
           const files = e ? Array.from(e) : [];
           const filenames = files.map((file) => file.name);
           setFile(filenames.length ? filenames : null);

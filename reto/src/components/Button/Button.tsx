@@ -1,5 +1,5 @@
 import styles from "./Button.module.css";
-import { ReactNode, forwardRef } from "react";
+import { forwardRef } from "react";
 import { useTheme } from "../../context/ThemeContext/index";
 import {
   Button as AriaButton,
@@ -15,9 +15,6 @@ import React from "react";
  * @extends {RACButtonProps} - Extends React Aria Components button props
  */
 interface ButtonProps extends RACButtonProps {
-  /** Content to be rendered inside the button */
-  children: ReactNode;
-
   /**
    * Visual style variant of the button
    * @default "primary"
@@ -29,16 +26,6 @@ interface ButtonProps extends RACButtonProps {
    * @example "Close dialog" or "Submit form"
    */
   ariaLabel?: string;
-  /** Whether the button is currently hovered with a mouse */
-  isHovered?: boolean;
-  /** Whether the button is currently in a pressed state */
-  isPressed?: boolean;
-  /** Whether the button is focused, either via a mouse or keyboard */
-  isFocused?: boolean;
-  /** Whether the button is keyboard focused */
-  isFocusVisible?: boolean;
-  /** Whether the button is currently in a pending state */
-  isPending?: boolean;
 }
 
 /**
@@ -74,22 +61,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     {
       children,
       variant = "primary",
-      ariaLabel,
-      isDisabled,
       className,
+      ariaLabel,
       ...props
     },
     ref
   ) => {
     const { prefersReducedMotion } = useTheme();
-
-    /**
-     * Generate aria attributes for the button.
-     */
-    const ariaAttributes = {
-      "aria-label": ariaLabel,
-      tabIndex: isDisabled ? -1 : 0,
-    };
 
     /**
      * Computes the final className by combining variant styles, reduced motion preference,
@@ -105,8 +83,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <AriaButton
         ref={ref}
         className={computedClassName}
-        isDisabled={isDisabled}
-        {...ariaAttributes}
+        aria-label={ariaLabel}
         {...props}
       >
         {children}

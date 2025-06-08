@@ -1,4 +1,4 @@
-export { Button } from "./Button/Button";
+export { Button, type ButtonProps } from "./Button/Button";
 export { Input } from "./Input/Input";
 export { Switch } from "./Switch/Switch";
 export { TextArea } from "./TextArea/TextArea";
