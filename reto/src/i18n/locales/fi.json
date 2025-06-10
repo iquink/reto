@@ -103,6 +103,11 @@
           },
           "coordinates": {
             "required": "Koordinaatit ovat pakolliset."
+          },
+          "files": {
+            "max": "Voit ladata enintään 3 tiedostoa.",
+            "type": "Vain kuvatiedostot (jpg, png, gif) ovat sallittuja.",
+            "size": "Jokaisen tiedoston on oltava alle 5 Mt."
           }
         },
         "selectedCoordinates": "Valitut koordinaatit:",

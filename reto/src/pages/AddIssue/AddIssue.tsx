@@ -139,9 +139,6 @@ const AddIssue: React.FC = observer(() => {
           issuesStore.selectedLocation.length === 2
             ? `${issuesStore.selectedLocation[0]}, ${issuesStore.selectedLocation[1]}`
             : t("pages.addIssue.form.selectOnMap")}
-          {errors.coordinates && (
-            <span className={styles.error}>{errors.coordinates.message}</span>
-          )}
         </div>
         <div className={styles.coordinatesModal}>
           <AddIssueModal
@@ -160,6 +157,14 @@ const AddIssue: React.FC = observer(() => {
       <Controller
         control={control}
         name="files"
+        rules={{
+          validate: (value) => {
+            if (value && value.length > 3) {
+              return t("pages.addIssue.form.validation.files.max", { max: 3 });
+            }
+            return true;
+          },
+        }}
         render={({ field: { onChange, value, ref } }) => (
           <>
             <FileTrigger

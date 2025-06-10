@@ -103,6 +103,11 @@
           },
           "coordinates": {
             "required": "Coordinates are required."
+          },
+          "files": {
+            "max": "You can upload a maximum of 3 files.",
+            "type": "Only image files (jpg, png, gif) are allowed.",
+            "size": "Each file must be less than 5MB."
           }
         },
         "selectedCoordinates": "Selected coordinates:",
