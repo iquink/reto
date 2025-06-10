@@ -32,6 +32,9 @@ const Issue: React.FC<{ id: string | number }> = observer(({ id }) => {
     return <div className={styles.container}>{t("loading")}</div>;
   }
 
+  // Gallery: show images if available
+  const hasImages = Array.isArray(issue.photos) && issue.photos.length > 0;
+
   return (
     <div className={styles.container}>
       <h1>{issue.title}</h1>
@@ -59,7 +62,29 @@ const Issue: React.FC<{ id: string | number }> = observer(({ id }) => {
         <strong>{t("pages.issue.status")}</strong>{" "}
         {t(`issueStatus.${issue.status}`)}
       </p>
-      {/* TODO: Render photos if available */}
+
+      {/* Gallery above the map */}
+      {hasImages && (
+        <div
+          className={styles.gallery}
+          role="region"
+          aria-label={t("pages.issue.galleryLabel") || "Gallery"}
+        >
+          {issue.photos.map((filename: string, idx: number) => (
+            <div className={styles.galleryItem} key={filename}>
+              <img
+                src={`${
+                  import.meta.env.VITE_API_URL || ""
+                }/images/${encodeURIComponent(filename)}`}
+                alt={t("pages.issue.imageAlt", { index: idx + 1 }) || `Issue image ${idx + 1}`}
+                className={styles.galleryImage}
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className={styles.mapWrapper}>
         <Map
           center={
