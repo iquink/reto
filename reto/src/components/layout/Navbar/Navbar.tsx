@@ -137,18 +137,18 @@ const Navbar: React.FC = observer(() => {
             options={[
               {
                 value: "en-US",
-                label: t("languages.en"),
-                icon: <img src={US} alt={t("languages.en")} />,
+                label: "English",
+                icon: <img src={US} alt="English" />,
               },
               {
                 value: "ru-RU",
-                label: t("languages.ru"),
-                icon: <img src={RU} alt={t("languages.ru")} />,
+                label: "Русский",
+                icon: <img src={RU} alt="Русский" />,
               },
               {
                 value: "fi-FI",
-                label: t("languages.fi"),
-                icon: <img src={FI} alt={t("languages.fi")} />,
+                label: "Suomi",
+                icon: <img src={FI} alt="Suomi" />,
               },
             ]}
             className={styles.languageSelect}
