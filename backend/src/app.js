@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const AuthService = require('./services/authService');
 const IssuesService = require('./services/issuesService');
 const issuesRoutes = require('./routes/issuesRoutes');
+const filesRoutes = require('./routes/filesRoutes');
 require('dotenv').config();
 
 const app = express();
@@ -35,6 +36,7 @@ const PORT = process.env.PORT || 3000;
   // Routes
   app.use('/', authRoutes(authService));
   app.use('/issues', issuesRoutes(issuesService));
+  app.use("/", filesRoutes)
 
   // Error handling
   app.use((err, req, res, next) => {

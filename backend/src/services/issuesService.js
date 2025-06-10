@@ -120,11 +120,12 @@ class IssuesService {
     const [rows] = await this.db.execute(query, [id, userId]);
     if (rows.length === 0) return null;
     const row = rows[0];
+    console.log("Fetched issue:", row);
     return {
       id: row.id,
       title: row.title,
       description: row.description,
-      photos: row.photos ? JSON.parse(row.photos) : null,
+      photos: row.photos ? row.photos : null,
       coordinates: row.coordinates,
       created_at: row.created_at,
       updated_at: row.updated_at,

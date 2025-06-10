@@ -1,3 +1,4 @@
+const { extractFilePaths } = require('../utils/filePaths');
 class IssuesController {
   constructor(issuesService) {
     this.issuesService = issuesService;
@@ -7,7 +8,9 @@ class IssuesController {
   async createIssue(req, res) {
     try {
       const userId = req.userId;
-      const { title, description, photos, coordinates } = req.body;
+      const { title, description, coordinates } = req.body;
+      const photos = extractFilePaths(req.files);
+
       const issue = await this.issuesService.createIssue({
         userId,
         title,
