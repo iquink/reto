@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Form } from "react-aria-components";
 import { Input, TextArea, Button, FileTrigger } from "@components/index";
 import { AddIssueModal } from "./AddIssueModal/AddIssueModal";
@@ -15,41 +15,47 @@ const AddIssue: React.FC = observer(() => {
     reset,
     setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormData>({
     defaultValues: {
       title: "",
       description: "",
       coordinates: "",
+      files: null,
     },
   });
 
   const { t } = useTranslation();
-  const { issuesStore, authStore } = useStore();
-  const { user } = authStore;
-
-  const [file, setFile] = useState<string[] | null>(null);
+  const { issuesStore } = useStore();
 
   interface FormData {
     title: string;
     description: string;
     coordinates: string;
+    files: FileList | null;
   }
 
   const onSubmit = async (data: FormData): Promise<void> => {
-    console.log("Form submitted:", data);
-    issuesStore.addIssue({
-      user_id: Number(user.id),
-      title: data.title,
-      description: data.description,
-      coordinates: data.coordinates,
-    });
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("coordinates", data.coordinates);
+    if (data.files) {
+      Array.from(data.files).forEach((file) => {
+        formData.append("files", file);
+      });
+    }
+    await issuesStore.addIssue(formData); // Your store/api should handle FormData
     alert("Form submitted successfully!");
     reset();
     issuesStore.clearSelectedLocation();
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      className={styles.form}
+      encType="multipart/form-data"
+    >
       <Controller
         control={control}
         name="title"
@@ -151,18 +157,29 @@ const AddIssue: React.FC = observer(() => {
           />
         </div>
       </div>
-      <FileTrigger
-        onSelect={(e: FileList | null) => {
-          const files = e ? Array.from(e) : [];
-          const filenames = files.map((file) => file.name);
-          setFile(filenames.length ? filenames : null);
-        }}
-        acceptedFileTypes={["image/*"]}
-        allowsMultiple={true}
-      >
-        {t("pages.addIssue.form.uploadFile")}
-      </FileTrigger>
-      {file && file.join(", ")}
+      <Controller
+        control={control}
+        name="files"
+        render={({ field: { onChange, value, ref } }) => (
+          <>
+            <FileTrigger
+              ref={ref}
+              onSelect={(e: FileList) => {
+                onChange(e);
+              }}
+              value={value}
+              acceptedFileTypes={["image/*"]}
+              allowsMultiple={true}
+            >
+              {t("pages.addIssue.form.uploadFile")}
+            </FileTrigger>
+            {value &&
+              Array.from(value)
+                .map((f) => f.name)
+                .join(", ")}
+          </>
+        )}
+      />
       <Button type="submit" className={styles.button}>
         {t("pages.addIssue.form.submit")}
       </Button>

@@ -57,6 +57,7 @@ export const IssuesStore = types
       description: string;
       photos?: string[];
       coordinates?: string;
+      files?: FileList | null;
     }) {
       try {
         yield issuesApi.createIssue(issueData);

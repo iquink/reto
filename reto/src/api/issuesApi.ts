@@ -18,9 +18,14 @@ const issuesApi = {
     description?: string;
     photos?: string[];
     coordinates?: string;
+    files?: FileList | null;
   }) {
+    console.log("Issue created:", data);
     const response = await apiClient.post(PATH, data, {
       withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
     return response.data;
   },
