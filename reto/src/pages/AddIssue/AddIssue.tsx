@@ -14,7 +14,7 @@ const AddIssue: React.FC = observer(() => {
     control,
     reset,
     setValue,
-    formState: { errors },
+    //formState: { errors },
   } = useForm<FormData>({
     defaultValues: {
       title: "",
@@ -165,14 +165,12 @@ const AddIssue: React.FC = observer(() => {
             return true;
           },
         }}
-        render={({ field: { onChange, value, ref } }) => (
+        render={({ field: { onChange, value } }) => (
           <>
             <FileTrigger
-              ref={ref}
-              onSelect={(e: FileList) => {
-                onChange(e);
+              onSelect={(files: FileList | null) => {
+                onChange(files);
               }}
-              value={value}
               acceptedFileTypes={["image/*"]}
               allowsMultiple={true}
             >

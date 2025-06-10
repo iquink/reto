@@ -14,7 +14,7 @@ import React from "react";
  * @interface ButtonProps
  * @extends {RACButtonProps} - Extends React Aria Components button props
  */
-interface ButtonProps extends RACButtonProps {
+export interface ButtonProps extends RACButtonProps {
   /**
    * Visual style variant of the button
    * @default "primary"

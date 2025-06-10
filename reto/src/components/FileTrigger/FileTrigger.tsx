@@ -34,10 +34,11 @@ export const FileTrigger: React.FC<FileTriggerPropsWithButton> = ({
   children,
   isDisabled,
   isPending,
+  onSelect,
   ...props
 }) => {
   return (
-    <RACFileTrigger {...props}>
+    <RACFileTrigger onSelect={onSelect} {...props}>
       <Button
         type="button"
         isDisabled={isDisabled}
