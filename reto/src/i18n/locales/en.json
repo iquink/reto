@@ -77,7 +77,11 @@
       "createdAt": "Created at:",
       "updatedAt": "Updated at:",
       "status": "Status:",
-      "noCoordinates": "-"
+      "noCoordinates": "-",
+      "galleryLabel": "Image gallery",
+      "imageAlt": "Issue image {{index}}",
+      "openImage": "Open image {{index}} in gallery",
+      "lightboxLabel": "Image gallery modal"
     },
     "addIssue": {
       "form": {

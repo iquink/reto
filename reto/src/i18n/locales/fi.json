@@ -77,7 +77,11 @@
       "createdAt": "Luotu:",
       "updatedAt": "Päivitetty:",
       "status": "Tila:",
-      "noCoordinates": "-"
+      "noCoordinates": "-",
+      "galleryLabel": "Kuvagalleria",
+      "imageAlt": "Ilmoituksen kuva {{index}}",
+      "openImage": "Avaa kuva {{index}} galleriassa",
+      "lightboxLabel": "Kuvagallerian modaali"
     },
     "addIssue": {
       "form": {

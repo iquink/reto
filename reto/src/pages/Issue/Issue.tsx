@@ -6,6 +6,10 @@ import { Map } from "@components/index";
 import { pickedLocation } from "@assets/index";
 import L from "leaflet";
 import { useTranslation } from "react-i18next";
+import Lightbox from "yet-another-react-lightbox";
+import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
+import "yet-another-react-lightbox/styles.css";
+
 
 /**
  * Issue page component.
@@ -13,6 +17,7 @@ import { useTranslation } from "react-i18next";
  * @param props - expects an `id` prop for the issue id
  */
 const Issue: React.FC<{ id: string | number }> = observer(({ id }) => {
+  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
   const { issuesStore } = useStore();
   const issueId = id;
   const { t } = useTranslation();
@@ -34,6 +39,12 @@ const Issue: React.FC<{ id: string | number }> = observer(({ id }) => {
 
   // Gallery: show images if available
   const hasImages = Array.isArray(issue.photos) && issue.photos.length > 0;
+
+  const getImagePath = (filename: string) => {
+    return `${import.meta.env.VITE_API_URL || ""}/images/${encodeURIComponent(
+      filename
+    )}`;
+  };
 
   return (
     <div className={styles.container}>
@@ -65,24 +76,54 @@ const Issue: React.FC<{ id: string | number }> = observer(({ id }) => {
 
       {/* Gallery above the map */}
       {hasImages && (
-        <div
-          className={styles.gallery}
-          role="region"
-          aria-label={t("pages.issue.galleryLabel") || "Gallery"}
-        >
-          {issue.photos.map((filename: string, idx: number) => (
-            <div className={styles.galleryItem} key={filename}>
-              <img
-                src={`${
-                  import.meta.env.VITE_API_URL || ""
-                }/images/${encodeURIComponent(filename)}`}
-                alt={t("pages.issue.imageAlt", { index: idx + 1 }) || `Issue image ${idx + 1}`}
-                className={styles.galleryImage}
-                loading="lazy"
-              />
-            </div>
-          ))}
-        </div>
+        <>
+          <div
+            className={styles.gallery}
+            role="region"
+            aria-label={t("pages.issue.galleryLabel") || "Gallery"}
+          >
+            {issue.photos.map((filename: string, idx: number) => (
+              <div
+                className={styles.galleryItem}
+                key={filename}
+                tabIndex={0}
+                aria-label={
+                  t("pages.issue.openImage", { index: idx + 1 }) ||
+                  `Open image ${idx + 1} in gallery`
+                }
+                onClick={() => setOpenIndex(idx)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") setOpenIndex(idx);
+                }}
+              >
+                <img
+                  src={getImagePath(filename)}
+                  alt={
+                    t("pages.issue.imageAlt", { index: idx + 1 }) ||
+                    `Issue image ${idx + 1}`
+                  }
+                  className={styles.galleryImage}
+                  loading="lazy"
+                  role="button"
+                  draggable={false}
+                />
+              </div>
+            ))}
+          </div>
+          <Lightbox
+            slides={issue.photos.map((filename: string, idx: number) => ({
+              src: getImagePath(filename),
+              alt:
+                t("pages.issue.imageAlt", { index: idx + 1 }) ||
+                `Issue image ${idx + 1}`,
+            }))}
+            open={openIndex !== null}
+            index={openIndex ?? 0}
+            close={() => setOpenIndex(null)}
+            plugins={[Slideshow]}
+            aria-label={t("pages.issue.lightboxLabel") || "Image gallery modal"}
+          />
+        </>
       )}
 
       <div className={styles.mapWrapper}>

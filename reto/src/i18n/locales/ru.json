@@ -77,7 +77,11 @@
       "createdAt": "Создано:",
       "updatedAt": "Обновлено:",
       "status": "Статус:",
-      "noCoordinates": "-"
+      "noCoordinates": "-",
+      "galleryLabel": "Галерея изображений",
+      "imageAlt": "Изображение заявки {{index}}",
+      "openImage": "Открыть изображение {{index}} в галерее",
+      "lightboxLabel": "Модальное окно галереи изображений"
     },
     "addIssue": {
       "form": {
