@@ -2,7 +2,6 @@
 .app {
   background-color: var(--background-color);
   color: var(--text-color);
-  min-height: 100vh;
   padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
