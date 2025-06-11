@@ -23,15 +23,41 @@ const Issues: React.FC = observer(() => {
 
   const { issuesStore } = useStore();
   const [rows, setRows] = React.useState<TUserIssue[]>([]);
+  const [isCardsGridOverflowing, setIsCardsGridOverflowing] = React.useState(false);
+
+  // Function to check if cardsGrid overflows window
+  const checkCardsGridOverflow = React.useCallback(() => {
+    if (typeof window !== 'undefined') {
+      const grid = document.querySelector(`.${styles.cardsGrid}`) as HTMLElement | null;
+      if (grid) {
+        setIsCardsGridOverflowing(grid.scrollHeight > window.innerHeight);
+      } else {
+        setIsCardsGridOverflowing(false);
+      }
+    }
+  }, []);
 
   React.useEffect(() => {
     issuesStore.getUserIssues().then(() => {
       setRows(issuesStore.userIssues.slice());
+      checkCardsGridOverflow();
     });
-  }, [issuesStore]);
+    // Also check on mount
+    checkCardsGridOverflow();
+    window.addEventListener('resize', checkCardsGridOverflow);
+    return () => {
+      window.removeEventListener('resize', checkCardsGridOverflow);
+    };
+  }, [issuesStore, checkCardsGridOverflow]);
 
   return (
     <div className={styles.container}>
+      {/* Render extra button on top if cardsGrid overflows window */}
+      {isCardsGridOverflowing && (
+        <Button onClick={handleAddIssue} className={styles.addButton}>
+          {t("pages.issues.createIssue")}
+        </Button>
+      )}
       {rows.length === 0 ? (
         <p className={styles.message}>
           {t("pages.issues.noIssues")} {/* Localized no issues message */}
@@ -52,7 +78,7 @@ const Issues: React.FC = observer(() => {
         </div>
       )}
       <Button onClick={handleAddIssue} className={styles.addButton}>
-        {t("pages.issues.createIssue")} {/* Localized add button */}
+        {t("pages.issues.createIssue")}
       </Button>
     </div>
   );
