@@ -4,16 +4,6 @@ class IssuesService {
   }
 
   async createIssue({ userId, title, description, photos, coordinates }) {
-    // Input to createIssue
-    console.log("Input to createIssue:", {
-      user_id: userId,
-      title,
-      description,
-      photos,
-      coordinates,
-    });
-    console.log("user_id type:", typeof userId, "user_id value:", userId);
-
     // Convert user_id to number
     const parsedUserId = Number(userId);
     if (
@@ -120,7 +110,7 @@ class IssuesService {
     const [rows] = await this.db.execute(query, [id, userId]);
     if (rows.length === 0) return null;
     const row = rows[0];
-    console.log("Fetched issue:", row);
+    
     return {
       id: row.id,
       title: row.title,

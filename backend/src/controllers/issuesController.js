@@ -20,7 +20,6 @@ class IssuesController {
       });
       res.status(201).json(issue);
     } catch (err) {
-      console.log("data", req.body);
       console.error("Error creating issue:", err);
       res.status(500).send("Error creating issue.");
     }
