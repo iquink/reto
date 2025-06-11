@@ -57,12 +57,13 @@ class IssuesController {
     try {
       const { userId } = req;
       const issueId = req.params.id;
-      const { title, description, photos, coordinates } = req.body;
+      const { title, description, photos, coordinates, status } = req.body;
       const updated = await this.issuesService.updateIssue(issueId, userId, {
         title,
         description,
         photos,
         coordinates,
+        status,
       });
       if (!updated)
         return res.status(404).send("Issue not found or not yours.");

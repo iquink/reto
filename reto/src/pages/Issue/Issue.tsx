@@ -2,14 +2,14 @@ import React from "react";
 import styles from "./Issue.module.css";
 import { useStore } from "@store";
 import { observer } from "mobx-react-lite";
-import { Map } from "@components/index";
+import { Map, Select } from "@components/index";
 import { pickedLocation } from "@assets/index";
 import L from "leaflet";
 import { useTranslation } from "react-i18next";
 import Lightbox from "yet-another-react-lightbox";
 import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
 import "yet-another-react-lightbox/styles.css";
-
+import { Status } from "@store/models";
 
 /**
  * Issue page component.
@@ -46,33 +46,59 @@ const Issue: React.FC<{ id: string | number }> = observer(({ id }) => {
     )}`;
   };
 
+  // Info fields to display above the gallery
+  const infoFields = [
+    {
+      label: t("pages.issue.id"),
+      value: issue.id,
+    },
+    {
+      label: t("pages.issue.description"),
+      value: issue.description,
+    },
+    {
+      label: t("pages.issue.coordinates"),
+      value: issue.coordinates
+        ? `${issue.coordinates.x}, ${issue.coordinates.y}`
+        : t("pages.issue.noCoordinates"),
+    },
+    {
+      label: t("pages.issue.createdAt"),
+      value: new Date(issue.created_at).toLocaleString(),
+    },
+    {
+      label: t("pages.issue.updatedAt"),
+      value: new Date(issue.updated_at).toLocaleString(),
+    },
+  ];
+
   return (
     <div className={styles.container}>
-      <h1>{issue.title}</h1>
-      <p>
-        <strong>{t("pages.issue.id")}</strong> {issue.id}
-      </p>
-      <p>
-        <strong>{t("pages.issue.description")}</strong> {issue.description}
-      </p>
-      <p>
-        <strong>{t("pages.issue.coordinates")}</strong>{" "}
-        {issue.coordinates
-          ? `${issue.coordinates.x}, ${issue.coordinates.y}`
-          : t("pages.issue.noCoordinates")}
-      </p>
-      <p>
-        <strong>{t("pages.issue.createdAt")}</strong>{" "}
-        {new Date(issue.created_at).toLocaleString()}
-      </p>
-      <p>
-        <strong>{t("pages.issue.updatedAt")}</strong>{" "}
-        {new Date(issue.updated_at).toLocaleString()}
-      </p>
-      <p>
-        <strong>{t("pages.issue.status")}</strong>{" "}
-        {t(`issueStatus.${issue.status}`)}
-      </p>
+      <div className={styles.infoSection}>
+        {infoFields.map((item, idx) => (
+          <div className={styles.infoBlock} key={idx}>
+            <strong>{item.label}</strong> {item.value}
+          </div>
+        ))}
+        <div className={styles.infoBlock}>
+          <strong>{t("pages.issue.status")}</strong>{" "}
+          <Select
+            name="status"
+            value={issue.status}
+            options={Object.values(Status).map((status) => ({
+              value: status,
+              label: t(`issueStatus.${status}`),
+            }))}
+            onChange={(newStatus: string) => {
+              if (newStatus !== issue.status) {
+                issuesStore.updateIssue(id, { status: newStatus });
+              }
+            }}
+            aria-label={t("pages.issue.status")}
+            className={styles.statusSelect}
+          />
+        </div>
+      </div>
 
       {/* Gallery above the map */}
       {hasImages && (

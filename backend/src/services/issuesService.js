@@ -133,7 +133,7 @@ class IssuesService {
     };
   }
 
-  async updateIssue(id, userId, { title, description, photos, coordinates }) {
+  async updateIssue(id, userId, { title, description, photos, coordinates, status }) {
     // Only update fields that are provided
     const fields = [];
     const values = [];
@@ -153,14 +153,26 @@ class IssuesService {
       fields.push("coordinates = ?");
       values.push(coordinates);
     }
+    if (status !== undefined) {
+      // Validate status value
+      const allowedStatuses = ["open", "in_progress", "closed"];
+      if (!allowedStatuses.includes(status)) {
+        throw new Error(`Invalid status: must be one of ${allowedStatuses.join(", ")}`);
+      }
+      fields.push("status = ?");
+      values.push(status);
+    }
     if (fields.length === 0) return false;
 
     values.push(id, userId);
-    const query = `UPDATE issues SET ${fields.join(
-      ", "
-    )} WHERE id = ? AND user_id = ?`;
-    const [result] = await this.db.execute(query, values);
-    return result.affectedRows > 0;
+    const query = `UPDATE issues SET ${fields.join(", ")} WHERE id = ? AND user_id = ?`;
+    try {
+      const [result] = await this.db.execute(query, values);
+      return result.affectedRows > 0;
+    } catch (error) {
+      console.error("DB error in updateIssue:", error);
+      throw error;
+    }
   }
 
   async deleteIssue(id, userId) {

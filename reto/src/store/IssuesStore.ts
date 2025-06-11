@@ -86,4 +86,27 @@ export const IssuesStore = types
         self.setCurrentIssue(null);
       }
     }),
+    // Update an existing issue
+    updateIssue: flow(function* (
+      id: number,
+      updateData: {
+        title?: string;
+        description?: string;
+        photos?: string[];
+        coordinates?: string;
+        status?: string;
+      }
+    ) {
+      try {
+        const updated = yield issuesApi.updateIssue(id, updateData);
+        // Optionally update currentIssue if it's the same issue
+        if (self.currentIssue && self.currentIssue.id === id) {
+          self.setCurrentIssue(updated);
+        }
+        return updated;
+      } catch (error) {
+        console.error("Failed to update issue:", error);
+        throw error;
+      }
+    }),
   }));

@@ -64,6 +64,7 @@ const issuesApi = {
       description?: string;
       photos?: string[];
       coordinates?: string;
+      status?: string;
     }
   ) {
     const response = await apiClient.put(`${PATH}/${id}`, data, {
