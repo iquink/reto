@@ -12,7 +12,7 @@ export const AuthStore = types
   })
   .actions((self) => ({
     setUser(user: Instance<typeof UserModel>) {
-      self.user = UserModel.create({ ...user, id: user.id.toString() });
+      self.user = UserModel.create(user);
     },
   }))
   .actions((self) => ({

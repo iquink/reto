@@ -14,7 +14,6 @@ export enum Status {
 }
 
 export const UserModel = types.model("User", {
-  id: types.identifier,
   username: types.string,
   email: types.string,
 });

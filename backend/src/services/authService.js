@@ -28,7 +28,7 @@ class AuthService {
     }
 
     const token = generateToken({ id: user.id, email: user.email });
-    return { token, user: { id: user.id, username: user.username, email: user.email } };
+    return { token, user: { username: user.username, email: user.email } };
   }
 
   async getUserById(id) {
@@ -40,7 +40,7 @@ class AuthService {
     }
 
     const user = results[0];
-    return { id: user.id, username: user.username, email: user.email };
+    return { username: user.username, email: user.email };
   }
 }
 
