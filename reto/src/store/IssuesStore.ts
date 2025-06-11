@@ -86,6 +86,8 @@ export const IssuesStore = types
         self.setCurrentIssue(null);
       }
     }),
+  }))
+  .actions((self) => ({
     // Update an existing issue
     updateIssue: flow(function* (
       id: number,
@@ -99,10 +101,9 @@ export const IssuesStore = types
     ) {
       try {
         const updated = yield issuesApi.updateIssue(id, updateData);
-        // Optionally update currentIssue if it's the same issue
-        if (self.currentIssue && self.currentIssue.id === id) {
-          self.setCurrentIssue(updated);
-        }
+
+        self.getIssueById(id);
+
         return updated;
       } catch (error) {
         console.error("Failed to update issue:", error);

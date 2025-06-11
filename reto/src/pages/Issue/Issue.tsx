@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Issue.module.css";
-import { useStore } from "@store";
+import { useStore } from "@store/index";
 import { observer } from "mobx-react-lite";
 import { Map, Select } from "@components/index";
 import { pickedLocation } from "@assets/index";
@@ -91,7 +91,7 @@ const Issue: React.FC<{ id: string | number }> = observer(({ id }) => {
             }))}
             onChange={(newStatus: string) => {
               if (newStatus !== issue.status) {
-                issuesStore.updateIssue(id, { status: newStatus });
+                issuesStore.updateIssue(Number(id), { status: newStatus });
               }
             }}
             aria-label={t("pages.issue.status")}
@@ -159,16 +159,20 @@ const Issue: React.FC<{ id: string | number }> = observer(({ id }) => {
               ? [issue.coordinates.y, issue.coordinates.x]
               : undefined
           }
-          markers={{
-            [`issue-${issue.id}`]: [
-              [issue.coordinates.y, issue.coordinates.x],
-              L.icon({
-                iconUrl: pickedLocation,
-                iconSize: [32, 32],
-                iconAnchor: [16, 32],
-              }),
-            ],
-          }}
+          markers={
+            issue.coordinates
+              ? {
+                  [`issue-${issue.id}`]: [
+                    [issue.coordinates.y, issue.coordinates.x],
+                    L.icon({
+                      iconUrl: pickedLocation,
+                      iconSize: [32, 32],
+                      iconAnchor: [16, 32],
+                    }),
+                  ],
+                }
+              : {}
+          }
           isGetCoordinatesByClick={false}
         />
       </div>

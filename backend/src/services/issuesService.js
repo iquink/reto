@@ -110,7 +110,7 @@ class IssuesService {
     const [rows] = await this.db.execute(query, [id, userId]);
     if (rows.length === 0) return null;
     const row = rows[0];
-    
+
     return {
       id: row.id,
       title: row.title,
@@ -123,7 +123,11 @@ class IssuesService {
     };
   }
 
-  async updateIssue(id, userId, { title, description, photos, coordinates, status }) {
+  async updateIssue(
+    id,
+    userId,
+    { title, description, photos, coordinates, status }
+  ) {
     // Only update fields that are provided
     const fields = [];
     const values = [];
@@ -147,15 +151,21 @@ class IssuesService {
       // Validate status value
       const allowedStatuses = ["open", "in_progress", "closed"];
       if (!allowedStatuses.includes(status)) {
-        throw new Error(`Invalid status: must be one of ${allowedStatuses.join(", ")}`);
+        throw new Error(
+          `Invalid status: must be one of ${allowedStatuses.join(", ")}`
+        );
       }
       fields.push("status = ?");
       values.push(status);
     }
     if (fields.length === 0) return false;
 
+    fields.push("updated_at = NOW()");
+
     values.push(id, userId);
-    const query = `UPDATE issues SET ${fields.join(", ")} WHERE id = ? AND user_id = ?`;
+    const query = `UPDATE issues SET ${fields.join(
+      ", "
+    )} WHERE id = ? AND user_id = ?`;
     try {
       const [result] = await this.db.execute(query, values);
       return result.affectedRows > 0;
