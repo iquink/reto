@@ -5,7 +5,7 @@ class IssuesController {
   }
 
   // Create a new issue
-  async createIssue(req, res) {
+  async createIssue(req, res, next) {
     try {
       const userId = req.userId;
       const { title, description, coordinates } = req.body;
@@ -20,25 +20,23 @@ class IssuesController {
       });
       res.status(201).json(issue);
     } catch (err) {
-      console.error("Error creating issue:", err);
-      res.status(500).send("Error creating issue.");
+      next(err);
     }
   }
 
   // Get all issues for the authenticated user
-  async getUserIssues(req, res) {
+  async getUserIssues(req, res, next) {
     try {
       const { userId } = req;
       const issues = await this.issuesService.getUserIssues(userId);
       res.json(issues);
     } catch (err) {
-      console.error("Error fetching issues:", err);
-      res.status(500).send("Error fetching issues.");
+      next(err);
     }
   }
 
   // Get a single issue by ID (must belong to user)
-  async getIssueById(req, res) {
+  async getIssueById(req, res, next) {
     try {
       const { userId } = req;
       const issueId = req.params.id;
@@ -46,13 +44,12 @@ class IssuesController {
       if (!issue) return res.status(404).send("Issue not found.");
       res.json(issue);
     } catch (err) {
-      console.error("Error fetching issue:", err);
-      res.status(500).send("Error fetching issue.");
+      next(err);
     }
   }
 
   // Update an issue (must belong to user)
-  async updateIssue(req, res) {
+  async updateIssue(req, res, next) {
     try {
       const { userId } = req;
       const issueId = req.params.id;
@@ -68,13 +65,12 @@ class IssuesController {
         return res.status(404).send("Issue not found or not yours.");
       res.json({ message: "Issue updated." });
     } catch (err) {
-      console.error("Error updating issue:", err);
-      res.status(500).send("Error updating issue.");
+      next(err);
     }
   }
 
   // Delete an issue (must belong to user)
-  async deleteIssue(req, res) {
+  async deleteIssue(req, res, next) {
     try {
       const { userId } = req;
       const issueId = req.params.id;
@@ -83,8 +79,7 @@ class IssuesController {
         return res.status(404).send("Issue not found or not yours.");
       res.json({ message: "Issue deleted." });
     } catch (err) {
-      console.error("Error deleting issue:", err);
-      res.status(500).send("Error deleting issue.");
+      next(err);
     }
   }
 }

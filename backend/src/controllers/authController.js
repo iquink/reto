@@ -5,17 +5,16 @@ class AuthController {
       this.authService = authService;
     }
   
-    async register(req, res) {
+    async register(req, res, next) {
       try {
         const result = await this.authService.register(req.body);
         res.status(201).json(result);
       } catch (err) {
-        console.error('Error registering user:', err);
-        res.status(500).send('Error registering user.');
+        next(err);
       }
     }
   
-    async login(req, res) {
+    async login(req, res, next) {
       try {
         const { token, user } = await this.authService.login(req.body);
         res.cookie('token', token, {
@@ -25,8 +24,7 @@ class AuthController {
         });
         res.json({ message: 'Login successful.', user });
       } catch (err) {
-        console.error('Error logging in:', err);
-        res.status(err.message === 'User not found.' ? 404 : 401).send(err.message);
+        next(err);
       }
     }
   
@@ -50,8 +48,7 @@ class AuthController {
         const user = await this.authService.getUserById(decoded.id);
         res.json(user);
       } catch (err) {
-        console.error('Error fetching user:', err);
-        res.status(404).send(err.message);
+        next(err);
       }
     }
   }

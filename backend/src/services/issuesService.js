@@ -1,3 +1,8 @@
+const {
+  BadRequestError,
+  NotFoundError,
+} = require("../utils/errors");
+
 class IssuesService {
   constructor(db) {
     this.db = db;
@@ -11,35 +16,35 @@ class IssuesService {
       !Number.isInteger(parsedUserId) ||
       parsedUserId <= 0
     ) {
-      throw new Error(
+      throw new BadRequestError(
         `Invalid user_id: must be a positive integer, received ${userId} (type: ${typeof userId})`
       );
     }
 
     // Title validation
     if (!title || typeof title !== "string" || title.length > 255) {
-      throw new Error(
+      throw new BadRequestError(
         "Invalid title: must be a non-empty string up to 255 characters"
       );
     }
 
     // Description validation
     if (description && typeof description !== "string") {
-      throw new Error("Invalid description: must be a string or null");
+      throw new BadRequestError("Invalid description: must be a string or null");
     }
 
     // Photos validation
     if (photos && !Array.isArray(photos) && typeof photos !== "object") {
-      throw new Error("Invalid photos: must be an array, object, or null");
+      throw new BadRequestError("Invalid photos: must be an array, object, or null");
     }
 
     // Coordinates validation
     if (!coordinates || typeof coordinates !== "string") {
-      throw new Error("Invalid coordinates: must be a string");
+      throw new BadRequestError("Invalid coordinates: must be a string");
     }
     const normalizedCoordinates = coordinates.replace(",", " ").trim();
     if (!normalizedCoordinates.match(/^-?\d+(\.\d+)?\s+-?\d+(\.\d+)?$/)) {
-      throw new Error(
+      throw new BadRequestError(
         'Invalid coordinates: must be in format "longitude latitude" or "longitude,latitude"'
       );
     }
@@ -52,7 +57,7 @@ class IssuesService {
       latitude < -90 ||
       latitude > 90
     ) {
-      throw new Error(
+      throw new BadRequestError(
         "Invalid coordinates: longitude must be between -180 and 180, latitude between -90 and 90"
       );
     }
@@ -87,7 +92,7 @@ class IssuesService {
       };
     } catch (error) {
       if (error.code === "ER_NO_REFERENCED_ROW_2") {
-        throw new Error("Invalid user_id: user does not exist");
+        throw new NotFoundError("Invalid user_id: user does not exist");
       }
       throw error;
     }
@@ -151,7 +156,7 @@ class IssuesService {
       // Validate status value
       const allowedStatuses = ["open", "in_progress", "closed"];
       if (!allowedStatuses.includes(status)) {
-        throw new Error(
+        throw new BadRequestError(
           `Invalid status: must be one of ${allowedStatuses.join(", ")}`
         );
       }
@@ -163,9 +168,7 @@ class IssuesService {
     fields.push("updated_at = NOW()");
 
     values.push(id, userId);
-    const query = `UPDATE issues SET ${fields.join(
-      ", "
-    )} WHERE id = ? AND user_id = ?`;
+    const query = `UPDATE issues SET ${fields.join(", ")} WHERE id = ? AND user_id = ?`;
     try {
       const [result] = await this.db.execute(query, values);
       return result.affectedRows > 0;
