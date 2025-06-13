@@ -73,7 +73,7 @@ CREATE TABLE `issues` (
 ```
 cd backend
 npm install
-node ./src/app.js
+npm run start
 ```
 - The backend will connect to your MySQL `reto_db` database (configure credentials in `backend/.env`).
 
