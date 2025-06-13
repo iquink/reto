@@ -13,9 +13,24 @@ export enum Status {
   CLOSED = "closed",
 }
 
+export enum UserRole {
+  USER = "user",
+  ADMIN = "admin",
+  MODERATOR = "moderator",
+}
+
 export const UserModel = types.model("User", {
   username: types.string,
   email: types.string,
+  fullName: types.maybeNull(types.string),
+  createdAt: types.string,
+  updatedAt: types.string,
+  isActive: types.number,
+  role: types.enumeration<UserRole>("UserRole", [
+    UserRole.USER,
+    UserRole.ADMIN,
+    UserRole.MODERATOR,
+  ]),
 });
 
 // IssueModel according to issues table

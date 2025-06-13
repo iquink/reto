@@ -4,12 +4,14 @@ import { IssuesStore } from "./IssuesStore";
 import { SettingsStore } from "./SettingsStore";
 import { createContext } from "react";
 import React from "react";
+import { AdminStore } from "./AdminStore";
 
 // Define the RootStore model
 const rootStoreModel = types.model("RootStore", {
   authStore: AuthStore,
   issuesStore: IssuesStore,
   settingsStore: SettingsStore,
+  adminStore: AdminStore,
 });
 
 // Create an instance of the store
@@ -19,6 +21,7 @@ export const rootStore = rootStoreModel.create({
     selectedLocation: [],
   },
   settingsStore: {},
+  adminStore: {},
 });
 
 const RootStoreContext = createContext<null | Instance<typeof rootStore>>(null);
