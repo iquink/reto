@@ -2,14 +2,15 @@ const {
   BadRequestError,
   NotFoundError,
 } = require("../utils/errors");
+const IssuesRepository = require("../repositories/issuesRepository");
 
 class IssuesService {
   constructor(db) {
     this.db = db;
+    this.issuesRepository = new IssuesRepository(db);
   }
 
   async createIssue({ userId, title, description, photos, coordinates }) {
-    // Convert user_id to number
     const parsedUserId = Number(userId);
     if (
       isNaN(parsedUserId) ||
@@ -20,25 +21,17 @@ class IssuesService {
         `Invalid user_id: must be a positive integer, received ${userId} (type: ${typeof userId})`
       );
     }
-
-    // Title validation
     if (!title || typeof title !== "string" || title.length > 255) {
       throw new BadRequestError(
         "Invalid title: must be a non-empty string up to 255 characters"
       );
     }
-
-    // Description validation
     if (description && typeof description !== "string") {
       throw new BadRequestError("Invalid description: must be a string or null");
     }
-
-    // Photos validation
     if (photos && !Array.isArray(photos) && typeof photos !== "object") {
       throw new BadRequestError("Invalid photos: must be an array, object, or null");
     }
-
-    // Coordinates validation
     if (!coordinates || typeof coordinates !== "string") {
       throw new BadRequestError("Invalid coordinates: must be a string");
     }
@@ -48,8 +41,6 @@ class IssuesService {
         'Invalid coordinates: must be in format "longitude latitude" or "longitude,latitude"'
       );
     }
-
-    // Split coordinates
     const [longitude, latitude] = normalizedCoordinates.split(" ").map(Number);
     if (
       longitude < -180 ||
@@ -61,26 +52,17 @@ class IssuesService {
         "Invalid coordinates: longitude must be between -180 and 180, latitude between -90 and 90"
       );
     }
-
-    // SQL query
-    const query = `
-    INSERT INTO issues (user_id, title, description, photos, coordinates)
-    VALUES (?, ?, ?, ?, ST_GeomFromText(?, 4326))
-  `;
-    const photosJson = photos ? JSON.stringify(photos) : null;
     const pointWKT = `POINT(${longitude} ${latitude})`;
-
     try {
-      const [result] = await this.db.execute(query, [
-        parsedUserId,
+      const insertId = await this.issuesRepository.create({
+        userId: parsedUserId,
         title,
-        description || null,
-        photosJson,
-        pointWKT,
-      ]);
-
+        description,
+        photos,
+        coordinates: pointWKT,
+      });
       return {
-        id: result.insertId,
+        id: insertId,
         user_id: parsedUserId,
         title,
         description: description || null,
@@ -99,8 +81,7 @@ class IssuesService {
   }
 
   async getUserIssues(userId) {
-    const query = `SELECT * FROM issues WHERE user_id = ? ORDER BY updated_at DESC`;
-    const [rows] = await this.db.execute(query, [userId]);
+    const rows = await this.issuesRepository.findByUserId(userId);
     return rows.map((row) => ({
       id: row.id,
       title: row.title,
@@ -111,11 +92,9 @@ class IssuesService {
   }
 
   async getIssueById(id, userId) {
-    const query = `SELECT * FROM issues WHERE id = ? AND user_id = ?`;
-    const [rows] = await this.db.execute(query, [id, userId]);
-    if (rows.length === 0) return null;
-    const row = rows[0];
-
+    const queryResult = await this.issuesRepository.findById(id);
+    if (!queryResult || queryResult.user_id != userId) return null;
+    const row = queryResult;
     return {
       id: row.id,
       title: row.title,
@@ -134,44 +113,23 @@ class IssuesService {
     { title, description, photos, coordinates, status }
   ) {
     // Only update fields that are provided
-    const fields = [];
-    const values = [];
-    if (title !== undefined) {
-      fields.push("title = ?");
-      values.push(title);
-    }
-    if (description !== undefined) {
-      fields.push("description = ?");
-      values.push(description);
-    }
-    if (photos !== undefined) {
-      fields.push("photos = ?");
-      values.push(photos ? JSON.stringify(photos) : null);
-    }
-    if (coordinates !== undefined) {
-      fields.push("coordinates = ?");
-      values.push(coordinates);
-    }
+    const fields = {};
+    if (title !== undefined) fields.title = title;
+    if (description !== undefined) fields.description = description;
+    if (photos !== undefined) fields.photos = photos ? JSON.stringify(photos) : null;
+    if (coordinates !== undefined) fields.coordinates = coordinates;
     if (status !== undefined) {
-      // Validate status value
       const allowedStatuses = ["open", "in_progress", "closed"];
       if (!allowedStatuses.includes(status)) {
         throw new BadRequestError(
           `Invalid status: must be one of ${allowedStatuses.join(", ")}`
         );
       }
-      fields.push("status = ?");
-      values.push(status);
+      fields.status = status;
     }
-    if (fields.length === 0) return false;
-
-    fields.push("updated_at = NOW()");
-
-    values.push(id, userId);
-    const query = `UPDATE issues SET ${fields.join(", ")} WHERE id = ? AND user_id = ?`;
+    if (Object.keys(fields).length === 0) return false;
     try {
-      const [result] = await this.db.execute(query, values);
-      return result.affectedRows > 0;
+      return await this.issuesRepository.update(id, userId, fields);
     } catch (error) {
       console.error("DB error in updateIssue:", error);
       throw error;
@@ -179,9 +137,7 @@ class IssuesService {
   }
 
   async deleteIssue(id, userId) {
-    const query = `DELETE FROM issues WHERE id = ? AND user_id = ?`;
-    const [result] = await this.db.execute(query, [id, userId]);
-    return result.affectedRows > 0;
+    return await this.issuesRepository.delete(id, userId);
   }
 }
 
