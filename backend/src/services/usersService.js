@@ -1,24 +1,26 @@
 const { ForbiddenError, NotFoundError } = require("../utils/errors");
+const UserRepository = require("../repositories/userRepository");
+const { mapUserToResponse } = require("../utils/userMapper");
 
 class UsersService {
   constructor(db) {
     this.db = db;
+    this.userRepository = new UserRepository(db)
   }
 
   async getUsersList(userId) {
-    const [userRows] = await this.db.execute("SELECT role FROM users WHERE id = ?", [userId]);
-    if (!userRows.length || userRows[0].role !== "admin") {
+    const isAdmin = await this.userRepository.isAdmin(userId);
+    if (!isAdmin) {
       throw new ForbiddenError("Access denied. Only admin can view users list.");
     }
-    const query =
-      "SELECT username, email, full_name, created_at, updated_at, is_active, role FROM users";
-    const [results] = await this.db.execute(query);
+
+    const results = await this.userRepository.getUsersList();
 
     if (results.length === 0) {
       throw new NotFoundError("Users not found.");
     }
 
-    return results;
+    return results.map(mapUserToResponse);
   }
 }
 
