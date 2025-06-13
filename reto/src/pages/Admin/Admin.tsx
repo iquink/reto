@@ -21,30 +21,33 @@ const Admin: React.FC = observer(() => {
 
   return (
     <div>
-      <Table aria-label="Users Table">
-        <Table.Header columns={columns}>
-          {columns.map((column) => (
-            <Table.Column
-              key={column.id}
-              id={column.id}
-            >
-              <span>{column.name}</span>
-            </Table.Column>
-          ))}
-        </Table.Header>
-        <Table.Body>
-          {adminStore?.users.map((user) => (
-            <Table.Row key={user.username} id={user.username} columns={columns}>
-              <Table.Cell>{user.username}</Table.Cell>
-              <Table.Cell>{user.email}</Table.Cell>
-              <Table.Cell>{user.role}</Table.Cell>
-              <Table.Cell>{user.isActive ? "Active" : "Inactive"}</Table.Cell>
-              <Table.Cell>{user.createdAt}</Table.Cell>
-              <Table.Cell>{user.updatedAt}</Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+      {!adminStore.isLoading && (
+        <Table aria-label="Users Table">
+          <Table.Header columns={columns}>
+            {columns.map((column) => (
+              <Table.Column key={column.id} id={column.id} isRowHeader>
+                <span>{column.name}</span>
+              </Table.Column>
+            ))}
+          </Table.Header>
+          <Table.Body>
+            {adminStore?.users.map((user) => (
+              <Table.Row
+                key={user.username}
+                id={user.username}
+                columns={columns}
+              >
+                <Table.Cell>{user.username}</Table.Cell>
+                <Table.Cell>{user.email}</Table.Cell>
+                <Table.Cell>{user.role}</Table.Cell>
+                <Table.Cell>{user.isActive ? "Active" : "Inactive"}</Table.Cell>
+                <Table.Cell>{user.createdAt}</Table.Cell>
+                <Table.Cell>{user.updatedAt}</Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      )}
     </div>
   );
 });
