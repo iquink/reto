@@ -1,6 +1,6 @@
 import { Route, Switch } from "wouter";
 import App from "../App";
-import { Home, Login, Register, Profile, AddIssue, Issues, Issue } from "@pages/index";
+import { Home, Login, Register, Profile, AddIssue, Issues, Issue, Admin } from "@pages/index";
 import React from "react";
 
 /**
@@ -24,7 +24,7 @@ export const Routes = () => (
       <Route path={"/issues/:id"} >
       {params => params.id === "add" ? <AddIssue /> : <Issue id={params.id} />}
       </Route>
-      {/* Add more routes here as needed */}
+      <Route path="/admin" component={Admin} />
     </Switch>
   </App>
 );
