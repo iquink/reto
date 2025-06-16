@@ -3,14 +3,12 @@ import styles from "./App.module.css";
 import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "@store";
-import { Breadcrumb, Breadcrumbs } from "react-aria-components";
-import { Link } from "wouter";
-import { BreadcrumbItemModel } from "@store/models";
-import { Instance } from "mobx-state-tree";
+import { Breadcrumbs } from "@components/layout/Breadcrumbs/Breadcrumbs";
+
 
 const App: React.FC<{ children: React.ReactNode }> = observer(
   ({ children }) => {
-    const { authStore, commonStore } = useStore();
+    const { authStore } = useStore();
   
 
     // Check authorization when the app loads
@@ -23,18 +21,7 @@ const App: React.FC<{ children: React.ReactNode }> = observer(
         <header className={styles.header}>
           <Navbar />
         </header>
-        <Breadcrumbs>
-          {commonStore.breadcrumbs.map((breadcrumb: Instance<typeof BreadcrumbItemModel>) => (
-            <Breadcrumb key={breadcrumb.path}>
-              <Link
-                to={breadcrumb.path}
-                className={styles.breadcrumbLink}
-              >
-                {breadcrumb.label}
-              </Link>
-            </Breadcrumb>
-          ))}
-        </Breadcrumbs>
+        <Breadcrumbs />
         <div className={styles.app}>{children}</div>
       </>
     );
