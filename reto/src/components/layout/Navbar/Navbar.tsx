@@ -130,7 +130,7 @@ const Navbar: React.FC = observer(() => {
             aria-label={t("navbar.labels.selectLanguage")}
             onSelectionChange={(value) => {
               i18next.changeLanguage(value as string).then(() => {
-                settingsStore.setCurrentLanguage(value as string);
+                settingsStore.setLanguage(value as string);
               });
             }}
             defaultSelectedKey={i18next.language}
