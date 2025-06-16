@@ -1,10 +1,8 @@
 import { Route, Switch } from "wouter";
 import App from "../App";
 import React, { JSX } from "react";
-import { RouteParams, routerConfig } from "./routes";
+import { RouteParams, routerConfig, Breadcrumb } from "./routes";
 import { useStore } from "@store/index";
-import { BreadcrumbItemModel } from "@store/models";
-import { Instance } from "mobx-state-tree";
 
 /**
  * Defines the application's routing structure using Wouter.
@@ -18,21 +16,43 @@ import { Instance } from "mobx-state-tree";
  */
 export const Routes = (): JSX.Element => {
   const { commonStore } = useStore();
-  const onRouteChanged = (breadcrumbs: Instance<typeof BreadcrumbItemModel>[]): void => {
+  const onRouteChanged = (breadcrumbs: Breadcrumb[]): void => {
     commonStore.setBreadcrumbs(breadcrumbs);
-    }
+  };
   return (
     <App>
       <Switch>
         {routerConfig.map((route) => {
-          const { path, render } = route;
+          const { path, render, breadcrumbs } = route;
           return (
             <Route key={path} path={path}>
-              {(params: RouteParams) => render(params, onRouteChanged)}
+              {(params: RouteParams) => (
+                <RouteWithBreadcrumbs
+                  render={() => render(params)}
+                  params={params}
+                  breadcrumbs={breadcrumbs(params)}
+                  onRouteChanged={onRouteChanged}
+                />
+              )}
             </Route>
           );
         })}
       </Switch>
     </App>
   );
+};
+
+interface RouteWithBreadcrumbsProps {
+  render: (params?: RouteParams) => React.ReactElement;
+  params?: RouteParams;
+  breadcrumbs: Breadcrumb[];
+  onRouteChanged: (items: Breadcrumb[]) => void;
+}
+
+const RouteWithBreadcrumbs: React.FC<RouteWithBreadcrumbsProps> = ({ render, params, breadcrumbs, onRouteChanged }) => {
+  React.useEffect(() => {
+    onRouteChanged(breadcrumbs);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(breadcrumbs)]);
+  return render(params);
 };

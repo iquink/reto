@@ -23,104 +23,53 @@ export type RouteParams = Record<string, string>;
 
 export type RouteConfig = {
   path: string;
-  render: (
-    params?: RouteParams,
-    onRouteChanged?: (items: Breadcrumb[]) => void
-  ) => React.ReactElement;
+  render: (params?: RouteParams) => React.ReactElement;
+  breadcrumbs: (params?: RouteParams) => Breadcrumb[];
 };
 
 export const routerConfig: RouteConfig[] = [
   {
     path: "/",
-    render: (
-      _params?: RouteParams,
-      onRouteChanged?: (items: Breadcrumb[]) => void
-    ) => {
-      onRouteChanged?.([home]);
-
-      return <Home />;
-    },
+    render: () => <Home />,
+    breadcrumbs: () => [home],
   },
   {
     path: "/login",
-    render: (
-      _params?: RouteParams,
-      onRouteChanged?: (items: Breadcrumb[]) => void
-    ) => {
-      onRouteChanged?.([home, login]);
-
-      return <Login />;
-    },
+    render: () => <Login />,
+    breadcrumbs: () => [home, login],
   },
   {
     path: "/register",
-    render: (
-      _params?: RouteParams,
-      onRouteChanged?: (items: Breadcrumb[]) => void
-    ) => {
-      onRouteChanged?.([home, register]);
-
-      return <Register />;
-    },
+    render: () => <Register />,
+    breadcrumbs: () => [home, register],
   },
   {
     path: "/profile",
-    render: (
-      _params?: RouteParams,
-      onRouteChanged?: (items: Breadcrumb[]) => void
-    ) => {
-      onRouteChanged?.([home, profile]);
-
-      return <Profile />;
-    },
+    render: () => <Profile />,
+    breadcrumbs: () => [home, profile],
   },
   {
     path: "/issues",
-    render: (
-      _params?: RouteParams,
-      onRouteChanged?: (items: Breadcrumb[]) => void
-    ) => {
-      onRouteChanged?.([home, issues]);
-
-      return <Issues />;
-    },
+    render: () => <Issues />,
+    breadcrumbs: () => [home, issues],
   },
   {
     path: "/issues/add",
-    render: (
-      _params?: RouteParams,
-      onRouteChanged?: (items: Breadcrumb[]) => void
-    ) => {
-      onRouteChanged?.([home, issues, addIssue]);
-
-      return <AddIssue />;
-    },
+    render: () => <AddIssue />,
+    breadcrumbs: () => [home, issues, addIssue],
   },
   {
     path: "/issues/:id",
-    render: (
-      params?: RouteParams,
-      onRouteChanged?: (items: Breadcrumb[]) => void
-    ) => {
-      if (params?.id === "add") {
-        onRouteChanged?.([home, issues, addIssue]);
-
-        return <AddIssue />;
-      }
-      onRouteChanged?.([home, issues, issue(params?.id ?? "")]);
-
-      return <Issue id={params?.id ?? ""} />;
-    },
+    render: (params) =>
+      params?.id === "add" ? <AddIssue /> : <Issue id={params?.id ?? ""} />,
+    breadcrumbs: (params) =>
+      params?.id === "add"
+        ? [home, issues, addIssue]
+        : [home, issues, issue(params?.id ?? "")],
   },
   {
     path: "/admin",
-    render: (
-      _params?: RouteParams,
-      onRouteChanged?: (items: Breadcrumb[]) => void
-    ) => {
-      onRouteChanged?.([home, admin]);
-
-      return <Admin />;
-    },
+    render: () => <Admin />,
+    breadcrumbs: () => [home, admin],
   },
 ];
