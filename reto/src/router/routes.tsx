@@ -17,6 +17,7 @@ const { home, login, register, profile, issues, addIssue, issue, admin } =
 export type Breadcrumb = {
   label: string;
   path: string;
+  params?: Record<string, string>;
 };
 
 export type RouteParams = Record<string, string>;

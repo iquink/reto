@@ -72,5 +72,5 @@ export const LanguageEnumModel = types.enumeration<Language>("Language", [
 export const BreadcrumbItemModel = types.model("BreadcrumbItem", {
   label: types.string,
   path: types.string,
-  params: types.maybeNull(types.frozen()),
+  params: types.maybe(types.frozen<Record<string, string>>())
 });

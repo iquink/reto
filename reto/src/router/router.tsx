@@ -3,6 +3,8 @@ import App from "../App";
 import React, { JSX } from "react";
 import { RouteParams, routerConfig, Breadcrumb } from "./routes";
 import { useStore } from "@store/index";
+import { Instance } from "mobx-state-tree";
+import { BreadcrumbItemModel } from "@store/models";
 
 /**
  * Defines the application's routing structure using Wouter.
@@ -17,7 +19,7 @@ import { useStore } from "@store/index";
 export const Routes = (): JSX.Element => {
   const { commonStore } = useStore();
   const onRouteChanged = (breadcrumbs: Breadcrumb[]): void => {
-    commonStore.setBreadcrumbs(breadcrumbs);
+    commonStore.setBreadcrumbs(breadcrumbs as Instance<typeof BreadcrumbItemModel>[]);
   };
   return (
     <App>
