@@ -68,3 +68,9 @@ export const LanguageEnumModel = types.enumeration<Language>("Language", [
   Language.FI,
   Language.SYSTEM,
 ]);
+
+export const BreadcrumbItemModel = types.model("BreadcrumbItem", {
+  id: types.identifierNumber,
+  label: types.string,
+  path: types.string,
+});

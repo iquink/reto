@@ -2,6 +2,7 @@ import { Instance, types } from "mobx-state-tree";
 import { AuthStore } from "./AuthStore";
 import { IssuesStore } from "./IssuesStore";
 import { SettingsStore } from "./SettingsStore";
+import { CommonStore } from "./CommonStore";
 import { createContext } from "react";
 import React from "react";
 import { AdminStore } from "./AdminStore";
@@ -12,6 +13,7 @@ const rootStoreModel = types.model("RootStore", {
   issuesStore: IssuesStore,
   settingsStore: SettingsStore,
   adminStore: AdminStore,
+  commonStore: CommonStore,
 });
 
 // Create an instance of the store
@@ -22,6 +24,15 @@ export const rootStore = rootStoreModel.create({
   },
   settingsStore: {},
   adminStore: {},
+  commonStore: {
+    breadcrumbs: [
+      {
+        id: 1,
+        label: "Home",
+        path: "/",
+      },
+    ],
+  },
 });
 
 const RootStoreContext = createContext<null | Instance<typeof rootStore>>(null);
