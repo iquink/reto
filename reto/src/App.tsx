@@ -25,7 +25,7 @@ const App: React.FC<{ children: React.ReactNode }> = observer(
         </header>
         <Breadcrumbs>
           {commonStore.breadcrumbs.map((breadcrumb: Instance<typeof BreadcrumbItemModel>) => (
-            <Breadcrumb key={breadcrumb.id}>
+            <Breadcrumb key={breadcrumb.path}>
               <Link
                 to={breadcrumb.path}
                 className={styles.breadcrumbLink}

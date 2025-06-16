@@ -25,13 +25,7 @@ export const rootStore = rootStoreModel.create({
   settingsStore: {},
   adminStore: {},
   commonStore: {
-    breadcrumbs: [
-      {
-        id: 1,
-        label: "Home",
-        path: "/",
-      },
-    ],
+    breadcrumbs: [],
   },
 });
 

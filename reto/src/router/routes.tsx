@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Home,
   Login,
@@ -8,9 +9,15 @@ import {
   Issue,
   Admin,
 } from "@pages/index";
-import { BreadcrumbItemModel } from "@store/models";
-import { Instance } from "mobx-state-tree";
-import React, { JSX } from "react";
+import { breadcrumbs } from "./breadcrumbs";
+
+const { home, login, register, profile, issues, addIssue, issue, admin } =
+  breadcrumbs;
+
+export type Breadcrumb = {
+  label: string;
+  path: string;
+};
 
 export type RouteParams = Record<string, string>;
 
@@ -18,16 +25,8 @@ export type RouteConfig = {
   path: string;
   render: (
     params?: RouteParams,
-    onRouteChanged?: (items: Instance<typeof BreadcrumbItemModel>[]) => void
-  ) => JSX.Element;
-};
-
-const breadcrumbs = {
-  home: {
-    id: 1,
-    label: "Home",
-    path: "/",
-  },
+    onRouteChanged?: (items: Breadcrumb[]) => void
+  ) => React.ReactElement;
 };
 
 export const routerConfig: RouteConfig[] = [
@@ -35,25 +34,93 @@ export const routerConfig: RouteConfig[] = [
     path: "/",
     render: (
       _params?: RouteParams,
-      onRouteChanged?: (items: Instance<typeof BreadcrumbItemModel>[]) => void
+      onRouteChanged?: (items: Breadcrumb[]) => void
     ) => {
-      onRouteChanged?.([breadcrumbs.home]);
+      onRouteChanged?.([home]);
 
       return <Home />;
     },
   },
-  { path: "/login", render: () => <Login /> },
-  { path: "/register", render: () => <Register /> },
-  { path: "/profile", render: () => <Profile /> },
-  { path: "/issues", render: () => <Issues /> },
+  {
+    path: "/login",
+    render: (
+      _params?: RouteParams,
+      onRouteChanged?: (items: Breadcrumb[]) => void
+    ) => {
+      onRouteChanged?.([home, login]);
+
+      return <Login />;
+    },
+  },
+  {
+    path: "/register",
+    render: (
+      _params?: RouteParams,
+      onRouteChanged?: (items: Breadcrumb[]) => void
+    ) => {
+      onRouteChanged?.([home, register]);
+
+      return <Register />;
+    },
+  },
+  {
+    path: "/profile",
+    render: (
+      _params?: RouteParams,
+      onRouteChanged?: (items: Breadcrumb[]) => void
+    ) => {
+      onRouteChanged?.([home, profile]);
+
+      return <Profile />;
+    },
+  },
+  {
+    path: "/issues",
+    render: (
+      _params?: RouteParams,
+      onRouteChanged?: (items: Breadcrumb[]) => void
+    ) => {
+      onRouteChanged?.([home, issues]);
+
+      return <Issues />;
+    },
+  },
+  {
+    path: "/issues/add",
+    render: (
+      _params?: RouteParams,
+      onRouteChanged?: (items: Breadcrumb[]) => void
+    ) => {
+      onRouteChanged?.([home, issues, addIssue]);
+
+      return <AddIssue />;
+    },
+  },
   {
     path: "/issues/:id",
-    render: (params?: RouteParams) =>
-      params && params.id === "add" ? (
-        <AddIssue />
-      ) : (
-        <Issue id={params ? params.id : ""} />
-      ),
+    render: (
+      params?: RouteParams,
+      onRouteChanged?: (items: Breadcrumb[]) => void
+    ) => {
+      if (params?.id === "add") {
+        onRouteChanged?.([home, issues, addIssue]);
+
+        return <AddIssue />;
+      }
+      onRouteChanged?.([home, issues, issue(params?.id ?? "")]);
+
+      return <Issue id={params?.id ?? ""} />;
+    },
   },
-  { path: "/admin", render: () => <Admin /> },
+  {
+    path: "/admin",
+    render: (
+      _params?: RouteParams,
+      onRouteChanged?: (items: Breadcrumb[]) => void
+    ) => {
+      onRouteChanged?.([home, admin]);
+
+      return <Admin />;
+    },
+  },
 ];
