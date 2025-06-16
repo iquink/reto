@@ -5,6 +5,5 @@ export { TextArea } from "./TextArea/TextArea";
 export { Map } from "./Map/Map";
 export { Checkbox } from "./Checkbox/Checkbox";
 export { Table } from "./Table/Table";
-export { IssueCard } from "./IssueCard/IssueCard";
 export { Select } from "./Select/Select";
 export { FileTrigger } from "./FileTrigger/FileTrigger";

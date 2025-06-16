@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "wouter";
 import styles from "./Issues.module.css";
-import { IssueCard } from "@components/IssueCard/IssueCard";
+import { IssueCard } from "./IssueCard/IssueCard";
 import { Button } from "@components/index";
 import { useStore } from "@store/index";
 import { observer } from "mobx-react-lite";
