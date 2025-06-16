@@ -24,8 +24,9 @@ export const breadcrumbs = {
     path: "/issues/add",
   },
   issue: (id: string) => ({
-    label: `Issue #${id}`,
+    label: "Issue",
     path: `/issues/${id}`,
+    params: { id },
   }),
   admin: {
     label: "Admin",

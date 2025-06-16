@@ -141,5 +141,15 @@
     "open": "Avoin",
     "closed": "Suljettu",
     "in_progress": "Käsittelyssä"
+  },
+  "breadcrumbs": {
+    "Home": "Etusivu",
+    "Login": "Kirjaudu sisään",
+    "Register": "Rekisteröidy",
+    "Profile": "Profiili",
+    "Issues": "Ilmoitukset",
+    "Add Issue": "Luo ilmoitus",
+    "Issue": "Ilmoitus #{{id}}",
+    "Admin": "Ylläpito"
   }
 }

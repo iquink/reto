@@ -141,5 +141,15 @@
     "open": "Open",
     "closed": "Closed",
     "in_progress": "In Progress"
+  },
+  "breadcrumbs": {
+    "Home": "Home",
+    "Login": "Login",
+    "Register": "Register",
+    "Profile": "Profile",
+    "Issues": "Issues",
+    "Add Issue": "Add Issue",
+    "Issue": "Issue #{{id}}",
+    "Admin": "Admin"
   }
 }

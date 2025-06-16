@@ -31,7 +31,7 @@ export const routerConfig: RouteConfig[] = [
   {
     path: "/",
     render: () => <Home />,
-    breadcrumbs: () => [home],
+    breadcrumbs: () => [],
   },
   {
     path: "/login",
