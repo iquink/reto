@@ -1,8 +1,7 @@
 import { types, flow, Instance } from "mobx-state-tree";
 import { UserModel } from "./models";
-import authApi from "@api/authApi";
+import { authApi, ApiError } from "@api/index";
 import { navigate } from "wouter/use-browser-location";
-import { ApiError } from "@api/api";
 
 // Define the AuthStore model
 export const AuthStore = types

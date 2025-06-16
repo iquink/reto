@@ -1,7 +1,4 @@
-const {
-  BadRequestError,
-  NotFoundError,
-} = require("../utils/errors");
+const { BadRequestError, NotFoundError } = require("../utils/errors");
 const IssuesRepository = require("../repositories/issuesRepository");
 
 class IssuesService {
@@ -27,10 +24,14 @@ class IssuesService {
       );
     }
     if (description && typeof description !== "string") {
-      throw new BadRequestError("Invalid description: must be a string or null");
+      throw new BadRequestError(
+        "Invalid description: must be a string or null"
+      );
     }
     if (photos && !Array.isArray(photos) && typeof photos !== "object") {
-      throw new BadRequestError("Invalid photos: must be an array, object, or null");
+      throw new BadRequestError(
+        "Invalid photos: must be an array, object, or null"
+      );
     }
     if (!coordinates || typeof coordinates !== "string") {
       throw new BadRequestError("Invalid coordinates: must be a string");
@@ -61,17 +62,12 @@ class IssuesService {
         photos,
         coordinates: pointWKT,
       });
-      return {
-        id: insertId,
-        user_id: parsedUserId,
-        title,
-        description: description || null,
-        photos: photos || null,
-        coordinates: { longitude, latitude },
-        status: "open",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
+      const newIssue = await this.issuesRepository.findById(insertId);
+      if (!newIssue) {
+        throw new NotFoundError("Failed to retrieve created issue");
+      }
+
+      return newIssue;
     } catch (error) {
       if (error.code === "ER_NO_REFERENCED_ROW_2") {
         throw new NotFoundError("Invalid user_id: user does not exist");
@@ -116,7 +112,8 @@ class IssuesService {
     const fields = {};
     if (title !== undefined) fields.title = title;
     if (description !== undefined) fields.description = description;
-    if (photos !== undefined) fields.photos = photos ? JSON.stringify(photos) : null;
+    if (photos !== undefined)
+      fields.photos = photos ? JSON.stringify(photos) : null;
     if (coordinates !== undefined) fields.coordinates = coordinates;
     if (status !== undefined) {
       const allowedStatuses = ["open", "in_progress", "closed"];
