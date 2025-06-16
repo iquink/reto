@@ -16,11 +16,16 @@ export const Breadcrumbs: React.FC = observer(() => {
   return (
     <AriaBreadcrumbs className={styles.breadcrumbs}>
       {commonStore.breadcrumbs.map(
-        (breadcrumb: Instance<typeof BreadcrumbItemModel>) => (
+        (breadcrumb: Instance<typeof BreadcrumbItemModel>, idx: number) => (
           <Breadcrumb key={breadcrumb.path} className={styles.item}>
-            <Link to={breadcrumb.path} className={styles.link}>
-              {breadcrumb.label}
-            </Link>
+            {/* If it's the last breadcrumb, display it as current */}
+            {idx === commonStore.breadcrumbs.length - 1 ? (
+              <span className={styles.current}>{breadcrumb.label}</span>
+            ) : (
+              <Link to={breadcrumb.path} className={styles.link}>
+                {breadcrumb.label}
+              </Link>
+            )}
           </Breadcrumb>
         )
       )}

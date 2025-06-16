@@ -28,7 +28,7 @@ export const Routes = (): JSX.Element => {
             <Route key={path} path={path}>
               {(params: RouteParams) => (
                 <RouteWithBreadcrumbs
-                  render={() => render(params)}
+                  render={render}
                   params={params}
                   breadcrumbs={breadcrumbs(params)}
                   onRouteChanged={onRouteChanged}
@@ -52,7 +52,6 @@ interface RouteWithBreadcrumbsProps {
 const RouteWithBreadcrumbs: React.FC<RouteWithBreadcrumbsProps> = ({ render, params, breadcrumbs, onRouteChanged }) => {
   React.useEffect(() => {
     onRouteChanged(breadcrumbs);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(breadcrumbs)]);
+  }, [breadcrumbs, onRouteChanged]);
   return render(params);
 };
