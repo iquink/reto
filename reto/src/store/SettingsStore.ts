@@ -10,5 +10,3 @@ export const SettingsStore = types
       self.currentLanguage = lang;
     },
   }));
-
-export type TSettingsStore = typeof SettingsStore.Type;

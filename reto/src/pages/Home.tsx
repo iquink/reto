@@ -1,12 +1,9 @@
 import React from "react";
 import { useStore } from "@store";
 import { observer } from "mobx-react-lite";
-import i18next from "i18next";
 
 const Home: React.FC = observer(() => {
   const { authStore } = useStore();
-
-  console.log("Current i18next language:", i18next.language);
 
   return (
     <div>
