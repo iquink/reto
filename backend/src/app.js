@@ -10,6 +10,7 @@ const filesRoutes = require('./routes/filesRoutes');
 const usersRoutes = require('./routes/usersRoutes');
 const UsersService = require('./services/usersService');
 const errorHandler = require('./middleware/errorHandler');
+const { validateCsrfToken, generateCsrfToken } = require('./middleware/csrfMiddleware');
 require('dotenv').config();
 
 const app = express();
@@ -29,26 +30,22 @@ const PORT = process.env.PORT || 3000;
     cors({
       origin: process.env.FRONTEND_HOST || 'http://localhost:5173',
       credentials: true,
-      allowedHeaders: ['Content-Type', 'Authorization'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     })
   );
 
   app.use(express.json());
   app.use(cookieParser());
+  app.use(validateCsrfToken);
 
   // Routes
-  app.use('/', authRoutes(authService));
+  app.use('/', authRoutes(authService, generateCsrfToken));
   app.use('/issues', issuesRoutes(issuesService));
   app.use("/", filesRoutes);
   app.use('/users', usersRoutes(usersService));
 
   app.use(errorHandler);
-  // // Error handling
-  // app.use((err, req, res, next) => {
-  //   console.error('Unexpected error:', err);
-  //   res.status(500).send('Internal Server Error');
-  // });
 
   // Start the server
   app.listen(PORT, () => {

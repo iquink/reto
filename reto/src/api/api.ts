@@ -31,6 +31,23 @@ const errorMessages: Record<number, string> = {
   404: "Resource not found.",
   500: "Server error. Please try again later.",
 };
+// CSRF token management
+// This token is used to protect against CSRF attacks in unsafe HTTP methods
+let csrfToken: string | null = null;
+
+export const setCsrfToken = (token: string) => {
+  csrfToken = token;
+  localStorage.setItem('csrfToken', token);
+};
+
+export const clearCsrfToken = () => {
+  csrfToken = null;
+  localStorage.removeItem('csrfToken');
+};
+
+export const getCsrfToken = (): string | null => {
+  return csrfToken || localStorage.getItem('csrfToken');
+};
 
 /**
  * Request interceptor for the Axios instance.
@@ -43,7 +60,15 @@ const errorMessages: Record<number, string> = {
  */
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // You can add authorization tokens or other custom logic here
+    // Add CSRF token to unsafe requests (POST, PUT, DELETE, PATCH)
+    const method = config.method?.toUpperCase();
+    if (
+      ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method || '') &&
+      getCsrfToken()
+    ) {
+      config.headers = config.headers || {};
+      config.headers['x-csrf-token'] = getCsrfToken();
+    }
     return config;
   },
   (error: unknown) => {

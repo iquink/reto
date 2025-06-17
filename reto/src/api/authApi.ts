@@ -1,4 +1,4 @@
-import apiClient from "./api";
+import apiClient, { clearCsrfToken, setCsrfToken } from "./api";
 
 /**
  * Authentication API for handling user-related operations.
@@ -16,6 +16,11 @@ const authApi = {
    */
   async login(email: string, password: string) {
     const response = await apiClient.post("/login", { email, password });
+    // Save the CSRF token to local storage for future requests
+    if (response.data?.csrfToken) {
+      setCsrfToken(response.data.csrfToken);
+    }
+
     return response.data;
   },
 
@@ -45,6 +50,7 @@ const authApi = {
    */
   async logout() {
     const response = await apiClient.post("/logout");
+    clearCsrfToken();
     return response.data;
   },
 

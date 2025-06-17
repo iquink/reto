@@ -17,12 +17,21 @@ class AuthController {
     async login(req, res, next) {
       try {
         const { token, user } = await this.authService.login(req.body);
+        
+        // Set JWT in httpOnly cookie
         res.cookie('token', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'strict',
         });
-        res.json({ message: 'Login successful.', user });
+        
+        const csrfToken = req.csrfToken;
+        
+        res.json({ 
+          message: 'Login successful.', 
+          user,
+          csrfToken  // Include CSRF token in the response
+        });
       } catch (err) {
         next(err);
       }
