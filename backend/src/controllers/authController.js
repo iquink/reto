@@ -1,4 +1,5 @@
 const { verifyToken } = require("../utils/jwt");
+const { UnauthorizedError } = require("../utils/errors");
 
 class AuthController {
     constructor(authService) {
@@ -16,13 +17,23 @@ class AuthController {
   
     async login(req, res, next) {
       try {
-        const { token, user } = await this.authService.login(req.body);
+        const { accessToken, refreshToken, user } = await this.authService.login(req.body);
         
-        // Set JWT in httpOnly cookie
-        res.cookie('token', token, {
+        // Set access token in httpOnly cookie
+        res.cookie('accessToken', accessToken, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'strict',
+          maxAge: 15 * 60 * 1000, // 15 minutes
+        });
+        
+        // Set refresh token in a separate httpOnly cookie
+        res.cookie('refreshToken', refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          path: '/refresh-token', // Restrict to refresh endpoint only
+          maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
         
         const csrfToken = req.csrfToken;
@@ -30,7 +41,7 @@ class AuthController {
         res.json({ 
           message: 'Login successful.', 
           user,
-          csrfToken  // Include CSRF token in the response
+          csrfToken
         });
       } catch (err) {
         next(err);
@@ -38,11 +49,20 @@ class AuthController {
     }
   
     async logout(req, res) {
-      res.clearCookie('token', {
+      // Clear both tokens
+      res.clearCookie('accessToken', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
       });
+
+      res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        path: '/refresh-token',
+      });
+
       res.status(200).send('Logout successful.');
     }
   
@@ -50,16 +70,52 @@ class AuthController {
       res.json({ message: 'Access granted.', user: req.user });
     }
   
-    async getUser(req, res) {
+    async getUser(req, res, next) {
       try {
-        const token = req.cookies.token; // Get the token from the cookie
-        const decoded = verifyToken(token);
-        const user = await this.authService.getUserById(decoded.id);
+        const userId = req.userId;
+        const user = await this.authService.getUserById(userId);
         res.json(user);
       } catch (err) {
         next(err);
       }
     }
+
+    /**
+     * Refreshes an expired access token using a valid refresh token
+     * 
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Express next middleware function
+     */
+    async refreshAccessToken(req, res, next) {
+      try {
+        const refreshToken = req.cookies.refreshToken;
+        
+        if (!refreshToken) {
+          throw new UnauthorizedError("Refresh token not provided");
+        }
+
+        const { accessToken } = await this.authService.refreshToken(refreshToken);
+
+        // Set new access token in httpOnly cookie
+        res.cookie('accessToken', accessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 15 * 60 * 1000, // 15 minutes
+        });
+
+        // Generate a new CSRF token for enhanced security
+        const csrfToken = req.csrfToken;
+
+        res.json({
+          message: 'Token refreshed successfully',
+          csrfToken
+        });
+      } catch (err) {
+        next(err);
+      }
+    }
   }
-  
-  module.exports = AuthController;
+
+module.exports = AuthController;

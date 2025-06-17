@@ -6,8 +6,10 @@ import { navigate } from "wouter/use-browser-location";
 // Define the AuthStore model
 export const AuthStore = types
   .model("AuthStore", {
-    isAuthenticated: types.optional(types.boolean, false),
     user: types.maybeNull(UserModel),
+    isAuthenticated: types.optional(types.boolean, false),
+    isLoading: types.optional(types.boolean, false),
+    error: types.maybeNull(types.string),
   })
   .actions((self) => ({
     setUser(user: Instance<typeof UserModel>) {
@@ -16,6 +18,8 @@ export const AuthStore = types
   }))
   .actions((self) => ({
     login: flow(function* (email: string, password: string) {
+      self.isLoading = true;
+      self.error = null;
       try {
         const response = yield authApi.login(email, password);
         const user = response.user;
@@ -24,11 +28,11 @@ export const AuthStore = types
         navigate("/");
         return { success: true };
       } catch (error: unknown) {
-        return {
-          success: false,
-          message:
-            (error as ApiError).message || "Login failed. Please try again.",
-        };
+        self.error =
+          (error as ApiError).message || "Login failed. Please try again.";
+        return { success: false, message: self.error };
+      } finally {
+        self.isLoading = false;
       }
     }),
     logout: flow(function* () {
@@ -52,4 +56,21 @@ export const AuthStore = types
         self.user = null;
       }
     }),
+    clearAuth() {
+      self.user = null;
+      self.isAuthenticated = false;
+      self.error = null;
+    },
+  }))
+  .actions((self) => ({
+    setupAuthListeners() {
+      window.addEventListener("auth:expired", () => {
+        self.clearAuth();
+      });
+    },
+  }))
+  .actions((self) => ({
+    afterCreate() {
+      self.setupAuthListeners();
+    },
   }));

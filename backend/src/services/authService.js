@@ -1,5 +1,5 @@
 const { hashPassword, verifyPassword } = require("../utils/hash");
-const { generateToken } = require("../utils/jwt");
+const { generateAccessToken, generateRefreshToken, verifyToken } = require("../utils/jwt");
 const { NotFoundError, UnauthorizedError, BadRequestError } = require("../utils/errors");
 const UserRepository = require("../repositories/userRepository");
 const { mapUserToResponse } = require("../utils/userMapper");
@@ -21,6 +21,12 @@ class AuthService {
     return { message: "User registered successfully." };
   }
 
+  /**
+   * Authenticates a user and generates both access and refresh tokens
+   * 
+   * @param {Object} credentials - User login credentials (email and password)
+   * @returns {Object} Object containing tokens and user information
+   */
   async login({ email, password }) {
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
@@ -32,9 +38,17 @@ class AuthService {
       throw new UnauthorizedError("Invalid credentials.");
     }
 
-    const token = generateToken({ id: user.id, email: user.email });
+    // Generate both tokens
+    const payload = { id: user.id, email: user.email };
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+
+    // Store refresh token hash in database (optional)
+    // await this.userRepository.saveRefreshToken(user.id, refreshToken);
+
     return {
-      token,
+      accessToken,
+      refreshToken,
       user: mapUserToResponse(user),
     };
   }
@@ -44,8 +58,34 @@ class AuthService {
     if (!user) {
       throw new NotFoundError("User not found.");
     }
-
     return mapUserToResponse(user);
+  }
+
+  /**
+   * Verifies a refresh token and generates a new access token
+   * 
+   * @param {string} refreshToken - The refresh token to verify
+   * @returns {Object} Object containing the new access token
+   */
+  async refreshToken(refreshToken) {
+    try {
+      // Verify the refresh token using the refresh token secret
+      const decoded = verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+      
+      // Find the user
+      const user = await this.userRepository.findById(decoded.id);
+      if (!user) {
+        throw new NotFoundError("User not found.");
+      }
+
+      // Generate a new access token
+      const payload = { id: user.id, email: user.email };
+      const accessToken = generateAccessToken(payload);
+
+      return { accessToken };
+    } catch (error) {
+      throw new UnauthorizedError("Invalid refresh token.");
+    }
   }
 }
 

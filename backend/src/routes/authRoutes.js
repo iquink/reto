@@ -10,6 +10,7 @@ module.exports = (authService, generateCsrfToken) => {
   router.post('/register', authController.register.bind(authController));
   router.post('/login', generateCsrfToken, authController.login.bind(authController));
   router.post('/logout', authController.logout.bind(authController));
+  router.post('/refresh-token', generateCsrfToken, authController.refreshAccessToken.bind(authController));
   router.get('/check-auth', authMiddleware, authController.checkAuth.bind(authController));
   router.get('/get-user', authMiddleware, authController.getUser.bind(authController));
 

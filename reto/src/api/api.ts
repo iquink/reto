@@ -1,7 +1,7 @@
 import axios, {
   AxiosInstance,
-  AxiosResponse,
   InternalAxiosRequestConfig,
+  AxiosError,
 } from "axios";
 
 /**
@@ -11,7 +11,7 @@ import axios, {
  * It also includes request and response interceptors for custom logic.
  */
 const apiClient: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000", // Default to localhost if not set
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
   withCredentials: true, // Include cookies with requests
   headers: {
     "Content-Type": "application/json",
@@ -24,50 +24,74 @@ export interface ApiError {
   details?: unknown;
 }
 
-const errorMessages: Record<number, string> = {
-  400: "Bad request. Please check your input.",
-  401: "Unauthorized. Please log in again.",
-  403: "Forbidden. You don't have permission to perform this action.",
-  404: "Resource not found.",
-  500: "Server error. Please try again later.",
-};
-// CSRF token management
-// This token is used to protect against CSRF attacks in unsafe HTTP methods
+// Variable for storing CSRF token
 let csrfToken: string | null = null;
+// Flag to prevent multiple concurrent refresh token requests
+let isRefreshing = false;
+// Queue of failed requests to retry after token refresh
+let failedQueue: Array<{
+  resolve: (value?: unknown) => void;
+  reject: (reason?: unknown) => void;
+  config: InternalAxiosRequestConfig;
+}> = [];
 
+/**
+ * Process the queue of failed requests by retrying them with the new token
+ */
+const processQueue = (error: Error | null) => {
+  failedQueue.forEach((request) => {
+    if (error) {
+      request.reject(error);
+    } else {
+      request.resolve();
+    }
+  });
+
+  failedQueue = [];
+};
+
+/**
+ * Sets the CSRF token for future requests
+ *
+ * @param token - CSRF token string
+ */
 export const setCsrfToken = (token: string) => {
   csrfToken = token;
-  localStorage.setItem('csrfToken', token);
+  localStorage.setItem("csrf-token", token);
 };
 
-export const clearCsrfToken = () => {
-  csrfToken = null;
-  localStorage.removeItem('csrfToken');
-};
-
+/**
+ * Retrieves the current CSRF token
+ *
+ * @returns The current CSRF token or null if not set
+ */
 export const getCsrfToken = (): string | null => {
-  return csrfToken || localStorage.getItem('csrfToken');
+  return csrfToken || localStorage.getItem("csrf-token");
+};
+
+/**
+ * Clears the stored CSRF token
+ */
+export const clearCsrfToken = (): void => {
+  csrfToken = null;
+  localStorage.removeItem("csrf-token");
 };
 
 /**
  * Request interceptor for the Axios instance.
  *
- * This interceptor allows you to modify the request configuration before it is sent.
- * For example, you can add authorization tokens or other custom logic here.
- *
- * @param config - The Axios request configuration.
- * @returns The modified Axios request configuration.
+ * This interceptor adds CSRF token to non-GET requests for protection against CSRF attacks
  */
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // Add CSRF token to unsafe requests (POST, PUT, DELETE, PATCH)
+    // Add CSRF token to non-GET requests
     const method = config.method?.toUpperCase();
     if (
-      ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method || '') &&
+      ["POST", "PUT", "DELETE", "PATCH"].includes(method || "") &&
       getCsrfToken()
     ) {
       config.headers = config.headers || {};
-      config.headers['x-csrf-token'] = getCsrfToken();
+      config.headers["x-csrf-token"] = getCsrfToken();
     }
     return config;
   },
@@ -79,39 +103,74 @@ apiClient.interceptors.request.use(
 /**
  * Response interceptor for the Axios instance.
  *
- * This interceptor allows you to handle responses globally.
- * For example, you can redirect to the login page on a 401 Unauthorized error.
- *
- * @param response - The Axios response object.
- * @returns The Axios response object.
+ * Handles token refresh when a 401 error is received due to expired access token
  */
 apiClient.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response;
-  },
-  (error: unknown) => {
-    // Type guard for AxiosError
-    const err = error as {
-      response?: { status?: number; data?: unknown };
-      config?: { url?: string };
-    };
-    const status = err.response?.status || 0;
-    let message = errorMessages[status] || "An unexpected error occurred.";
-
-    if (status === 404 && err.config?.url?.includes("/login")) {
-      message = (err.response?.data as string) || "User not found.";
-    }
-
-    const apiError: ApiError = {
-      status,
-      message,
-      details: err.response?.data,
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
     };
 
-    if (apiError.status === 401 && window.location.pathname !== "/") {
-      window.location.href = "/";
+    // If error is 401 and not a refresh token request itself and not already retrying
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url?.includes("refresh-token")
+    ) {
+      // Set retry flag to prevent infinite loop
+      originalRequest._retry = true;
+
+      // If already refreshing, add to queue
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject, config: originalRequest });
+        });
+      }
+
+      isRefreshing = true;
+
+      try {
+        // Try to refresh the token
+        const response = await axios.post(
+          `${
+            import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"
+          }/refresh-token`,
+          {},
+          {
+            withCredentials: true,
+            headers: { "x-csrf-token": csrfToken },
+            timeout: 10000,
+          }
+        );
+
+        // If we get a new CSRF token, save it
+        if (response.data?.csrfToken) {
+          setCsrfToken(response.data.csrfToken);
+        }
+
+        // Process queue with successful refresh
+        processQueue(null);
+
+        // Retry original request
+        return apiClient(originalRequest);
+      } catch (refreshError) {
+        // Process queue with error
+        processQueue(refreshError as Error);
+
+        // Clear tokens on refresh failure
+        clearCsrfToken();
+
+        // Redirect to login or dispatch logout event
+        window.dispatchEvent(new CustomEvent("auth:expired"));
+
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
     }
-    return Promise.reject(apiError);
+
+    return Promise.reject(error);
   }
 );
 
