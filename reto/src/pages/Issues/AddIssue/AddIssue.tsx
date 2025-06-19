@@ -7,6 +7,7 @@ import { useStore } from "@store";
 import { observer } from "mobx-react-lite";
 import { useTranslation } from "react-i18next";
 import styles from "./AddIssue.module.css";
+import { useLocation } from "wouter";
 
 const AddIssue: React.FC = observer(() => {
   const {
@@ -26,6 +27,7 @@ const AddIssue: React.FC = observer(() => {
 
   const { t } = useTranslation();
   const { issuesStore } = useStore();
+  const [, navigate] = useLocation();
 
   interface FormData {
     title: string;
@@ -48,6 +50,8 @@ const AddIssue: React.FC = observer(() => {
     alert("Form submitted successfully!");
     reset();
     issuesStore.clearSelectedLocation();
+    navigate("/issues" + "/" + issuesStore.currentIssue.id); // Redirect to the issue page after submission
+
   };
 
   return (

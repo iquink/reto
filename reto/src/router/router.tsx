@@ -5,6 +5,7 @@ import { RouteParams, routerConfig, Breadcrumb } from "./routes";
 import { useStore } from "@store/index";
 import { Instance } from "mobx-state-tree";
 import { BreadcrumbItemModel } from "@store/models";
+import { RouteContent } from "./RouteContent";
 
 /**
  * Defines the application's routing structure using Wouter.
@@ -18,8 +19,10 @@ import { BreadcrumbItemModel } from "@store/models";
  */
 export const Routes = (): JSX.Element => {
   const { commonStore } = useStore();
-  const onRouteChanged = (breadcrumbs: Breadcrumb[]): void => {
-    commonStore.setBreadcrumbs(breadcrumbs as Instance<typeof BreadcrumbItemModel>[]);
+  const onBreadcrumbsUpdate = (breadcrumbs: Breadcrumb[]): void => {
+    commonStore.setBreadcrumbs(
+      breadcrumbs as Instance<typeof BreadcrumbItemModel>[]
+    );
   };
   return (
     <App>
@@ -29,11 +32,11 @@ export const Routes = (): JSX.Element => {
           return (
             <Route key={path} path={path}>
               {(params: RouteParams) => (
-                <RouteWithBreadcrumbs
+                <RouteContent
                   render={render}
                   params={params}
                   breadcrumbs={breadcrumbs(params)}
-                  onRouteChanged={onRouteChanged}
+                  onBreadcrumbsUpdate={onBreadcrumbsUpdate}
                 />
               )}
             </Route>
@@ -44,16 +47,4 @@ export const Routes = (): JSX.Element => {
   );
 };
 
-interface RouteWithBreadcrumbsProps {
-  render: (params?: RouteParams) => React.ReactElement;
-  params?: RouteParams;
-  breadcrumbs: Breadcrumb[];
-  onRouteChanged: (items: Breadcrumb[]) => void;
-}
 
-const RouteWithBreadcrumbs: React.FC<RouteWithBreadcrumbsProps> = ({ render, params, breadcrumbs, onRouteChanged }) => {
-  React.useEffect(() => {
-    onRouteChanged(breadcrumbs);
-  }, [breadcrumbs, onRouteChanged]);
-  return render(params);
-};

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import styles from "./Navbar.module.css";
 import { GiHamburgerMenu as MenuIcon } from "react-icons/gi";
 import clsx from "clsx";
@@ -26,6 +26,7 @@ const Navbar: React.FC = observer(() => {
    */
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { authStore, settingsStore } = useStore();
+  const [ , navigate] = useLocation();
 
   const { theme, toggleTheme } = useTheme();
 
@@ -41,6 +42,7 @@ const Navbar: React.FC = observer(() => {
 
   const handleLogout = async () => {
     await authStore.logout();
+    navigate("/");
   };
 
   return (
@@ -55,13 +57,13 @@ const Navbar: React.FC = observer(() => {
         </Link>
       </div>
 
-      <button
+      <Button
         className={styles.menuButton}
         onClick={toggleMenu}
         aria-label={t("navbar.labels.toggleMenu")}
       >
         <MenuIcon size={24} />
-      </button>
+      </Button>
 
       <nav className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}>
         <Link

@@ -1,7 +1,6 @@
 import { cast, types, flow, Instance } from "mobx-state-tree";
 import { IssueModel, UserIssuesListItemModel } from "./models";
 import { issuesApi } from "@api/index";
-import { navigate } from "wouter/use-browser-location";
 
 // Issue interface (TypeScript type for IssueModel)
 export type TIssue = Instance<typeof IssueModel>;
@@ -63,7 +62,6 @@ export const IssuesStore = types
       try {
         const response = yield issuesApi.createIssue(issueData);
         self.setCurrentIssue(response);
-        navigate(`/issues/${response.id}`);
       } catch (error) {
         console.error("Failed to add issue:", error);
       }

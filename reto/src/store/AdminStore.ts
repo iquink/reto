@@ -1,6 +1,6 @@
 import { types, flow, Instance } from "mobx-state-tree";
 import { UserModel } from "./models";
-import adminApi from "@api/adminApi";
+import { adminApi } from "@api/index";
 
 export const AdminStore = types
   .model("AdminStore", {

@@ -3,12 +3,10 @@ import { Form } from "react-aria-components";
 import { Input } from "@components";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "@components";
-// import axios from "axios";
-// import authApi from "@api/authApi";
 import { useStore } from "@store"; // Import the root store
 import { useTranslation } from "react-i18next";
 import styles from "./Login.module.css"; // Import the CSS module
-// import { useLocation } from "wouter";
+import { useLocation } from "wouter";
 
 /**
  * Login component for user authentication.
@@ -25,7 +23,7 @@ import styles from "./Login.module.css"; // Import the CSS module
 const Login: React.FC = () => {
   const { authStore } = useStore();
   const { t } = useTranslation();
-  // const [, navigate] = useLocation();
+  const [, navigate] = useLocation();
   /**
    * Default form values for the login form.
    */
@@ -57,6 +55,7 @@ const Login: React.FC = () => {
     if (result.success) {
       console.log("Login successful!");
       reset(); // Reset the form after submission
+      navigate("/"); // Redirect to the home page after successful login
     } else {
       alert(result.message);
       console.error("Login failed:", result);

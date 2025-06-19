@@ -1,4 +1,4 @@
-import apiClient, { clearCsrfToken, setCsrfToken } from "./api";
+import apiClient, { clearCsrfToken, setCsrfToken } from "../api";
 
 /**
  * Authentication API for handling user-related operations.
