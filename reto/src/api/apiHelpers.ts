@@ -28,6 +28,9 @@ const processQueue = (error: Error | null) => {
   failedQueue = [];
 };
 
+
+const MAX_QUEUE_SIZE = 10;
+
 /**
  * Sets up Axios interceptors for CSRF and error handling.
  */
@@ -62,7 +65,11 @@ export function setupInterceptors(apiClient: AxiosInstance) {
 
         if (isRefreshing) {
           return new Promise((resolve, reject) => {
-            failedQueue.push({ resolve, reject, config: originalRequest });
+            if (failedQueue.length < MAX_QUEUE_SIZE) {
+              failedQueue.push({ resolve, reject, config: originalRequest });
+            } else {
+              reject(new Error("Too many pending requests during token refresh"));
+            }
           });
         }
 
