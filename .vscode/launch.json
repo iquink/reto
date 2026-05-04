@@ -1,0 +1,57 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // ── Node.js backend ─────────────────────────────────────────
+      // Starts app.js with the built-in --watch flag (Node 22+) so
+      // the process restarts on file changes while keeping the
+      // debugger attached via the "restart" option.
+      "name": "Debug Backend",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/src/app.js",
+      "cwd": "${workspaceFolder}/backend",
+      "envFile": "${workspaceFolder}/backend/.env",
+      "runtimeArgs": ["--watch"],
+      "restart": true,
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      // ── Vite frontend in Chrome ──────────────────────────────────
+      // Launches Chrome with the debugger attached to the Vite dev
+      // server. Run `npm run dev` inside reto/ FIRST, then start
+      // this config (or use the "Full Stack" compound below).
+      "name": "Debug Frontend (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/reto/src",
+      "sourceMapPathOverrides": {
+        // Vite serves files under /@fs/ when outside the root dir
+        "/@fs/*": "${workspaceFolder}/reto/*"
+      }
+    },
+    {
+      // ── Vite frontend in Edge ────────────────────────────────────
+      "name": "Debug Frontend (Edge)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/reto/src",
+      "sourceMapPathOverrides": {
+        "/@fs/*": "${workspaceFolder}/reto/*"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      // Starts both the backend debugger and Chrome simultaneously.
+      // Make sure `npm run dev` in reto/ is already running, and
+      // the DB-only Docker container is up (`docker-compose up db`).
+      "name": "Full Stack Debug",
+      "configurations": ["Debug Backend", "Debug Frontend (Chrome)"],
+      "stopAll": true
+    }
+  ]
+}

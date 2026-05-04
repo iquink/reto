@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   backend:
     build:
@@ -6,15 +7,18 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - ./backend/.env
+      - .env
     volumes:
       - ./backend/uploads:/app/uploads
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
     build:
       context: ./reto
+      args:
+        - VITE_API_URL=${VITE_API_URL}
     ports:
       - "8080:80"
     depends_on:
@@ -25,11 +29,27 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE} 
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
       - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p$$MYSQL_ROOT_PASSWORD",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   db_data:
