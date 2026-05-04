@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_active` tinyint(1) DEFAULT '1',
   `role` enum('user','admin','moderator') DEFAULT 'user',
+  `refresh_token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_email` (`email`),
   KEY `idx_username` (`username`),

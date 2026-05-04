@@ -48,22 +48,40 @@ class AuthController {
       }
     }
   
-    async logout(req, res) {
-      // Clear both tokens
-      res.clearCookie('accessToken', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-      });
+    async logout(req, res, next) {
+      try {
+        // Decode the refresh token to identify the user whose token must be revoked.
+        // We use the refresh token (not the access token) because it lives longer and
+        // is the credential that grants new sessions. If the token is absent or invalid
+        // we still clear the cookies — the server-side revocation is best-effort.
+        const refreshToken = req.cookies.refreshToken;
+        if (refreshToken) {
+          try {
+            const decoded = verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+            await this.authService.logout(decoded.id);
+          } catch {
+            // Token unverifiable (expired / tampered) — proceed to clear cookies anyway
+          }
+        }
 
-      res.clearCookie('refreshToken', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        path: '/refresh-token',
-      });
+        // Clear both tokens
+        res.clearCookie('accessToken', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+        });
 
-      res.status(200).send('Logout successful.');
+        res.clearCookie('refreshToken', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          path: '/refresh-token',
+        });
+
+        res.status(200).send('Logout successful.');
+      } catch (err) {
+        next(err);
+      }
     }
   
     async checkAuth(req, res) {

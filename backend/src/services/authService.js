@@ -22,10 +22,9 @@ class AuthService {
   }
 
   /**
-   * Authenticates a user and generates both access and refresh tokens
-   * 
-   * @param {Object} credentials - User login credentials (email and password)
-   * @returns {Object} Object containing tokens and user information
+   * Authenticates a user and generates both access and refresh tokens.
+   * The refresh token is hashed with Argon2 before being persisted so that
+   * a database breach cannot be used to forge new sessions.
    */
   async login({ email, password }) {
     const user = await this.userRepository.findByEmail(email);
@@ -38,13 +37,13 @@ class AuthService {
       throw new UnauthorizedError("Invalid credentials.");
     }
 
-    // Generate both tokens
     const payload = { id: user.id, email: user.email };
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
-    // Store refresh token hash in database (optional)
-    // await this.userRepository.saveRefreshToken(user.id, refreshToken);
+    // Hash the refresh token before storage — raw token is only ever sent to the client
+    const hashedRefreshToken = await hashPassword(refreshToken);
+    await this.userRepository.saveRefreshToken(user.id, hashedRefreshToken);
 
     return {
       accessToken,
@@ -62,30 +61,49 @@ class AuthService {
   }
 
   /**
-   * Verifies a refresh token and generates a new access token
-   * 
-   * @param {string} refreshToken - The refresh token to verify
-   * @returns {Object} Object containing the new access token
+   * Verifies a refresh token and generates a new access token.
+   * Two checks are performed:
+   *   1. Cryptographic signature via JWT (prevents tampering).
+   *   2. Hash comparison against the stored value (detects revoked/stolen tokens).
    */
   async refreshToken(refreshToken) {
+    let decoded;
     try {
-      // Verify the refresh token using the refresh token secret
-      const decoded = verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-      
-      // Find the user
-      const user = await this.userRepository.findById(decoded.id);
-      if (!user) {
-        throw new NotFoundError("User not found.");
-      }
-
-      // Generate a new access token
-      const payload = { id: user.id, email: user.email };
-      const accessToken = generateAccessToken(payload);
-
-      return { accessToken };
-    } catch (error) {
+      decoded = verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    } catch {
       throw new UnauthorizedError("Invalid refresh token.");
     }
+
+    const user = await this.userRepository.findById(decoded.id);
+    if (!user) {
+      throw new UnauthorizedError("Invalid refresh token.");
+    }
+
+    // Reject if no token is stored (user has logged out or token was revoked)
+    if (!user.refresh_token) {
+      throw new UnauthorizedError("Refresh token has been revoked.");
+    }
+
+    // Verify the presented token matches the hash on record
+    const isValid = await verifyPassword(user.refresh_token, refreshToken);
+    if (!isValid) {
+      // Potential token theft — clear the stored token to force re-login
+      await this.userRepository.deleteRefreshToken(user.id);
+      throw new UnauthorizedError("Refresh token mismatch. All sessions invalidated.");
+    }
+
+    const payload = { id: user.id, email: user.email };
+    const accessToken = generateAccessToken(payload);
+
+    return { accessToken };
+  }
+
+  /**
+   * Revokes the stored refresh token for a user, preventing any further
+   * token refresh calls from succeeding (server-side logout).
+   */
+  async logout(userId) {
+    await this.userRepository.deleteRefreshToken(userId);
   }
 }
 
