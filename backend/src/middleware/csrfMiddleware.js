@@ -50,7 +50,21 @@ const validateCsrfToken = (req, res, next) => {
     const csrfCookie = req.cookies["csrf-token"];
     const csrfHeader = req.headers["x-csrf-token"];
 
-    if (!csrfCookie || !csrfHeader || csrfCookie !== csrfHeader) {
+    if (!csrfCookie || !csrfHeader) {
+      return next(new ForbiddenError("CSRF protection validation failed"));
+    }
+
+    // Use timing-safe comparison to prevent timing-oracle attacks.
+    // Both buffers must be the same byte length; if they differ the tokens
+    // cannot be equal, so we short-circuit immediately rather than padding
+    // (padding could introduce its own side-channel).
+    const cookieBuf = Buffer.from(csrfCookie, "utf8");
+    const headerBuf = Buffer.from(csrfHeader, "utf8");
+    const tokensMatch =
+      cookieBuf.length === headerBuf.length &&
+      crypto.timingSafeEqual(cookieBuf, headerBuf);
+
+    if (!tokensMatch) {
       return next(new ForbiddenError("CSRF protection validation failed"));
     }
   }
