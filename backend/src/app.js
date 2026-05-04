@@ -1,6 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+// helmet sets a suite of security-focused HTTP response headers (CSP, HSTS, X-Frame-Options, etc.)
+const helmet = require('helmet');
+// express-rate-limit throttles repeated requests from the same IP to mitigate brute-force attacks
+const { rateLimit } = require('express-rate-limit');
 const initDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const AuthService = require('./services/authService');
@@ -16,6 +20,17 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Rate limiter for authentication endpoints — prevents brute-force attacks on
+// login, registration, and token-refresh by capping each IP to 10 requests
+// per 15-minute sliding window.
+const authRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10,
+  standardHeaders: 'draft-8', // Return rate-limit info in the `RateLimit-*` headers
+  legacyHeaders: false,
+  message: { error: 'Too many requests, please try again later.' },
+});
+
 (async () => {
   // Database initialization
   const db = await initDB();
@@ -24,6 +39,9 @@ const PORT = process.env.PORT || 3000;
   const authService = new AuthService(db);
   const issuesService = new IssuesService(db);
   const usersService = new UsersService(db);
+
+  // Security headers — applied before any route handler
+  app.use(helmet());
 
   // Middleware
   app.use(
@@ -35,9 +53,13 @@ const PORT = process.env.PORT || 3000;
     })
   );
 
-  app.use(express.json());
+  // Limit request body size to 10 kb to prevent payload-exhaustion (DoS) attacks
+  app.use(express.json({ limit: '10kb' }));
   app.use(cookieParser());
   app.use(validateCsrfToken);
+
+  // Apply auth rate limiter only to the endpoints vulnerable to brute-force
+  app.use(['/login', '/register', '/refresh-token'], authRateLimit);
 
   // Routes
   app.use('/', authRoutes(authService, generateCsrfToken));
