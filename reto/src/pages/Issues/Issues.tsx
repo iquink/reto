@@ -6,12 +6,7 @@ import { Button } from "@components/index";
 import { useStore } from "@store/index";
 import { observer } from "mobx-react-lite";
 import { getFormattedDate } from "./utils";
-import type { Instance } from "mobx-state-tree";
-import { UserIssuesListItemModel } from "@store/models";
 import { useTranslation } from "react-i18next";
-
-// TUserIssue type for userIssues
-export type TUserIssue = Instance<typeof UserIssuesListItemModel>;
 
 const Issues: React.FC = observer(() => {
   const [, navigate] = useLocation();
@@ -22,31 +17,28 @@ const Issues: React.FC = observer(() => {
   };
 
   const { issuesStore } = useStore();
-  const [rows, setRows] = React.useState<TUserIssue[]>([]);
-  const [isCardsGridOverflowing, setIsCardsGridOverflowing] = React.useState(false);
+  const cardsGridRef = React.useRef<HTMLDivElement>(null);
+  const [isCardsGridOverflowing, setIsCardsGridOverflowing] =
+    React.useState(false);
 
   // Function to check if cardsGrid overflows window
   const checkCardsGridOverflow = React.useCallback(() => {
-    if (typeof window !== 'undefined') {
-      const grid = document.querySelector(`.${styles.cardsGrid}`) as HTMLElement | null;
-      if (grid) {
-        setIsCardsGridOverflowing(grid.scrollHeight > window.innerHeight);
-      } else {
-        setIsCardsGridOverflowing(false);
-      }
+    const grid = cardsGridRef.current;
+    if (grid) {
+      setIsCardsGridOverflowing(grid.scrollHeight > window.innerHeight);
+    } else {
+      setIsCardsGridOverflowing(false);
     }
   }, []);
 
   React.useEffect(() => {
     issuesStore.getUserIssues().then(() => {
-      setRows(issuesStore.userIssues.slice());
       checkCardsGridOverflow();
     });
-    // Also check on mount
     checkCardsGridOverflow();
-    window.addEventListener('resize', checkCardsGridOverflow);
+    window.addEventListener("resize", checkCardsGridOverflow);
     return () => {
-      window.removeEventListener('resize', checkCardsGridOverflow);
+      window.removeEventListener("resize", checkCardsGridOverflow);
     };
   }, [issuesStore, checkCardsGridOverflow]);
 
@@ -58,13 +50,11 @@ const Issues: React.FC = observer(() => {
           {t("pages.issues.createIssue")}
         </Button>
       )}
-      {rows.length === 0 ? (
-        <p className={styles.message}>
-          {t("pages.issues.noIssues")} {/* Localized no issues message */}
-        </p>
+      {issuesStore.userIssues.length === 0 ? (
+        <p className={styles.message}>{t("pages.issues.noIssues")}</p>
       ) : (
-        <div className={styles.cardsGrid}>
-          {rows.map((row) => (
+        <div ref={cardsGridRef} className={styles.cardsGrid}>
+          {issuesStore.userIssues.map((row) => (
             <IssueCard
               key={row.id}
               id={row.id}

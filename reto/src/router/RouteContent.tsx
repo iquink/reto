@@ -19,16 +19,21 @@ export const RouteContent: React.FC<RouteContentProps> = ({
   const [location, navigate] = useLocation();
   const { authStore } = useStore();
 
-    // Update breadcrumbs in the store whenever they change
-  React.useEffect(() => {
-    onBreadcrumbsUpdate(breadcrumbs);
-  }, [breadcrumbs, onBreadcrumbsUpdate]);
+  // Keep a stable ref to the latest callback to avoid infinite-loop risks
+  // when the parent doesn't memoize onBreadcrumbsUpdate with useCallback.
+  const onBreadcrumbsUpdateRef = React.useRef(onBreadcrumbsUpdate);
+  onBreadcrumbsUpdateRef.current = onBreadcrumbsUpdate;
 
-    // Redirect to login if not authenticated and not on login or register page
+  // Update breadcrumbs in the store whenever they change
+  React.useEffect(() => {
+    onBreadcrumbsUpdateRef.current(breadcrumbs);
+  }, [breadcrumbs]);
+
+  // Redirect to login if not authenticated and not on login or register page
   React.useEffect(() => {
     if (!authStore.isAuthenticated) {
       if (location !== "/login" && location !== "/register") {
-        navigate("/");
+        navigate("/login");
       }
     }
   }, [authStore.isAuthenticated, location, navigate]);

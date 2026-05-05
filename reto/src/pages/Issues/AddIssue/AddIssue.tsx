@@ -46,12 +46,13 @@ const AddIssue: React.FC = observer(() => {
         formData.append("files", file);
       });
     }
-    await issuesStore.addIssue(formData); // Your store/api should handle FormData
-    alert("Form submitted successfully!");
+    await issuesStore.addIssue(formData);
     reset();
     issuesStore.clearSelectedLocation();
-    navigate("/issues" + "/" + issuesStore.currentIssue.id); // Redirect to the issue page after submission
-
+    const issueId = issuesStore.currentIssue?.id;
+    if (issueId != null) {
+      navigate(`/issues/${issueId}`);
+    }
   };
 
   return (
@@ -152,7 +153,7 @@ const AddIssue: React.FC = observer(() => {
                 Array.isArray(issuesStore.selectedLocation) &&
                   issuesStore.selectedLocation.length === 2
                   ? `${issuesStore.selectedLocation[0]} ${issuesStore.selectedLocation[1]}`
-                  : ""
+                  : "",
               )
             }
           />
