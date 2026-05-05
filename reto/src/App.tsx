@@ -5,15 +5,27 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "@store";
 import { Breadcrumbs } from "@components/layout/Breadcrumbs/Breadcrumbs";
 
-
 const App: React.FC<{ children: React.ReactNode }> = observer(
   ({ children }) => {
     const { authStore } = useStore();
-  
 
     // Check authorization when the app loads
     useEffect(() => {
       authStore.checkAuthorization(); // Call the store action directly
+    }, [authStore]);
+
+    // Listen for the custom "auth:expired" event from the API layer
+    useEffect(() => {
+      const handleAuthExpired = () => {
+        authStore.clearAuth();
+      };
+
+      window.addEventListener("auth:expired", handleAuthExpired);
+
+      // Cleanup listener on unmount
+      return () => {
+        window.removeEventListener("auth:expired", handleAuthExpired);
+      };
     }, [authStore]);
 
     return (
@@ -25,7 +37,7 @@ const App: React.FC<{ children: React.ReactNode }> = observer(
         <div className={styles.app}>{children}</div>
       </>
     );
-  }
+  },
 );
 
 export default App;

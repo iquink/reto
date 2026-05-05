@@ -20,7 +20,6 @@ const issuesApi = {
     coordinates?: string;
     files?: FileList | null;
   }) {
-    console.log("Issue created:", data);
     const response = await apiClient.post(PATH, data, {
       withCredentials: true,
       headers: {
@@ -65,7 +64,7 @@ const issuesApi = {
       photos?: string[];
       coordinates?: string;
       status?: string;
-    }
+    },
   ) {
     const response = await apiClient.put(`${PATH}/${id}`, data, {
       withCredentials: true,

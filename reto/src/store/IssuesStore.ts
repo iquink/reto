@@ -42,7 +42,7 @@ export const IssuesStore = types
   }))
   .actions((self) => ({
     // Fetch a single issue by id and set as currentIssue
-    getIssue: flow(function* (id: number) {
+    getIssueById: flow(function* (id: number) {
       try {
         const data = yield issuesApi.getIssueById(id);
         self.setCurrentIssue(data);
@@ -76,15 +76,6 @@ export const IssuesStore = types
         self.clearUserIssues();
       }
     }),
-    getIssueById: flow(function* (id: number) {
-      try {
-        const data = yield issuesApi.getIssueById(id);
-        self.setCurrentIssue(data);
-      } catch (error) {
-        console.error("Failed to fetch issue by ID:", error);
-        self.setCurrentIssue(null);
-      }
-    }),
   }))
   .actions((self) => ({
     // Update an existing issue
@@ -96,12 +87,12 @@ export const IssuesStore = types
         photos?: string[];
         coordinates?: string;
         status?: string;
-      }
+      },
     ) {
       try {
         const updated = yield issuesApi.updateIssue(id, updateData);
 
-        self.getIssueById(id);
+        yield self.getIssueById(id);
 
         return updated;
       } catch (error) {

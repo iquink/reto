@@ -1,8 +1,11 @@
 import { AxiosInstance, AxiosError } from "axios";
 import { errorMessages } from "./errorMessages";
 import { getCsrfToken, setCsrfToken, clearCsrfToken } from "./csrfUtils";
-import { ExtendedAxiosRequestConfig, ApiError, ErrorResponseData } from "./types";
-import { rootStore } from "@store/index";
+import {
+  ExtendedAxiosRequestConfig,
+  ApiError,
+  ErrorResponseData,
+} from "./types";
 
 /**
  * Queue for failed requests during token refresh.
@@ -28,7 +31,6 @@ const processQueue = (error: Error | null) => {
   failedQueue = [];
 };
 
-
 const MAX_QUEUE_SIZE = 10;
 
 /**
@@ -47,7 +49,7 @@ export function setupInterceptors(apiClient: AxiosInstance) {
       }
       return config;
     },
-    (error) => Promise.reject(error)
+    (error) => Promise.reject(error),
   );
 
   apiClient.interceptors.response.use(
@@ -68,7 +70,9 @@ export function setupInterceptors(apiClient: AxiosInstance) {
             if (failedQueue.length < MAX_QUEUE_SIZE) {
               failedQueue.push({ resolve, reject, config: originalRequest });
             } else {
-              reject(new Error("Too many pending requests during token refresh"));
+              reject(
+                new Error("Too many pending requests during token refresh"),
+              );
             }
           });
         }
@@ -79,7 +83,7 @@ export function setupInterceptors(apiClient: AxiosInstance) {
           const response = await apiClient.post(
             "/refresh-token",
             {},
-            { withCredentials: true }
+            { withCredentials: true },
           );
           if (response.data?.csrfToken) {
             setCsrfToken(response.data.csrfToken);
@@ -89,7 +93,7 @@ export function setupInterceptors(apiClient: AxiosInstance) {
         } catch (refreshError) {
           processQueue(refreshError as Error);
           clearCsrfToken();
-          rootStore.authStore.clearAuth();
+          window.dispatchEvent(new CustomEvent("auth:expired"));
           return Promise.reject(refreshError);
         } finally {
           isRefreshing = false;
@@ -108,6 +112,6 @@ export function setupInterceptors(apiClient: AxiosInstance) {
       };
 
       return Promise.reject(apiError);
-    }
+    },
   );
 }

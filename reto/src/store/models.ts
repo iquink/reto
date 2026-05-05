@@ -25,7 +25,7 @@ export const UserModel = types.model("User", {
   fullName: types.maybeNull(types.string),
   createdAt: types.string,
   updatedAt: types.string,
-  isActive: types.number,
+  isActive: types.boolean,
   role: types.enumeration<UserRole>("UserRole", [
     UserRole.USER,
     UserRole.ADMIN,
@@ -43,12 +43,12 @@ export const IssueModel = types.model("Issue", {
     types.model({
       x: types.number,
       y: types.number,
-    })
+    }),
   ),
   created_at: types.string, // ISO string, e.g. "2025-05-28T07:55:49.000Z"
   updated_at: types.string, // ISO string, e.g. "2025-05-28T07:55:49.000Z",
   status: types.enumeration<Status>("Status", [
-    Status.OPEN, 
+    Status.OPEN,
     Status.IN_PROGRESS,
     Status.CLOSED,
   ]),
@@ -72,5 +72,5 @@ export const LanguageEnumModel = types.enumeration<Language>("Language", [
 export const BreadcrumbItemModel = types.model("BreadcrumbItem", {
   label: types.string,
   path: types.string,
-  params: types.maybe(types.frozen<Record<string, string>>())
+  params: types.maybe(types.frozen<Record<string, string>>()),
 });
