@@ -76,7 +76,25 @@ const authRateLimit = rateLimit({
   app.use(errorHandler);
 
   // Start the server
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
+
+  // Graceful shutdown — finish in-flight requests before exiting
+  const shutdown = (signal) => {
+    console.log(`\n${signal} received. Shutting down gracefully...`);
+    server.close(async () => {
+      console.log('HTTP server closed.');
+      try {
+        await db.end();
+        console.log('Database connection pool closed.');
+      } catch (err) {
+        console.error('Error closing database pool:', err.message);
+      }
+      process.exit(0);
+    });
+  };
+
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
 })();
