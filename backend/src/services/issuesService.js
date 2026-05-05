@@ -1,13 +1,11 @@
 const { BadRequestError, NotFoundError } = require("../utils/errors");
-const IssuesRepository = require("../repositories/issuesRepository");
 
 class IssuesService {
-  constructor(db) {
-    this.db = db;
-    this.issuesRepository = new IssuesRepository(db);
+  constructor(issuesRepository) {
+    this.issuesRepository = issuesRepository;
   }
 
-  async createIssue({ userId, title, description, photos, coordinates }) {
+  _validateIssueData({ userId, title, description, photos }) {
     const parsedUserId = Number(userId);
     if (
       isNaN(parsedUserId) ||
@@ -33,16 +31,20 @@ class IssuesService {
         "Invalid photos: must be an array, object, or null"
       );
     }
+    return parsedUserId;
+  }
+
+  _parseCoordinates(coordinates) {
     if (!coordinates || typeof coordinates !== "string") {
       throw new BadRequestError("Invalid coordinates: must be a string");
     }
-    const normalizedCoordinates = coordinates.replace(",", " ").trim();
-    if (!normalizedCoordinates.match(/^-?\d+(\.\d+)?\s+-?\d+(\.\d+)?$/)) {
+    const normalized = coordinates.replace(",", " ").trim();
+    if (!normalized.match(/^-?\d+(\.\d+)?\s+-?\d+(\.\d+)?$/)) {
       throw new BadRequestError(
         'Invalid coordinates: must be in format "longitude latitude" or "longitude,latitude"'
       );
     }
-    const [longitude, latitude] = normalizedCoordinates.split(" ").map(Number);
+    const [longitude, latitude] = normalized.split(" ").map(Number);
     if (
       longitude < -180 ||
       longitude > 180 ||
@@ -53,7 +55,13 @@ class IssuesService {
         "Invalid coordinates: longitude must be between -180 and 180, latitude between -90 and 90"
       );
     }
-    const pointWKT = `POINT(${longitude} ${latitude})`;
+    return `POINT(${longitude} ${latitude})`;
+  }
+
+  async createIssue({ userId, title, description, photos, coordinates }) {
+    const parsedUserId = this._validateIssueData({ userId, title, description, photos });
+    const pointWKT = this._parseCoordinates(coordinates);
+
     try {
       const insertId = await this.issuesRepository.create({
         userId: parsedUserId,

@@ -1,3 +1,5 @@
+const ALLOWED_UPDATE_FIELDS = ['title', 'description', 'photos', 'coordinates', 'status'];
+
 class IssuesRepository {
   constructor(db) {
     this.db = db;
@@ -36,6 +38,7 @@ class IssuesRepository {
     const setFields = [];
     const values = [];
     for (const [key, value] of Object.entries(fields)) {
+      if (!ALLOWED_UPDATE_FIELDS.includes(key)) continue;
       setFields.push(`${key} = ?`);
       values.push(value);
     }

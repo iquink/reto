@@ -1,11 +1,9 @@
 const { ForbiddenError, NotFoundError } = require("../utils/errors");
-const UserRepository = require("../repositories/userRepository");
 const { mapUserToResponse } = require("../utils/userMapper");
 
 class UsersService {
-  constructor(db) {
-    this.db = db;
-    this.userRepository = new UserRepository(db)
+  constructor(userRepository) {
+    this.userRepository = userRepository;
   }
 
   async getUsersList(userId) {

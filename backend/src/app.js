@@ -13,6 +13,8 @@ const issuesRoutes = require('./routes/issuesRoutes');
 const filesRoutes = require('./routes/filesRoutes');
 const usersRoutes = require('./routes/usersRoutes');
 const UsersService = require('./services/usersService');
+const UserRepository = require('./repositories/userRepository');
+const IssuesRepository = require('./repositories/issuesRepository');
 const errorHandler = require('./middleware/errorHandler');
 const { validateCsrfToken, generateCsrfToken } = require('./middleware/csrfMiddleware');
 require('dotenv').config();
@@ -35,10 +37,14 @@ const authRateLimit = rateLimit({
   // Database initialization
   const db = await initDB();
 
-  // Service initialization
-  const authService = new AuthService(db);
-  const issuesService = new IssuesService(db);
-  const usersService = new UsersService(db);
+  // Repository instantiation — the only layer that holds the db connection
+  const userRepository = new UserRepository(db);
+  const issuesRepository = new IssuesRepository(db);
+
+  // Service instantiation with injected repositories
+  const authService = new AuthService(userRepository);
+  const issuesService = new IssuesService(issuesRepository);
+  const usersService = new UsersService(userRepository);
 
   // Security headers — applied before any route handler
   app.use(helmet());
